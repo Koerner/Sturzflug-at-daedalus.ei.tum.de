@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->BaudRateBox->addItem("4800", BAUD4800);
     ui->BaudRateBox->addItem("9600", BAUD9600);
     ui->BaudRateBox->addItem("19200", BAUD19200);
+    ui->BaudRateBox->addItem("115200", BAUD115200);
     ui->BaudRateBox->setCurrentIndex(3);
     // BaudRateBox STOP
 
