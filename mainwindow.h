@@ -22,8 +22,10 @@ class MainWindow : public QMainWindow
 {
 public:
 
-    void writeComText(QString writeComText);
-    void sendCOM(int sendCOM);
+    void XbeewriteComText(QString writeComText);
+    void XbeesendCOM(int sendCOM);
+    void IPSwriteComText(QString writeComText);
+    void IPSsendCOM(int sendCOM);
 
 
     Q_OBJECT
@@ -35,17 +37,25 @@ public:
     
 private:
     Ui::MainWindow *ui;
-    QTimer *timer;
-    QextSerialPort *port;
+    QTimer *Xbeetimer;
+    QTimer *IPStimer;
+    QextSerialPort *Xbeeport;
+    QextSerialPort *IPSport;
     QextSerialEnumerator *enumerator;
 
 
 //GUI Funktionen
 private Q_SLOTS:
-    void onBaudRateChanged(int idx);
-    void onPortAddedOrRemoved();
-    void onPortNameChanged(const QString &name);
-    void onReadyRead();
+    void XbeeonBaudRateChanged(int idx);
+    void XbeeonPortAddedOrRemoved();
+    void XbeeonPortNameChanged(const QString &name);
+    void XbeeonReadyRead();
+
+    void IPSonBaudRateChanged(int idx);
+    void IPSonPortAddedOrRemoved();
+    void IPSonPortNameChanged(const QString &name);
+    void IPSonReadyRead();
+
     void onTestButtonClicked();
 
 };

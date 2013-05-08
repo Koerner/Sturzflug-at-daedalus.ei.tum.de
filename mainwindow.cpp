@@ -9,149 +9,273 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // GUI Einstellunegn
 
-    setWindowTitle(tr("ComPort Sturzflug@daedalus"));
+    setWindowTitle(tr("Zentrale - Sturzflug@daedalus"));
 
     //PortBox ComPort Einstellungen
         //COM Ports suchen
         foreach (QextPortInfo info, QextSerialEnumerator::getPorts())
-        ui->portBox->addItem(info.portName);
+        ui->XbeeportBox->addItem(info.portName);
+        foreach (QextPortInfo info, QextSerialEnumerator::getPorts())
+        ui->IPSportBox->addItem(info.portName);
+
         //selber eintargen Möglich machen
-        ui->portBox->setEditable(true);
+        ui->XbeeportBox->setEditable(true);
+        ui->IPSportBox->setEditable(true);
     //Port Box STOP
 
     //BaudRateBox kompatible Werte mit Win und Linux
-    ui->BaudRateBox->addItem("1200", BAUD1200);
-    ui->BaudRateBox->addItem("2400", BAUD2400);
-    ui->BaudRateBox->addItem("4800", BAUD4800);
-    ui->BaudRateBox->addItem("9600", BAUD9600);
-    ui->BaudRateBox->addItem("19200", BAUD19200);
-    ui->BaudRateBox->addItem("115200", BAUD115200);
-    ui->BaudRateBox->setCurrentIndex(3);
+    ui->XbeeBaudRateBox->addItem("1200", BAUD1200);
+    ui->XbeeBaudRateBox->addItem("2400", BAUD2400);
+    ui->XbeeBaudRateBox->addItem("4800", BAUD4800);
+    ui->XbeeBaudRateBox->addItem("9600", BAUD9600);
+    ui->XbeeBaudRateBox->addItem("19200", BAUD19200);
+    ui->XbeeBaudRateBox->addItem("115200", BAUD115200);
+    ui->XbeeBaudRateBox->setCurrentIndex(3); //Vorsicht nur Ändern wenn auch PorSettings geändert
+    ui->IPSBaudRateBox->addItem("115200", BAUD115200); //IPS nur mit dieser BaudRate
+    ui->IPSBaudRateBox->setCurrentIndex(0); //Vorsicht nur Ändern wenn auch PorSettings geändert
     // BaudRateBox STOP
 
     //ComText Box
-    ui->ComText->setReadOnly(true);
+    ui->XbeeComText->setReadOnly(true);
+    ui->IPSComText->setReadOnly(true);
     //ComText Box STOP
 
-    timer = new QTimer(this);
-    timer->setInterval(40);
+    Xbeetimer = new QTimer(this);
+    Xbeetimer->setInterval(40);
+    IPStimer = new QTimer(this);
+    IPStimer->setInterval(40);
 
     //Vordefinierte Einstelluneg
-    PortSettings settings = {BAUD9600, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10};
-    port = new QextSerialPort(ui->portBox->currentText(), settings, QextSerialPort::Polling);
+    PortSettings Xbeesettings = {BAUD9600, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10};
+    Xbeeport = new QextSerialPort(ui->XbeeportBox->currentText(), Xbeesettings, QextSerialPort::Polling);
+    PortSettings IPSsettings = {BAUD115200, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10};
+    IPSport = new QextSerialPort(ui->IPSportBox->currentText(), IPSsettings, QextSerialPort::Polling);
     //Vordefinierte Einstellungen STOP
 
     //enumerator = new QextSerialEnumerator(this);
     //enumerator->setUpNotifications();
-    connect(ui->BaudRateBox, SIGNAL(currentIndexChanged(int)), SLOT(onBaudRateChanged(int)));
-    connect(ui->portBox, SIGNAL(editTextChanged(QString)), SLOT(onPortNameChanged(QString)));
+
+    //Connectoren
+
+    //globale Connectoren
     connect(ui->TestButton, SIGNAL(clicked()), SLOT(onTestButtonClicked()));
-    connect(timer, SIGNAL(timeout()), SLOT(onReadyRead()));
-    connect(port, SIGNAL(readyRead()), SLOT(onReadyRead()));
+
+
+    //Xbee connectoren
+    connect(ui->XbeeBaudRateBox, SIGNAL(currentIndexChanged(int)), SLOT(XbeeonBaudRateChanged(int)));
+    connect(ui->XbeeportBox, SIGNAL(editTextChanged(QString)), SLOT(XbeeonPortNameChanged(QString)));
+    connect(Xbeetimer, SIGNAL(timeout()), SLOT(XbeeonReadyRead()));
+    connect(Xbeeport, SIGNAL(readyRead()), SLOT(XbeeonReadyRead()));
+
+    //IPS connectoren
+    connect(ui->IPSBaudRateBox, SIGNAL(currentIndexChanged(int)), SLOT(IPSonBaudRateChanged(int)));
+    connect(ui->IPSportBox, SIGNAL(editTextChanged(QString)), SLOT(IPSonPortNameChanged(QString)));
+    connect(IPStimer, SIGNAL(timeout()), SLOT(IPSonReadyRead()));
+    connect(IPSport, SIGNAL(readyRead()), SLOT(IPSonReadyRead()));
+
+    //ConnectorenSTOP
+
 
 
 
 }
 
  //Funktionen GUI
-void MainWindow::onBaudRateChanged(int idx)
+
+//Baud Rate
+void MainWindow::XbeeonBaudRateChanged(int idx)
 {
-    port->setBaudRate((BaudRateType)ui->BaudRateBox->itemData(idx).toInt());
+    Xbeeport->setBaudRate((BaudRateType)ui->XbeeBaudRateBox->itemData(idx).toInt());
 }
-
-
-void MainWindow::onPortAddedOrRemoved()
+void MainWindow::IPSonBaudRateChanged(int idx)
 {
-    QString current = ui->portBox->currentText();
+    IPSport->setBaudRate((BaudRateType)ui->IPSBaudRateBox->itemData(idx).toInt());
+}
+//Baus Rate STOP
 
-    ui->portBox->blockSignals(true);
-    ui->portBox->clear();
+
+// Port Änderung
+void MainWindow::XbeeonPortAddedOrRemoved()
+{
+    QString current = ui->XbeeportBox->currentText();
+
+    ui->XbeeportBox->blockSignals(true);
+    ui->XbeeportBox->clear();
     foreach (QextPortInfo info, QextSerialEnumerator::getPorts())
-        ui->portBox->addItem(info.portName);
+        ui->XbeeportBox->addItem(info.portName);
 
-    ui->portBox->setCurrentIndex(ui->portBox->findText(current));
-
-    ui->portBox->blockSignals(false);
+    ui->XbeeportBox->setCurrentIndex(ui->XbeeportBox->findText(current));
+    ui->XbeeportBox->blockSignals(false);
 }
-
-void MainWindow::writeComText(QString writeComText)
+void MainWindow::IPSonPortAddedOrRemoved()
 {
-    ui->ComText->moveCursor(QTextCursor::End);
-    ui->ComText->insertPlainText(writeComText);
-    ui->ComText->moveCursor(QTextCursor::End);
-}
+    QString current = ui->IPSportBox->currentText();
 
-void MainWindow::onPortNameChanged(const QString & /*name*/)
+    ui->IPSportBox->blockSignals(true);
+    ui->IPSportBox->clear();
+    foreach (QextPortInfo info, QextSerialEnumerator::getPorts())
+        ui->IPSportBox->addItem(info.portName);
+
+    ui->IPSportBox->setCurrentIndex(ui->IPSportBox->findText(current));
+    ui->IPSportBox->blockSignals(false);
+}
+//Port Änderung STOP
+
+//Senden an ComPort
+void MainWindow::XbeewriteComText(QString writeComText)
+{
+    ui->XbeeComText->moveCursor(QTextCursor::End);
+    ui->XbeeComText->insertPlainText(writeComText);
+    ui->XbeeComText->moveCursor(QTextCursor::End);
+}
+void MainWindow::IPSwriteComText(QString writeComText)
+{
+    ui->IPSComText->moveCursor(QTextCursor::End);
+    ui->IPSComText->insertPlainText(writeComText);
+    ui->IPSComText->moveCursor(QTextCursor::End);
+}
+// Senden an ComPort STOP
+
+// Ändern des ComPorts und öffnen
+void MainWindow::XbeeonPortNameChanged(const QString & /*name*/)
 {
     // ggf. offenen Comport schließen
 
-    if (port->isOpen())
+    if (Xbeeport->isOpen())
     {
-        port->close();
-        writeComText("---\nCom Port geschlossen\n");
+        Xbeeport->close();
+        XbeewriteComText("---\nCom Port geschlossen\n");
     }
     else{}
     // STOP
 
     // Com Port setzen und öffnen
-     port->setPortName(ui->portBox->currentText());  //Com setzen
-     port->setQueryMode(QextSerialPort::Polling); //Pollin Mode einstellen
-     port->open(QIODevice::ReadWrite);
+     Xbeeport->setPortName(ui->XbeeportBox->currentText());  //Com setzen
+     Xbeeport->setQueryMode(QextSerialPort::Polling); //Pollin Mode einstellen
+     Xbeeport->open(QIODevice::ReadWrite);
 
-     if (port->isOpen()) { //Abfrage ob's geklappt hat
-         writeComText("---\nCom Port offen\n---\n");
+     if (Xbeeport->isOpen()) { //Abfrage ob's geklappt hat
+         XbeewriteComText("---\nCom Port offen\n---\n");
         }
         else {
-         writeComText("---\nFehler - konnte Com Port nicht oeffnen \n---\n");
+         XbeewriteComText("---\nFehler - konnte Com Port nicht oeffnen \n---\n");
               }
      //STOP
         //Da polling mode, Ein QTimer
-        if (port->isOpen() && port->queryMode() == QextSerialPort::Polling)
-        timer->start();
+        if (Xbeeport->isOpen() && Xbeeport->queryMode() == QextSerialPort::Polling)
+        Xbeetimer->start();
         else
-        timer->stop();
+        Xbeetimer->stop();
      }
+void MainWindow::IPSonPortNameChanged(const QString & /*name*/)
+{
+    // ggf. offenen Comport schließen
+
+    if (IPSport->isOpen())
+    {
+        IPSport->close();
+        IPSwriteComText("---\nCom Port geschlossen\n");
+    }
+    else{}
+    // STOP
+
+    // Com Port setzen und öffnen
+     IPSport->setPortName(ui->IPSportBox->currentText());  //Com setzen
+     IPSport->setQueryMode(QextSerialPort::Polling); //Pollin Mode einstellen
+     IPSport->open(QIODevice::ReadWrite);
+
+     if (IPSport->isOpen()) { //Abfrage ob's geklappt hat
+         IPSwriteComText("---\nCom Port offen\n---\n");
+        }
+        else {
+         IPSwriteComText("---\nFehler - konnte Com Port nicht oeffnen \n---\n");
+              }
+     //STOP
+        //Da polling mode, Ein QTimer
+        if (IPSport->isOpen() && IPSport->queryMode() == QextSerialPort::Polling)
+        IPStimer->start();
+        else
+        IPStimer->stop();
+     }
+//Ädern des Com Ports und öffnen STOP
+
+
 
 // ComPort lesen
-void MainWindow::onReadyRead()
+void MainWindow::XbeeonReadyRead()
 {
-    if (port->bytesAvailable()) {
-        writeComText ("->");
-        writeComText(QString::fromLatin1(port->readAll()));
-        writeComText ("\n");
+    if (Xbeeport->bytesAvailable()) {
+        XbeewriteComText ("->");
+        XbeewriteComText(QString::fromLatin1(Xbeeport->readAll()));
+        XbeewriteComText ("\n");
+    }
+}
+void MainWindow::IPSonReadyRead()
+{
+    if (IPSport->bytesAvailable()) {
+        IPSwriteComText ("->");
+        IPSwriteComText(QString::fromLatin1(IPSport->readAll()));
+        IPSwriteComText ("\n");
     }
 }
 //ComPort lesen STOP
 
 //ComPort schreiben
-void MainWindow::sendCOM(int sendCOM)
+void MainWindow::XbeesendCOM(int sendCOM)
 {
-    if (port->isOpen() )
+    if (Xbeeport->isOpen() )
     {
         QString str;
         str.append(QString("%1").arg(sendCOM));
-        ui->sendEdit->insertPlainText(str);
-        port->write(ui->sendEdit->toPlainText().toLatin1());
+        ui->XbeesendEdit->insertPlainText(str);
+        Xbeeport->write(ui->XbeesendEdit->toPlainText().toLatin1());
         // Textausgabe des gesendetetn
-        writeComText("<-");
-        writeComText(ui->sendEdit->toPlainText().toLatin1());
-        writeComText("\n");
-        ui->sendEdit->clear ();//loeschen sonst wird das alte immer wieder mitgesendet
+        XbeewriteComText("<-");
+        XbeewriteComText(ui->XbeesendEdit->toPlainText().toLatin1());
+        XbeewriteComText("\n");
+        ui->XbeesendEdit->clear ();//loeschen sonst wird das alte immer wieder mitgesendet
     }
     else
     {
-        writeComText("---\nPort nicht offen, Senden Fehlgeschlagen\n---\n");
+        XbeewriteComText("---\nPort nicht offen, Senden Fehlgeschlagen\n---\n");
+    }
+
+}
+void MainWindow::IPSsendCOM(int sendCOM)
+{
+    if (IPSport->isOpen() )
+    {
+        QString str;
+        str.append(QString("%1").arg(sendCOM));
+        ui->IPSsendEdit->insertPlainText(str);
+        IPSport->write(ui->IPSsendEdit->toPlainText().toLatin1());
+        // Textausgabe des gesendetetn
+        IPSwriteComText("<-");
+        IPSwriteComText(ui->IPSsendEdit->toPlainText().toLatin1());
+        IPSwriteComText("\n");
+        ui->IPSsendEdit->clear ();//loeschen sonst wird das alte immer wieder mitgesendet
+    }
+    else
+    {
+        IPSwriteComText("---\nPort nicht offen, Senden Fehlgeschlagen\n---\n");
     }
 
 }
 
 //ComPort schreiben STOP
 
+
+
+
+
+
+
+
 //TestButton
 void MainWindow::onTestButtonClicked()
 {
     int Test = 101000;
-   sendCOM(Test);
+   XbeesendCOM(Test);
 }
 //TestButton STOP
 
@@ -168,5 +292,6 @@ MainWindow::~MainWindow()
 {
 
     delete ui;
-    delete port;
+    delete Xbeeport;
+    delete IPSport;
 }
