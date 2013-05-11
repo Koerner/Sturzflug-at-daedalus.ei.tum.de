@@ -15,11 +15,13 @@ include(qextserial/qextserialport.pri)
 
 SOURCES += main.cpp\
         mainwindow.cpp\
-        com.cpp
+        com.cpp \
+    ips.cpp
 
 
 HEADERS  += mainwindow.h \
-            com.h
+            com.h \
+    ips.h
 
 FORMS    += mainwindow.ui
 

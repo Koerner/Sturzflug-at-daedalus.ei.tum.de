@@ -213,8 +213,10 @@ void MainWindow::XbeeonReadyRead()
 void MainWindow::IPSonReadyRead()
 {
     if (IPSport->bytesAvailable()) {
+        QString com = QString::fromLatin1(IPSport->readAll());
+        x.setdata(com);
         IPSwriteComText ("->");
-        IPSwriteComText(QString::fromLatin1(IPSport->readAll()));
+        IPSwriteComText(com);
         IPSwriteComText ("\n");
     }
 }
@@ -276,6 +278,11 @@ void MainWindow::onTestButtonClicked()
 {
     int Test = 101000;
    XbeesendCOM(Test);
+
+
+   QString str;
+   str.append(QString("%1").arg(x.stationtime[1][2]));
+   IPSwriteComText(str);
 }
 //TestButton STOP
 

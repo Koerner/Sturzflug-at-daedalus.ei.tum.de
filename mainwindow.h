@@ -9,6 +9,8 @@
 #include <QDialog>
 #include <qstring>
 
+#include <ips.h>
+
 namespace Ui {
 class MainWindow;
 }
@@ -26,6 +28,7 @@ public:
     void XbeesendCOM(int sendCOM);
     void IPSwriteComText(QString writeComText);
     void IPSsendCOM(int sendCOM);
+    ips x;
 
 
     Q_OBJECT
@@ -42,6 +45,7 @@ private:
     QextSerialPort *Xbeeport;
     QextSerialPort *IPSport;
     QextSerialEnumerator *enumerator;
+
 
 
 //GUI Funktionen
