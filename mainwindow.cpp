@@ -281,7 +281,7 @@ void MainWindow::onTestButtonClicked()
 
 
    QString str;
-   str.append(QString("%1").arg(x.stationtime[1][2]));
+   str.append(QString("%1").arg(x.gettimef(2)));
    IPSwriteComText(str);
 }
 //TestButton STOP

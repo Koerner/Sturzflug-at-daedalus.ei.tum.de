@@ -10,9 +10,8 @@ public:
     //ips();
     //int getpos();
     void setdata(QString comdata);
-    int getxf();
-    int getyf();
-    int getzh();
+    int gettime (int station, int time);
+    double gettimef(int station);
 
     int stationtime[10][10];//={{0}};
 
