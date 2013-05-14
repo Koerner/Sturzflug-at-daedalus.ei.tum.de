@@ -12,6 +12,7 @@ public:
     void setdata(QString comdata);
     int gettime (int station, int time);
     double gettimef(int station);
+    int aufruf_wrapper();
 
     int stationtime[10][10];//={{0}};
 
@@ -23,7 +24,14 @@ private:
     int xf[1000];
     int yf[1000];
     int zf[1000];
+    double erg[3];
+
     void setstationtime(int nr, int rawtime);
+    int rechne();
+    double f(double x, double y, double z, int n);
+    void gradf(double x, double y, double z, int n);
+    double armijo(double x, double y, double z, int n);
+    double wrapper(double station[][3], double start[3], double radius[], int nn, double *refx, double *refy, double *refz);
 
 };
 

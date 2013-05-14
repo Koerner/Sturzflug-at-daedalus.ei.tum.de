@@ -9,7 +9,7 @@
 #include <QDialog>
 #include <qstring>
 
-#include <ips.h>
+#include "ips.h"
 
 namespace Ui {
 class MainWindow;

@@ -281,7 +281,7 @@ void MainWindow::onTestButtonClicked()
 
 
    QString str;
-   str.append(QString("%1").arg(x.gettimef(2)));
+   str.append(QString("%1").arg(x.gettimef(2)));//aufruf_wrapper()
    IPSwriteComText(str);
 }
 //TestButton STOP

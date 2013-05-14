@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <ips.h>
+#include "ips.h"
 
 int main(int argc, char *argv[])
 {
