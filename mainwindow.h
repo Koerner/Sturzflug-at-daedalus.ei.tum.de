@@ -29,6 +29,7 @@ public:
     void IPSwriteComText(QString writeComText);
     void IPSsendCOM(int sendCOM);
     ips x;
+    int posStation[10][3];
 
 
     Q_OBJECT
@@ -61,6 +62,7 @@ private Q_SLOTS:
     void IPSonReadyRead();
 
     void onTestButtonClicked();
+    void setPosStation();
 
 };
 

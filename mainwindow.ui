@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="TestButton">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>400</y>
+      <x>10</x>
+      <y>420</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -30,10 +30,10 @@
    <widget class="QPlainTextEdit" name="XbeesendEdit">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>290</y>
+      <x>240</x>
+      <y>420</y>
       <width>104</width>
-      <height>71</height>
+      <height>31</height>
      </rect>
     </property>
    </widget>
@@ -186,12 +186,153 @@
    <widget class="QPlainTextEdit" name="IPSsendEdit">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>190</y>
+      <x>120</x>
+      <y>420</y>
       <width>104</width>
-      <height>71</height>
+      <height>31</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>316</x>
+      <y>0</y>
+      <width>281</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Tab 1</string>
+     </attribute>
+     <widget class="QWidget" name="gridLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>271</width>
+        <height>296</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="s2y"/>
+       </item>
+       <item row="7" column="1">
+        <widget class="QSpinBox" name="s7y"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QSpinBox" name="s2x"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QSpinBox" name="s1x"/>
+       </item>
+       <item row="8" column="0">
+        <widget class="QSpinBox" name="s8x"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QSpinBox" name="s6x"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Z-Koordinate</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="s3y"/>
+       </item>
+       <item row="7" column="2">
+        <widget class="QSpinBox" name="s7z"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QSpinBox" name="s9x"/>
+       </item>
+       <item row="8" column="1">
+        <widget class="QSpinBox" name="s8y"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="s1y"/>
+       </item>
+       <item row="3" column="2">
+        <widget class="QSpinBox" name="s3z"/>
+       </item>
+       <item row="1" column="2">
+        <widget class="QSpinBox" name="s1z"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QSpinBox" name="s3x"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Y-Koordinate</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>X-Kordinate</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QSpinBox" name="s2z"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QSpinBox" name="s5x"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QSpinBox" name="s4x"/>
+       </item>
+       <item row="8" column="2">
+        <widget class="QSpinBox" name="s8z"/>
+       </item>
+       <item row="4" column="1">
+        <widget class="QSpinBox" name="s4y"/>
+       </item>
+       <item row="6" column="2">
+        <widget class="QSpinBox" name="s6z"/>
+       </item>
+       <item row="5" column="1">
+        <widget class="QSpinBox" name="s5y"/>
+       </item>
+       <item row="6" column="1">
+        <widget class="QSpinBox" name="s6y"/>
+       </item>
+       <item row="4" column="2">
+        <widget class="QSpinBox" name="s4z"/>
+       </item>
+       <item row="5" column="2">
+        <widget class="QSpinBox" name="s5z"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QSpinBox" name="s7x"/>
+       </item>
+       <item row="9" column="1">
+        <widget class="QSpinBox" name="s9y"/>
+       </item>
+       <item row="9" column="2">
+        <widget class="QSpinBox" name="s9z"/>
+       </item>
+       <item row="10" column="0" colspan="3">
+        <widget class="QPushButton" name="posStationSetzen">
+         <property name="text">
+          <string>Stationen speichern</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

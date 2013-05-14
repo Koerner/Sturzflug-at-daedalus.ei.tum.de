@@ -72,6 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->IPSportBox, SIGNAL(editTextChanged(QString)), SLOT(IPSonPortNameChanged(QString)));
     connect(IPStimer, SIGNAL(timeout()), SLOT(IPSonReadyRead()));
     connect(IPSport, SIGNAL(readyRead()), SLOT(IPSonReadyRead()));
+    connect(ui->posStationSetzen, SIGNAL(clicked()), SLOT(setPosStation()));
 
     //ConnectorenSTOP
 
@@ -266,7 +267,16 @@ void MainWindow::IPSsendCOM(int sendCOM)
 
 //ComPort schreiben STOP
 
+//Positionen der Bodenstationen speichern
 
+void MainWindow::setPosStation()
+{
+    posStation[0][0]=ui->s1x->value(); //x
+    posStation[0][1]=ui->s1y->value(); //y
+    posStation[0][2]=ui->s1z->value(); //z
+}
+
+//STOP Positionen der Bodenstationen speichern
 
 
 
@@ -281,7 +291,11 @@ void MainWindow::onTestButtonClicked()
 
 
    QString str;
+<<<<<<< HEAD
    str.append(QString("%1").arg(x.gettimef(2)));//aufruf_wrapper()
+=======
+   str.append(QString("%1").arg(posStation[0][0])); //x.gettimef(2)
+>>>>>>> GUI Bodenstationen Pos
    IPSwriteComText(str);
 }
 //TestButton STOP
