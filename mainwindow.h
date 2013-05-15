@@ -2,13 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "qextserialport.h"
-#include "qextserialenumerator.h"
-#include "ui_mainwindow.h"
 #include <QtCore>
 #include <QDialog>
 #include <qstring>
 
+
+#include "qextserialport.h"
+#include "qextserialenumerator.h"
+#include "ui_mainwindow.h"
 #include "ips.h"
 
 namespace Ui {
@@ -28,8 +29,10 @@ public:
     void XbeesendCOM(int sendCOM);
     void IPSwriteComText(QString writeComText);
     void IPSsendCOM(int sendCOM);
+    int getposStation(int station, int xyz);
     ips x;
-    int posStation[10][3];
+
+
 
 
     Q_OBJECT
