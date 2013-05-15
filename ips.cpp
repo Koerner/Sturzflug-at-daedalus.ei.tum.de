@@ -143,7 +143,7 @@ double ips::wrapper(double start[3], double radius[], int nn, double *refx, doub
 {
     int i=0;
     for (i=0;i<nn;i++) {
-      base_x[i] = mainwindow::posStation[i][0];
+      base_x[i] = w.posStation[i][0];
       base_y[i] = w.posStation[i][1];
       base_z[i] = w.posStation[i][2];
       r[i] = radius[i];
