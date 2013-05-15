@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setPosStation();
 
     // GUI Einstellunegn
 
@@ -271,44 +272,50 @@ void MainWindow::IPSsendCOM(int sendCOM)
 
 void MainWindow::setPosStation()
 {
-    posStation[0][0]=ui->s1x->value(); //x
-    posStation[0][1]=ui->s1y->value(); //y
-    posStation[0][2]=ui->s1z->value(); //z
+    x.posStation[0][0]=ui->s1x->value(); //x
+    x.posStation[0][1]=ui->s1y->value(); //y
+    x.posStation[0][2]=ui->s1z->value(); //z
 
-    posStation[1][0]=ui->s1x->value(); //x
-    posStation[1][1]=ui->s1y->value(); //y
-    posStation[1][2]=ui->s1z->value(); //z
+    x.posStation[1][0]=ui->s1x->value(); //x
+    x.posStation[1][1]=ui->s1y->value(); //y
+    x.posStation[1][2]=ui->s1z->value(); //z
 
-    posStation[2][0]=ui->s1x->value(); //x
-    posStation[2][1]=ui->s1y->value(); //y
-    posStation[2][2]=ui->s1z->value(); //z
+    x.posStation[2][0]=ui->s1x->value(); //x
+    x.posStation[2][1]=ui->s1y->value(); //y
+    x.posStation[2][2]=ui->s1z->value(); //z
 
-    posStation[3][0]=ui->s1x->value(); //x
-    posStation[3][1]=ui->s1y->value(); //y
-    posStation[3][2]=ui->s1z->value(); //z
+    x.posStation[3][0]=ui->s1x->value(); //x
+    x.posStation[3][1]=ui->s1y->value(); //y
+    x.posStation[3][2]=ui->s1z->value(); //z
 
-    posStation[4][0]=ui->s1x->value(); //x
-    posStation[4][1]=ui->s1y->value(); //y
-    posStation[4][2]=ui->s1z->value(); //z
+    x.posStation[4][0]=ui->s1x->value(); //x
+    x.posStation[4][1]=ui->s1y->value(); //y
+    x.posStation[4][2]=ui->s1z->value(); //z
 
-    posStation[5][0]=ui->s1x->value(); //x
-    posStation[5][1]=ui->s1y->value(); //y
-    posStation[5][2]=ui->s1z->value(); //z
+    x.posStation[5][0]=ui->s1x->value(); //x
+    x.posStation[5][1]=ui->s1y->value(); //y
+    x.posStation[5][2]=ui->s1z->value(); //z
 
-    posStation[6][0]=ui->s1x->value(); //x
-    posStation[6][1]=ui->s1y->value(); //y
-    posStation[6][2]=ui->s1z->value(); //z
+    x.posStation[6][0]=ui->s1x->value(); //x
+    x.posStation[6][1]=ui->s1y->value(); //y
+    x.posStation[6][2]=ui->s1z->value(); //z
 
-    posStation[7][0]=ui->s1x->value(); //x
-    posStation[7][1]=ui->s1y->value(); //y
-    posStation[7][2]=ui->s1z->value(); //z
+    x.posStation[7][0]=ui->s1x->value(); //x
+    x.posStation[7][1]=ui->s1y->value(); //y
+    x.posStation[7][2]=ui->s1z->value(); //z
 
-    posStation[8][0]=ui->s1x->value(); //x
-    posStation[8][1]=ui->s1y->value(); //y
-    posStation[8][2]=ui->s1z->value(); //z
+    x.posStation[8][0]=ui->s1x->value(); //x
+    x.posStation[8][1]=ui->s1y->value(); //y
+    x.posStation[8][2]=ui->s1z->value(); //z
 }
 
 //STOP Positionen der Bodenstationen speichern
+
+//array Daten übergebenen PosStation
+int MainWindow::getposStation(int station, int xyz)
+{
+    return x.posStation[station][xyz];
+}
 
 
 
@@ -324,7 +331,10 @@ void MainWindow::onTestButtonClicked()
 
    QString str;
 
-   str.append(QString("%1").arg(posStation[0][0])); //x.gettimef(2)
+   str.append(QString("%1").arg(x.posStation[0][0])); //x.gettimef(2)
+   str.append(QString("%1").arg(getposStation(0,0))); //x.gettimef(2)
+   //str.append(QString("%1").arg(x.aufruf_wrapper())); //x.gettimef(2)
+   //x.aufruf_wrapper();
 
    IPSwriteComText(str);
 }

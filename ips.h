@@ -19,6 +19,8 @@ public:
     double pos_y[10];
     double pos_z[10];
 
+    int posStation[10][3];
+
 private:
     int x[50];
     int y[50];

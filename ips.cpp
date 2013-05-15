@@ -67,6 +67,11 @@ double ips::gettimef(int station)
 }
 //STOP Filter
 
+
+
+
+//Triang.
+
 int ips::aufruf_wrapper()
 {
     int numstations =5;
@@ -105,8 +110,6 @@ int ips::aufruf_wrapper()
         double y;
         double z;
         double deltar;
-        //multilat.wrapper.restype=c_double
-
 
         deltar = wrapper(cstartpos, cradii, cnn, &x, &y, &z);
 
@@ -114,7 +117,7 @@ int ips::aufruf_wrapper()
         posy = y;
         posz = z;
 
-        for (i=0;8;i++)
+        for (i=0;999;i++)
         {   pos_x[i+1]=pos_x[i];
             pos_y[i+1]=pos_y[i];
             pos_z[i+1]=pos_z[i];
@@ -123,7 +126,9 @@ int ips::aufruf_wrapper()
         pos_y[0]=posy;
         pos_z[0]=posz;
         //cout<< posx<< posy<< posz<<endl;
+
     }
+    return 1;
 }
 #define BASES 20	//Max Anz an Basen
 double start_x = 10000;
@@ -143,9 +148,15 @@ double ips::wrapper(double start[3], double radius[], int nn, double *refx, doub
 {
     int i=0;
     for (i=0;i<nn;i++) {
+<<<<<<< HEAD
       base_x[i] = w.posStation[i][0];
       base_y[i] = w.posStation[i][1];
       base_z[i] = w.posStation[i][2];
+=======
+        base_x[i] = posStation[i][0];
+        base_y[i] = posStation[i][1];
+        base_z[i] = posStation[i][2];
+>>>>>>> 95ed6907be002703330693bdcc325a4305a06a9c
       r[i] = radius[i];
 
     }
@@ -158,7 +169,7 @@ double ips::wrapper(double start[3], double radius[], int nn, double *refx, doub
     *refx = posx;
     *refy = posy;
     *refz = posz;
-    double genauigkeit = 0.0;
+    double genauigkeit = 1;
     return genauigkeit;
 }
 
@@ -196,7 +207,7 @@ int ips::rechne()
 
         //auf Staionaritaet pruefen
         if (((x-x_neu)*(x-x_neu)+(y-y_neu)*(y-y_neu)+(z-z_neu)*(z-z_neu))<0.0001)
-            break;
+           { break;}
         x = x_neu;
         y = y_neu;
         z = z_neu;
