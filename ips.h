@@ -12,7 +12,7 @@ public:
     void setdata(QString comdata);
     int gettime (int station, int time);
     double gettimef(int station);
-    int aufruf_wrapper();
+    int wrapper();
 
     int stationtime[10][10];//={{0}};
     double pos_x[10];
@@ -32,6 +32,17 @@ private:
     double posx;
     double posy;
     double posz;
+    double start_x;// = 10000;
+    double start_y;// = 10000;
+    double start_z;// = 10000;
+    //Koord der Basen
+    double base_x[10];
+    double base_y[10];
+    double base_z[10];
+    //Abstaende zu den Basen
+    double r[10];
+    //Anz der Basen
+    int n;// = 0;
 
 
     void setstationtime(int nr, int rawtime);
@@ -39,7 +50,6 @@ private:
     double f(double x, double y, double z, int n);
     void gradf(double x, double y, double z, int n);
     double armijo(double x, double y, double z, int n);
-    double wrapper(double start[3], double radius[], int nn, double *refx, double *refy, double *refz);
 
 };
 

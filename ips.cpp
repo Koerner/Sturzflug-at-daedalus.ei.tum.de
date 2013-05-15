@@ -72,100 +72,43 @@ double ips::gettimef(int station)
 
 //Triang.
 
-int ips::aufruf_wrapper()
+
+int ips::wrapper()
 {
-    int numstations =5;
+    int numstations =3;
     int i = 0;
-
+    int hans;
     //    millis = int(round(time.time() * 1000))
-    //for station in stations:
-    //    if (millis - station[4]) < 1500:
-    //        numstations += 1;
-    if (numstations > 2){
-        i = -1;
-        //double cstations[5][3]={{0}}; nicht benötigt
-        double cradii[5]={0};
-        double cstartpos [3];
-        cstartpos[0]=posx;
-        cstartpos[0]=posy;
-        cstartpos[0]=posz;
 
-        //alle Werte auf Null setzen
-        //??cstartpos = cstarttype(posx, posy, posz);
-        int cnn = numstations;
-        for(i=0; i < numstations; i++)
-        {
-           // if (millis - station[4]) < 1500:
-                //cstations[i][0] = meineBodenstation.GetStationen_x(i);
-                //cstations[i][1] = meineBodenstation.GetStationen_y(i);
-                //cstations[i][2] = meineBodenstation.GetStationen_z(i);
-                cradii[i] = gettimef(i)*0.343;
-                //cradii[1] = 100;
-                //cradii[2] = 300;
-                //cradii[3] = 400;
-        }
-
-
-        double x;
-        double y;
-        double z;
-        double deltar;
-
-        deltar = wrapper(cstartpos, cradii, cnn, &x, &y, &z);
-
-        posx = x;
-        posy = y;
-        posz = z;
-
-        for (i=0;999;i++)
-        {   pos_x[i+1]=pos_x[i];
-            pos_y[i+1]=pos_y[i];
-            pos_z[i+1]=pos_z[i];
-        }
-        pos_x[0]=posx;
-        pos_y[0]=posy;
-        pos_z[0]=posz;
-        //cout<< posx<< posy<< posz<<endl;
-
-    }
-    return 1;
-}
-#define BASES 20	//Max Anz an Basen
-double start_x = 10000;
-double start_y = 10000;
-double start_z = 10000;
-//Koord der Basen
-double base_x[BASES];
-double base_y[BASES];
-double base_z[BASES];
-//Abstaende zu den Basen
-double r[BASES];
-//Anz der Basen
-int n = 0;
-
-
-double ips::wrapper(double start[3], double radius[], int nn, double *refx, double *refy, double *refz)
-{
-    int i=0;
-    for (i=0;i<nn;i++) {
+    for (i=0;i<numstations;i++) {
 
         base_x[i] = posStation[i][0];
         base_y[i] = posStation[i][1];
         base_z[i] = posStation[i][2];
 
-      r[i] = radius[i];
+      //r[i] = gettimef(i)*0.343;
+        r[0]=1000;
+        r[1]=1000;
+        r[2]=1000;
 
     }
-    n = nn;
-    start_x = start[0];
-    start_y = start[1];
-    start_z = start[2];
+    n = numstations;
+    start_x = pos_x[0];
+    start_y = pos_y[0];
+    start_z = pos_y[0];
 
-    rechne();
-    *refx = posx;
-    *refy = posy;
-    *refz = posz;
-    double genauigkeit = 1;
+    hans=rechne();
+    hans = hans+1;
+
+    //for (i=0;999;i++)
+    //{   pos_x[i+1]=pos_x[i];
+    //    pos_y[i+1]=pos_y[i];
+    //    pos_z[i+1]=pos_z[i];
+    //}
+    pos_x[0]=posx;
+    pos_y[0]=posy;
+    pos_z[0]=posz;
+    int genauigkeit = 1;
     return genauigkeit;
 }
 
@@ -193,9 +136,6 @@ int ips::rechne()
         //Schrittweite nach Armijo (google it!!)
         schritt = armijo(x,y,z,n);
 
-        //x_neu = x - schritt*richtung[0];
-        //y_neu = y - schritt*richtung[1];
-        //z_neu = z - schritt*richtung[2];
         x_neu = x - schritt*richtung[0];
         y_neu = y - schritt*richtung[1];
         z_neu = z - schritt*richtung[2];

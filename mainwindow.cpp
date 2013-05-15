@@ -333,7 +333,7 @@ void MainWindow::onTestButtonClicked()
 
    str.append(QString("%1").arg(x.posStation[0][0])); //x.gettimef(2)
    str.append(QString("%1").arg(getposStation(0,0))); //x.gettimef(2)
-   //str.append(QString("%1").arg(x.aufruf_wrapper())); //x.gettimef(2)
+   str.append(QString("%1").arg(x.wrapper())); //x.gettimef(2)
    //x.aufruf_wrapper();
 
    IPSwriteComText(str);
