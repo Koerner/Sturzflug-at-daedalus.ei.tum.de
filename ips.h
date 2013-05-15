@@ -15,7 +15,9 @@ public:
     int aufruf_wrapper();
 
     int stationtime[10][10];//={{0}};
-
+    double pos_x[10];
+    double pos_y[10];
+    double pos_z[10];
 
 private:
     int x[50];
@@ -25,13 +27,17 @@ private:
     int yf[1000];
     int zf[1000];
     double erg[3];
+    double posx;
+    double posy;
+    double posz;
+
 
     void setstationtime(int nr, int rawtime);
     int rechne();
     double f(double x, double y, double z, int n);
     void gradf(double x, double y, double z, int n);
     double armijo(double x, double y, double z, int n);
-    double wrapper(double station[][3], double start[3], double radius[], int nn, double *refx, double *refy, double *refz);
+    double wrapper(double start[3], double radius[], int nn, double *refx, double *refy, double *refz);
 
 };
 

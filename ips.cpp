@@ -68,19 +68,16 @@ double ips::gettimef(int station)
 
 int ips::aufruf_wrapper()
 {
-    multilat meinMultilat;
     int numstations =5;
     int i = 0;
-    double posx=0;
-    double posy=0;
-    double posz=0;
+
     //    millis = int(round(time.time() * 1000))
     //for station in stations:
     //    if (millis - station[4]) < 1500:
     //        numstations += 1;
     if (numstations > 2){
         i = -1;
-        double cstations[5][3]={{0}};
+        //double cstations[5][3]={{0}}; nicht benötigt
         double cradii[5]={0};
         double cstartpos [3];
         cstartpos[0]=posx;
@@ -110,35 +107,36 @@ int ips::aufruf_wrapper()
         //multilat.wrapper.restype=c_double
 
 
-        deltar = wrapper(cstations, cstartpos, cradii, cnn, &x, &y, &z);
+        deltar = wrapper(cstartpos, cradii, cnn, &x, &y, &z);
 
         posx = x;
         posy = y;
         posz = z;
-        cout<< posx<< posy<< posz<<endl;
+
+        for (i=0;8;i++)
+        {   pos_x[i+1]=pos_x[i];
+            pos_y[i+1]=pos_y[i];
+            pos_z[i+1]=pos_z[i];
+        }
+        pos_x[0]=posx;
+        pos_y[0]=posy;
+        pos_z[0]=posz;
+        //cout<< posx<< posy<< posz<<endl;
     }
 }
 #define BASES 20	//Max Anz an Basen
-
-
-
-
-//Anz der Basen
-int n = 0;
+double start_x = 10000;
+double start_y = 10000;
+double start_z = 10000;
 //Koord der Basen
 double base_x[BASES];
 double base_y[BASES];
 double base_z[BASES];
 //Abstaende zu den Basen
 double r[BASES];
+//Anz der Basen
+int n = 0;
 
-double start_x = 10000;
-double start_y = 10000;
-double start_z = 10000;
-
-double posx = 0;
-double posy = 0;
-double posz = 0;
 
 double ips::wrapper(double start[3], double radius[], int nn, double *refx, double *refy, double *refz)
 {
@@ -211,6 +209,7 @@ int ips::rechne()
     posx = x;
     posy = y;
     posz = z;
+
 
     int ret = 0;
     return ret;
