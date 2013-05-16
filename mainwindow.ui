@@ -217,22 +217,46 @@
       </property>
       <layout class="QGridLayout" name="gridLayout">
        <item row="2" column="1">
-        <widget class="QSpinBox" name="s2y"/>
+        <widget class="QSpinBox" name="s2y">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="7" column="1">
-        <widget class="QSpinBox" name="s7y"/>
+        <widget class="QSpinBox" name="s7y">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QSpinBox" name="s2x"/>
+        <widget class="QSpinBox" name="s2x">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QSpinBox" name="s1x"/>
+        <widget class="QSpinBox" name="s1x">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="8" column="0">
-        <widget class="QSpinBox" name="s8x"/>
+        <widget class="QSpinBox" name="s8x">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="6" column="0">
-        <widget class="QSpinBox" name="s6x"/>
+        <widget class="QSpinBox" name="s6x">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="0" column="2">
         <widget class="QLabel" name="label_3">
@@ -242,28 +266,60 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QSpinBox" name="s3y"/>
+        <widget class="QSpinBox" name="s3y">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="7" column="2">
-        <widget class="QSpinBox" name="s7z"/>
+        <widget class="QSpinBox" name="s7z">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="9" column="0">
-        <widget class="QSpinBox" name="s9x"/>
+        <widget class="QSpinBox" name="s9x">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="8" column="1">
-        <widget class="QSpinBox" name="s8y"/>
+        <widget class="QSpinBox" name="s8y">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QSpinBox" name="s1y"/>
+        <widget class="QSpinBox" name="s1y">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QSpinBox" name="s3z"/>
+        <widget class="QSpinBox" name="s3z">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QSpinBox" name="s1z"/>
+        <widget class="QSpinBox" name="s1z">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QSpinBox" name="s3x"/>
+        <widget class="QSpinBox" name="s3x">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_2">
@@ -280,43 +336,95 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QSpinBox" name="s2z"/>
+        <widget class="QSpinBox" name="s2z">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="5" column="0">
-        <widget class="QSpinBox" name="s5x"/>
+        <widget class="QSpinBox" name="s5x">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QSpinBox" name="s4x"/>
+        <widget class="QSpinBox" name="s4x">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="8" column="2">
-        <widget class="QSpinBox" name="s8z"/>
+        <widget class="QSpinBox" name="s8z">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QSpinBox" name="s4y"/>
+        <widget class="QSpinBox" name="s4y">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="6" column="2">
-        <widget class="QSpinBox" name="s6z"/>
+        <widget class="QSpinBox" name="s6z">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QSpinBox" name="s5y"/>
+        <widget class="QSpinBox" name="s5y">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QSpinBox" name="s6y"/>
+        <widget class="QSpinBox" name="s6y">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QSpinBox" name="s4z"/>
+        <widget class="QSpinBox" name="s4z">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="5" column="2">
-        <widget class="QSpinBox" name="s5z"/>
+        <widget class="QSpinBox" name="s5z">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="7" column="0">
-        <widget class="QSpinBox" name="s7x"/>
+        <widget class="QSpinBox" name="s7x">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="9" column="1">
-        <widget class="QSpinBox" name="s9y"/>
+        <widget class="QSpinBox" name="s9y">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="9" column="2">
-        <widget class="QSpinBox" name="s9z"/>
+        <widget class="QSpinBox" name="s9z">
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+        </widget>
        </item>
        <item row="10" column="0" colspan="3">
         <widget class="QPushButton" name="posStationSetzen">
