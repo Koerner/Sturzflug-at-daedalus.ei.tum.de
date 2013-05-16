@@ -3,6 +3,7 @@
 #include <QString>
 #include <QStringList>
 #include <QArrayData>
+#include <QList>
 
 class ips
 {

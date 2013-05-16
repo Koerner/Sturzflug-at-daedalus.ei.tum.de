@@ -121,6 +121,9 @@ int ips::gettimef(int station)
 
 int ips::wrapper()
 {
+    QList<int> xList;
+    //QList<int> yList;
+    //QList<int> zList;
     int numstations =3;
     int i = 0;
     int hans;
@@ -133,9 +136,9 @@ int ips::wrapper()
         base_z[i] = posStation[i][2];
 
       //r[i] = gettimef(i)*0.343;
-        r[0]=1000;
-        r[1]=1000;
-        r[2]=1000;
+        r[0]=1728;
+        r[1]=3508;
+        r[2]=4960;
 
     }
     n = numstations;
@@ -154,8 +157,11 @@ int ips::wrapper()
     pos_x[0]=posx;
     pos_y[0]=posy;
     pos_z[0]=posz;
-    int genauigkeit = 1;
-    return genauigkeit;
+    int b;
+    xList.append(posx);
+    b=xList.at(0);
+    //int genauigkeit = 1;
+    return b;
 }
 
 int ips::rechne()
