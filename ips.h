@@ -11,7 +11,7 @@ public:
     //int getpos();
     void setdata(QString comdata);
     int gettime (int station, int time);
-    double gettimef(int station);
+    int gettimef(int station);
     int wrapper();
 
     int stationtime[10][10];//={{0}};
@@ -46,6 +46,7 @@ private:
 
 
     void setstationtime(int nr, int rawtime);
+    void keepstationtime (int nr);
     int rechne();
     double f(double x, double y, double z, int n);
     void gradf(double x, double y, double z, int n);

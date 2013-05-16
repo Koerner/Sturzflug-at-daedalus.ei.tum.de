@@ -13,17 +13,54 @@ void ips::setdata(QString comdata)
 {
     QString delimiterPattern("\n");
     QStringList comdatasplit = comdata.split(delimiterPattern);
-    int rawtime[10];
     int i=0;
-    for (i=0; i<10; i++)
+    for (i=0; i<comdatasplit.size(); i++)
         {
-        //if(i<=comdatasplit.size()){
-        bool ok;
-        rawtime[i]=comdatasplit[i].mid(16,4).toInt(&ok,10); //mid(16,4) = Position 17-20 extrahieren / String in int umwandeln Basis 10
-        setstationtime(i,rawtime[i]);
-        //}
-        //else {setstationtime(i,0);}
+
+        if(comdatasplit[i].length()>0){
+        if (comdatasplit[i].left(1).contains("t", Qt::CaseInsensitive))
+            {if(comdatasplit[i].length()==13)
+                {
+//            setstationtime(0,3);
+                bool ok;
+                int s=0;
+                s=comdatasplit[i].mid(1,2).toInt(&ok,10)-1;
+                int t=0;
+                comdatasplit[i].mid(3,10).toInt(&ok,10);
+                if(ok){
+                t=comdatasplit[i].mid(3,10).toInt(&ok,10);
+                }
+                setstationtime(s,t);
+               }
+            else{ //braucht es das? ich glaub nicht
+                if(comdatasplit[i].length()>3)
+                {
+                    bool ok;
+                    int s=0;
+                    comdatasplit[i].mid(1,2).toInt(&ok,10);
+                    if(ok)
+                    {
+                    s=comdatasplit[i].mid(1,2).toInt(&ok,10)-1;
+                    }
+                    else
+                    {
+//                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10);  //geht nicht
+                    }
+                    setstationtime(s,0); //keepstationtime()
+                }
+                else
+                {
+//                    bool ok;
+                    int s=0;
+//                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10); //geht nicht
+                    setstationtime(s,0); //keepstationtime
+                }
+
+
+            }
+            }
         }
+    }
 }
 //STOP Extrahiert die Laufzeit aller Stationen
 
@@ -31,9 +68,18 @@ void ips::setdata(QString comdata)
 void ips::setstationtime (int nr, int rawtime)
 {
     int i=0;
-    for (i=0; i<9; i++)
-    {stationtime[nr][i+1]=stationtime[nr][i];}
+    for (i=8; i>0; i--)
+    {stationtime[nr][i]=stationtime[nr][i-1];}
     stationtime[nr][0]=rawtime;
+
+
+}
+void ips::keepstationtime (int nr)
+{
+    int i=0;
+    for (i=8; i>0; i--)
+    {stationtime[nr][i]=stationtime[nr][i-1];}
+    stationtime[nr][0]=stationtime[nr][1];
 
 
 }
@@ -45,7 +91,7 @@ int ips::gettime (int station, int time)
 }
 
 // Filter
-double ips::gettimef(int station)
+int ips::gettimef(int station)
 {
     int i=0;
     double timef=0;
@@ -54,13 +100,13 @@ double ips::gettimef(int station)
     int filterstr=1;
 
     for(i=0;i<filterzus;i++)
-        array[i] = ips::gettime(station, i);
+       { array[i] = stationtime[station][i];}
 
     std::sort(array, array+filterzus);
     timef=0;
 
     for(i=filterstr;i<(filterzus-filterstr);i++)
-            timef=timef+array[i];
+            {timef=timef+array[i];}
 
     timef=timef/(filterzus-(filterstr*2));
     return timef;

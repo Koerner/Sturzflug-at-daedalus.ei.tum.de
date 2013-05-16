@@ -216,10 +216,11 @@ void MainWindow::IPSonReadyRead()
 {
     if (IPSport->bytesAvailable()) {
         QString com = QString::fromLatin1(IPSport->readAll());
-        x.setdata(com);
         IPSwriteComText ("->");
         IPSwriteComText(com);
         IPSwriteComText ("\n");
+
+        x.setdata(com);
     }
 }
 //ComPort lesen STOP
@@ -331,9 +332,14 @@ void MainWindow::onTestButtonClicked()
 
    QString str;
 
-   str.append(QString("%1").arg(x.posStation[0][0])); //x.gettimef(2)
-   str.append(QString("%1").arg(getposStation(0,0))); //x.gettimef(2)
-   str.append(QString("%1").arg(x.wrapper())); //x.gettimef(2)
+   int i=0;
+   for(i=0;i<9;i++)
+   {str.append(QString("%1").arg(x.gettime(1,i)));}
+   str.append(QString("%1").arg(x.gettimef(1)));
+
+   str.append(QString("%1").arg(x.posStation[0][0]));
+   str.append(QString("%1").arg(getposStation(0,0)));
+   str.append(QString("%1").arg(x.wrapper()));
    //x.aufruf_wrapper();
 
    IPSwriteComText(str);
