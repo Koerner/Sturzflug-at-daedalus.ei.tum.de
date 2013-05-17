@@ -340,7 +340,9 @@ void MainWindow::onTestButtonClicked()
    str.append(QString("%1").arg(x.posStation[0][0]));
    str.append(QString("%1").arg(getposStation(0,0)));
    str.append(QString("%1").arg(x.wrapper()));
-   //x.aufruf_wrapper();
+   str.append(QString("%1").arg(x.xList.at(0)));
+   str.append(QString("%1").arg(x.yList.at(0)));
+   str.append(QString("%1").arg(x.zList.at(0)));
 
    IPSwriteComText(str);
 }

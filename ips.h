@@ -16,11 +16,10 @@ public:
     int wrapper();
 
     int stationtime[10][10];//={{0}};
-    double pos_x[10];
-    double pos_y[10];
-    double pos_z[10];
-
     int posStation[10][3];
+    QList<int> xList;
+    QList<int> yList;
+    QList<int> zList;
 
 private:
     int x[50];
@@ -48,7 +47,7 @@ private:
 
     void setstationtime(int nr, int rawtime);
     void keepstationtime (int nr);
-    int rechne();
+    void rechne();
     double f(double x, double y, double z, int n);
     void gradf(double x, double y, double z, int n);
     double armijo(double x, double y, double z, int n);

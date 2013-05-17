@@ -116,55 +116,52 @@ int ips::gettimef(int station)
 
 
 
-//Triang.
+//Beginn Triang.
+//Der Großteil des Codes ist vom Tutor Markus erstellt und wurde hier übernommen.
+//Einige Änderungen wurden durchgeführt, um es c++-konform zu machen
+//Die Berechnung basiert auf dem numerischen Gradientenverfahren
 
 
+//Beginn wrapper (Sammeln der Daten)
 int ips::wrapper()
 {
-    QList<int> xList;
-    //QList<int> yList;
-    //QList<int> zList;
+
     int numstations =3;
     int i = 0;
-    int hans;
+
     //    millis = int(round(time.time() * 1000))
 
     for (i=0;i<numstations;i++) {
 
-        base_x[i] = posStation[i][0];
-        base_y[i] = posStation[i][1];
-        base_z[i] = posStation[i][2];
+        base_x[i] = posStation[i][0];       //Die Koordinaten der
+        base_y[i] = posStation[i][1];       //Bdenstationen werden
+        base_z[i] = posStation[i][2];       //abgepeichert
 
-      //r[i] = gettimef(i)*0.343;
+        //Berechnung des Abstandes des Zeppelins zu den einzelnen Bodenstationen anahnd der Laufzeiten
+        //r[i] = gettimef(i)*0.343;
         r[0]=1728;
         r[1]=3508;
         r[2]=4960;
 
     }
     n = numstations;
-    start_x = pos_x[0];
-    start_y = pos_y[0];
-    start_z = pos_y[0];
+    start_x = xList.at(0);
+    start_y = yList.at(0);
+    start_z = zList.at(0);
 
-    hans=rechne();
-    hans = hans+1;
+    rechne();
 
-    //for (i=0;999;i++)
-    //{   pos_x[i+1]=pos_x[i];
-    //    pos_y[i+1]=pos_y[i];
-    //    pos_z[i+1]=pos_z[i];
-    //}
-    pos_x[0]=posx;
-    pos_y[0]=posy;
-    pos_z[0]=posz;
-    int b;
-    xList.append(posx);
-    b=xList.at(0);
+    xList.prepend(10);//posx
+    yList.prepend(5);//posy
+    zList.prepend(4);//posz
     //int genauigkeit = 1;
-    return b;
+    return 0;
 }
+//Ende wrapper
 
-int ips::rechne()
+
+//Start Berechnung der Koordinaten
+void ips::rechne()
 {
     //double *richtung;
     double richtung[3]={0};
@@ -211,12 +208,13 @@ int ips::rechne()
     posz = z;
 
 
-    int ret = 0;
-    return ret;
+    //int ret = 0;
+    //return ret;
 }
+//Ende Berechnung der Koordinaten
 
 
-//zu minimierende Funktion f
+//Start zu minimierende Funktion f
 double ips::f(double x, double y, double z, int n)
 {
     int i = 0;
@@ -230,9 +228,10 @@ double ips::f(double x, double y, double z, int n)
     }
     return erg3;
 }
+//Ende zu minimierende Funktion f
 
 
-//grad f
+//Start Berechnung des Gradienten f (gradf)
 void ips::gradf(double x, double y, double z, int n)
 {
 
@@ -253,12 +252,11 @@ void ips::gradf(double x, double y, double z, int n)
     erg[1] = erg[1] *4;
     erg[2] = erg[2] *4;
 
-
-    //return 0;
 }
+//Ende gradf
 
 
-//armijo-Schrittweite bestimmen
+//Start Bestimmung der armijo-Schrittweite(armijo)
 double ips::armijo(double x, double y, double z, int n)
 {
     double schritt = 1;
@@ -285,3 +283,6 @@ double ips::armijo(double x, double y, double z, int n)
 
     return schritt;
 }
+//Ende armijo
+
+//Ende Triang.
