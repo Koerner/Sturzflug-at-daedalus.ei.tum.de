@@ -40,7 +40,7 @@
    <widget class="QTabWidget" name="COMtabWidget">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>840</x>
       <y>0</y>
       <width>181</width>
       <height>401</height>
@@ -196,7 +196,7 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>316</x>
+      <x>560</x>
       <y>0</y>
       <width>281</width>
       <height>401</height>
@@ -445,11 +445,14 @@
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>256</width>
-      <height>192</height>
+      <x>10</x>
+      <y>10</y>
+      <width>541</width>
+      <height>391</height>
      </rect>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
     </property>
    </widget>
   </widget>
@@ -483,8 +486,8 @@
   <tabstop>s1y</tabstop>
   <tabstop>s1z</tabstop>
   <tabstop>s2x</tabstop>
-  <tabstop>s2z</tabstop>
   <tabstop>s2y</tabstop>
+  <tabstop>s2z</tabstop>
   <tabstop>s3x</tabstop>
   <tabstop>s3y</tabstop>
   <tabstop>s3z</tabstop>

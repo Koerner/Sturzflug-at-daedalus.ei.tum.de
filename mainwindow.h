@@ -42,6 +42,9 @@ public:
     ~MainWindow();
 
     
+    void DrawMap();
+
+
 private:
     Ui::MainWindow *ui;
     QTimer *Xbeetimer;
@@ -50,6 +53,7 @@ private:
     QextSerialPort *Xbeeport;
     QextSerialPort *IPSport;
     QextSerialEnumerator *enumerator;
+    QGraphicsScene *map;
 
 
 
@@ -67,7 +71,7 @@ private Q_SLOTS:
 
     void onTestButtonClicked();
     void setPosStation();
-    void Koordinatenrefresh();
+    void refresh();
 
 };
 

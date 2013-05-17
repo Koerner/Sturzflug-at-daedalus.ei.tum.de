@@ -11,6 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setPosStation();
 
+    map = new QGraphicsScene(this);
+    ui->graphicsView->setScene(map);
+
     // GUI Einstellunegn
 
     setWindowTitle(tr("Zentrale - Sturzflug@daedalus"));
@@ -50,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     IPStimer->setInterval(40); //könnte probleme lösen
 
     Filtertimer = new QTimer(this);
-    Filtertimer->setInterval(1000); //Aktuallisierungsrate der Koordinaten
+    Filtertimer->setInterval(1000); //Aktuallisierungsrate 1sec
 
     //Vordefinierte Einstelluneg
     PortSettings Xbeesettings = {BAUD9600, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10};
@@ -81,8 +84,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(IPSport, SIGNAL(readyRead()), SLOT(IPSonReadyRead()));
     connect(ui->posStationSetzen, SIGNAL(clicked()), SLOT(setPosStation()));
 
-    //Koordinate refresh connector
-    connect(Filtertimer, SIGNAL(timeout()), SLOT(Koordinatenrefresh()));
+    //refresh connector ZENTRALES Takt-Element
+    connect(Filtertimer, SIGNAL(timeout()), SLOT(refresh()));
     Filtertimer->start();
 
 
@@ -226,12 +229,12 @@ void MainWindow::XbeeonReadyRead()
 void MainWindow::IPSonReadyRead()
 {
     if (IPSport->bytesAvailable()) {
-        QString com = QString::fromLatin1(IPSport->readAll());
+        QString comdata = QString::fromLatin1(IPSport->readAll());
         IPSwriteComText ("->");
-        IPSwriteComText(com);
+        IPSwriteComText(comdata);
         IPSwriteComText ("\n");
 
-        x.setdata(com);
+        x.setdata(comdata);
     }
 }
 //ComPort lesen STOP
@@ -288,37 +291,37 @@ void MainWindow::setPosStation()
     x.posStation[0][1]=ui->s1y->value(); //y
     x.posStation[0][2]=ui->s1z->value(); //z
 
-    x.posStation[1][0]=ui->s1x->value(); //x
-    x.posStation[1][1]=ui->s1y->value(); //y
-    x.posStation[1][2]=ui->s1z->value(); //z
+    x.posStation[1][0]=ui->s2x->value(); //x
+    x.posStation[1][1]=ui->s2y->value(); //y
+    x.posStation[1][2]=ui->s2z->value(); //z
 
-    x.posStation[2][0]=ui->s1x->value(); //x
-    x.posStation[2][1]=ui->s1y->value(); //y
-    x.posStation[2][2]=ui->s1z->value(); //z
+    x.posStation[2][0]=ui->s3x->value(); //x
+    x.posStation[2][1]=ui->s3y->value(); //y
+    x.posStation[2][2]=ui->s3z->value(); //z
 
-    x.posStation[3][0]=ui->s1x->value(); //x
-    x.posStation[3][1]=ui->s1y->value(); //y
-    x.posStation[3][2]=ui->s1z->value(); //z
+    x.posStation[3][0]=ui->s4x->value(); //x
+    x.posStation[3][1]=ui->s4y->value(); //y
+    x.posStation[3][2]=ui->s4z->value(); //z
 
-    x.posStation[4][0]=ui->s1x->value(); //x
-    x.posStation[4][1]=ui->s1y->value(); //y
-    x.posStation[4][2]=ui->s1z->value(); //z
+    x.posStation[4][0]=ui->s5x->value(); //x
+    x.posStation[4][1]=ui->s5y->value(); //y
+    x.posStation[4][2]=ui->s5z->value(); //z
 
-    x.posStation[5][0]=ui->s1x->value(); //x
-    x.posStation[5][1]=ui->s1y->value(); //y
-    x.posStation[5][2]=ui->s1z->value(); //z
+    x.posStation[5][0]=ui->s6x->value(); //x
+    x.posStation[5][1]=ui->s6y->value(); //y
+    x.posStation[5][2]=ui->s6z->value(); //z
 
-    x.posStation[6][0]=ui->s1x->value(); //x
-    x.posStation[6][1]=ui->s1y->value(); //y
-    x.posStation[6][2]=ui->s1z->value(); //z
+    x.posStation[6][0]=ui->s7x->value(); //x
+    x.posStation[6][1]=ui->s7y->value(); //y
+    x.posStation[6][2]=ui->s7z->value(); //z
 
-    x.posStation[7][0]=ui->s1x->value(); //x
-    x.posStation[7][1]=ui->s1y->value(); //y
-    x.posStation[7][2]=ui->s1z->value(); //z
+    x.posStation[7][0]=ui->s8x->value(); //x
+    x.posStation[7][1]=ui->s8y->value(); //y
+    x.posStation[7][2]=ui->s8z->value(); //z
 
-    x.posStation[8][0]=ui->s1x->value(); //x
-    x.posStation[8][1]=ui->s1y->value(); //y
-    x.posStation[8][2]=ui->s1z->value(); //z
+    x.posStation[8][0]=ui->s9x->value(); //x
+    x.posStation[8][1]=ui->s9y->value(); //y
+    x.posStation[8][2]=ui->s9z->value(); //z
 }
 
 //STOP Positionen der Bodenstationen speichern
@@ -329,10 +332,26 @@ int MainWindow::getposStation(int station, int xyz)
     return x.posStation[station][xyz];
 }
 
-void MainWindow::Koordinatenrefresh()
+
+// Zentrale Erzeugung der Karte
+void MainWindow::DrawMap()
 {
-    qDebug()<<"Koordinaterefresh";
+    map->clear();  //löschen der gesamten Karte  --OPTIMIERUNGSPOTENTIAL
+    int i=0;
+    for(i=0;i<x.xList.size();i++)
+    {
+        map->addLine(x.xList.at(i),x.yList.at(i),x.xList.at(i+1),x.yList.at(i+1));  //Positionsdarstellung des Zeppelins
+    }
+
+    for(i=0;i<9;i++)
+    {
+        map->addRect(x.posStation[i][0],x.posStation[i][1],3,3);  // Zeichnen der Stationen
+    }
+
+    map->addLine(x.posStation[0][0],x.posStation[0][1],x.posStation[1][0],x.posStation[1][1]);  // Test Strich zwischen Station 0 und 1
 }
+
+// STOP Zentrale erzeugung der Karte
 
 
 
@@ -355,14 +374,12 @@ void MainWindow::onTestButtonClicked()
 
    str.append(QString("%1").arg(x.posStation[0][0]));
    str.append(QString("%1").arg(getposStation(0,0)));
-   str.append(QString("%1").arg(x.wrapper()));
-   str.append(QString("%1").arg(x.xList.at(0)));
-   str.append(QString("%1").arg(x.yList.at(0)));
-   str.append(QString("%1").arg(x.zList.at(0)));
+//   x.wrapper();
+//   str.append(QString("%1").arg(x.xList.at(0)));
+//   str.append(QString("%1").arg(x.yList.at(0)));
+//   str.append(QString("%1").arg(x.zList.at(0)));
 
-   qDebug() << x.pos_x;
-   qDebug() << x.pos_x;
-   qDebug() << x.pos_x;
+   //qDebug() << x.xList;
 
    IPSwriteComText(str);
 }
@@ -371,6 +388,18 @@ void MainWindow::onTestButtonClicked()
 
 
 //Funktionen GUI STOP
+
+
+// refreshfunktion wird durch timer ausgelöst
+
+void MainWindow::refresh()
+{
+    qDebug()<<"Koordinaterefresh";
+    DrawMap();
+
+}
+
+// STOP refreshaktion
 
 
 
