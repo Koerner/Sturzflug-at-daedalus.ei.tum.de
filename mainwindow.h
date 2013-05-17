@@ -46,6 +46,7 @@ private:
     Ui::MainWindow *ui;
     QTimer *Xbeetimer;
     QTimer *IPStimer;
+    QTimer *Filtertimer;
     QextSerialPort *Xbeeport;
     QextSerialPort *IPSport;
     QextSerialEnumerator *enumerator;
@@ -66,6 +67,7 @@ private Q_SLOTS:
 
     void onTestButtonClicked();
     void setPosStation();
+    void Koordinatenrefresh();
 
 };
 

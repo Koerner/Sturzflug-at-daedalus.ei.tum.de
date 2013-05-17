@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "vector"
+#include "QPainter"
+#include "QDebug"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -44,7 +47,10 @@ MainWindow::MainWindow(QWidget *parent) :
     Xbeetimer = new QTimer(this);
     Xbeetimer->setInterval(40);
     IPStimer = new QTimer(this);
-    IPStimer->setInterval(40);
+    IPStimer->setInterval(40); //könnte probleme lösen
+
+    Filtertimer = new QTimer(this);
+    Filtertimer->setInterval(1000); //Aktuallisierungsrate der Koordinaten
 
     //Vordefinierte Einstelluneg
     PortSettings Xbeesettings = {BAUD9600, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10};
@@ -74,6 +80,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(IPStimer, SIGNAL(timeout()), SLOT(IPSonReadyRead()));
     connect(IPSport, SIGNAL(readyRead()), SLOT(IPSonReadyRead()));
     connect(ui->posStationSetzen, SIGNAL(clicked()), SLOT(setPosStation()));
+
+    //Koordinate refresh connector
+    connect(Filtertimer, SIGNAL(timeout()), SLOT(Koordinatenrefresh()));
+    Filtertimer->start();
+
 
     //ConnectorenSTOP
 
@@ -318,6 +329,11 @@ int MainWindow::getposStation(int station, int xyz)
     return x.posStation[station][xyz];
 }
 
+void MainWindow::Koordinatenrefresh()
+{
+    qDebug()<<"Koordinaterefresh";
+}
+
 
 
 
@@ -343,6 +359,10 @@ void MainWindow::onTestButtonClicked()
    str.append(QString("%1").arg(x.xList.at(0)));
    str.append(QString("%1").arg(x.yList.at(0)));
    str.append(QString("%1").arg(x.zList.at(0)));
+
+   qDebug() << x.pos_x;
+   qDebug() << x.pos_x;
+   qDebug() << x.pos_x;
 
    IPSwriteComText(str);
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>782</width>
-    <height>593</height>
+    <width>1024</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,7 +47,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -442,13 +442,23 @@
      </attribute>
     </widget>
    </widget>
+   <widget class="QGraphicsView" name="graphicsView">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>782</width>
+     <width>1024</width>
      <height>21</height>
     </rect>
    </property>
@@ -464,6 +474,50 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>XbeesendEdit</tabstop>
+  <tabstop>COMtabWidget</tabstop>
+  <tabstop>XbeeBaudRateBox</tabstop>
+  <tabstop>XbeeportBox</tabstop>
+  <tabstop>s1x</tabstop>
+  <tabstop>s1y</tabstop>
+  <tabstop>s1z</tabstop>
+  <tabstop>s2x</tabstop>
+  <tabstop>s2z</tabstop>
+  <tabstop>s2y</tabstop>
+  <tabstop>s3x</tabstop>
+  <tabstop>s3y</tabstop>
+  <tabstop>s3z</tabstop>
+  <tabstop>s4x</tabstop>
+  <tabstop>s4y</tabstop>
+  <tabstop>s4z</tabstop>
+  <tabstop>s5x</tabstop>
+  <tabstop>s5y</tabstop>
+  <tabstop>s5z</tabstop>
+  <tabstop>s6x</tabstop>
+  <tabstop>s6y</tabstop>
+  <tabstop>s6z</tabstop>
+  <tabstop>s7x</tabstop>
+  <tabstop>s7y</tabstop>
+  <tabstop>s7z</tabstop>
+  <tabstop>s8x</tabstop>
+  <tabstop>s8y</tabstop>
+  <tabstop>s8z</tabstop>
+  <tabstop>s9x</tabstop>
+  <tabstop>s9y</tabstop>
+  <tabstop>s9z</tabstop>
+  <tabstop>posStationSetzen</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>TestButton</tabstop>
+  <tabstop>IPSComText</tabstop>
+  <tabstop>XbeeComText</tabstop>
+  <tabstop>IPSsendEdit</tabstop>
+  <tabstop>IPSBaudRateBox</tabstop>
+  <tabstop>IPSportBox</tabstop>
+  <tabstop>scrollArea_2</tabstop>
+  <tabstop>graphicsView</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
