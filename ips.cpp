@@ -1,7 +1,7 @@
 #include "ips.h"
 #include "mainwindow.h"
 #include <iostream>
-
+#include "QDebug"
 
 
 //ips::ips()
@@ -126,7 +126,7 @@ int ips::gettimef(int station)
 int ips::wrapper()
 {
 
-    int numstations =3;
+    int numstations =9;
     int i = 0;
 
     //    millis = int(round(time.time() * 1000))
@@ -138,10 +138,10 @@ int ips::wrapper()
         base_z[i] = posStation[i][2];       //abgepeichert
 
         //Berechnung des Abstandes des Zeppelins zu den einzelnen Bodenstationen anahnd der Laufzeiten
-        //r[i] = gettimef(i)*0.343;
-        r[0]=1728;
-        r[1]=3508;
-        r[2]=4960;
+        r[i] = gettimef(i)*0.343;
+//        r[0]=1728;
+//        r[1]=3508;
+//        r[2]=4960;
 
     }
     n = numstations;
@@ -149,11 +149,17 @@ int ips::wrapper()
     //start_y = yList.at(0);
     //start_z = zList.at(0);
 
+    qDebug() << "rechne";
+
     rechne();
 
-    xList.prepend(5);//posx
-    yList.prepend(5);//posy
-    zList.prepend(4);//posz
+    qDebug() << "fertig rechne";
+
+    xList.prepend(posx);//posx
+    yList.prepend(posx);//posy
+    zList.prepend(posx);//posz
+
+    qDebug() << posx;
 
     int genauigkeit = xList.at(0);
     return genauigkeit;

@@ -13,6 +13,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     map = new QGraphicsScene(this);
     ui->graphicsView->setScene(map);
+    ui->graphicsView->scale(0.05,0.05);  //zoomen der Karte so ist platz für 7,5 meter
+    //ui->graphicsView->setSceneRect(0, 0, 1000, 1000);
+    //Use ScrollHand Drag Mode to enable Panning
+    //ui->graphicsView->setDragMode(ScrollHandDrag);
 
     // GUI Einstellunegn
 
@@ -332,23 +336,47 @@ int MainWindow::getposStation(int station, int xyz)
     return x.posStation[station][xyz];
 }
 
+void MainWindow::wheelEvent(QWheelEvent* event) {
+
+    ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+
+    // Scale the view / do the zoom
+    double scaleFactor = 1.15;
+    if(event->delta() > 0) {
+        // Zoom in
+        ui->graphicsView->scale(scaleFactor, scaleFactor);
+    } else {
+        // Zooming out
+        ui->graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+    }
+
+    // Don't call superclass handler here
+    // as wheel is normally used for moving scrollbars
+}
+
 
 // Zentrale Erzeugung der Karte
 void MainWindow::DrawMap()
 {
+
     map->clear();  //löschen der gesamten Karte  --OPTIMIERUNGSPOTENTIAL
+    QPen normal;
+    normal.setWidth(20); // hängt vom scaling ab
+
     int i=0;
     for(i=0;i<(x.xList.size()-1);i++)
     {
-        map->addLine(x.xList.at(i),x.yList.at(i),x.xList.at(i+1),x.yList.at(i+1));  //Positionsdarstellung des Zeppelins
+        map->addLine(x.xList.at(i),x.yList.at(i),x.xList.at(i+1),x.yList.at(i+1))->setPen(normal);  //Positionsdarstellung des Zeppelins
     }
 
     for(i=0;i<9;i++)
     {
-        map->addRect(x.posStation[i][0],x.posStation[i][1],3,3);  // Zeichnen der Stationen
+        map->addRect(x.posStation[i][0],x.posStation[i][1],100,100)->setPen(normal);  // Zeichnen der Stationen
     }
 
-    map->addLine(x.posStation[0][0],x.posStation[0][1],x.posStation[1][0],x.posStation[1][1]);  // Test Strich zwischen Station 0 und 1
+    map->addLine(x.posStation[0][0],x.posStation[0][1],x.posStation[1][0],x.posStation[1][1])->setPen(normal);  // Test Strich zwischen Station 0 und 1
+
+
 }
 
 // STOP Zentrale erzeugung der Karte

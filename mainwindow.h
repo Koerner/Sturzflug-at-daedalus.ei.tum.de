@@ -12,6 +12,14 @@
 #include "ui_mainwindow.h"
 #include "ips.h"
 
+#include <QGraphicsScene>
+#include <QGraphicsTextItem>
+#include <QTextStream>
+#include <QScrollBar>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QDebug>
+
 namespace Ui {
 class MainWindow;
 }
@@ -72,6 +80,7 @@ private Q_SLOTS:
     void onTestButtonClicked();
     void setPosStation();
     void refresh();
+    virtual void wheelEvent(QWheelEvent* event);
 
 };
 
