@@ -338,7 +338,7 @@ void MainWindow::DrawMap()
 {
     map->clear();  //löschen der gesamten Karte  --OPTIMIERUNGSPOTENTIAL
     int i=0;
-    for(i=0;i<x.xList.size();i++)
+    for(i=0;i<(x.xList.size()-1);i++)
     {
         map->addLine(x.xList.at(i),x.yList.at(i),x.xList.at(i+1),x.yList.at(i+1));  //Positionsdarstellung des Zeppelins
     }
@@ -366,7 +366,7 @@ void MainWindow::onTestButtonClicked()
 
 
    QString str;
-
+   int ergebnis;
    int i=0;
    for(i=0;i<9;i++)
    {str.append(QString("%1").arg(x.gettime(1,i)));}
@@ -374,7 +374,8 @@ void MainWindow::onTestButtonClicked()
 
    str.append(QString("%1").arg(x.posStation[0][0]));
    str.append(QString("%1").arg(getposStation(0,0)));
-//   x.wrapper();
+   ergebnis = x.wrapper();
+   str.append(QString("%1").arg(ergebnis));
 //   str.append(QString("%1").arg(x.xList.at(0)));
 //   str.append(QString("%1").arg(x.yList.at(0)));
 //   str.append(QString("%1").arg(x.zList.at(0)));

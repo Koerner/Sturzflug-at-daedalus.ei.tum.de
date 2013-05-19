@@ -145,17 +145,18 @@ int ips::wrapper()
 
     }
     n = numstations;
-    start_x = xList.at(0);
-    start_y = yList.at(0);
-    start_z = zList.at(0);
+    //start_x = xList.at(0);
+    //start_y = yList.at(0);
+    //start_z = zList.at(0);
 
     rechne();
 
-    xList.prepend(10);//posx
+    xList.prepend(5);//posx
     yList.prepend(5);//posy
     zList.prepend(4);//posz
-    //int genauigkeit = 1;
-    return 0;
+
+    int genauigkeit = xList.at(0);
+    return genauigkeit;
 }
 //Ende wrapper
 
