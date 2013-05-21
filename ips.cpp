@@ -92,30 +92,51 @@ int ips::gettime (int station, int time)
     return stationtime[station][time];
 }
 
-// Filter
+// Hochleistungfilter ;) Neu Neu Neu
 int ips::gettimef(int station)
 {
     int i=0;
     double timef=0;
     int array[10];
-    int filterzus=5;
-    int filterstr=2;
+    int filterzus=1;            //Zahl der Werte die gemittelt werden sollen
+    int filterstreichenunten=0; //Zahl der niedrigsten Werte die gestrichen werden
+    int filterstreichenoben=0;  //Zahl der höchsten Werte die gestrichen werden
 
     for(i=0;i<filterzus;i++)
-       { array[i] = stationtime[station][i];}
+    {
+        if(stationtime[station][i]!=0)
+        {
+        array[i] = stationtime[station][i];
+        }
+        else
+        {
+            if(filterzus==9)                                    // damit der Filter nicht überläuft, gerade am Anfang wenn noch keine Werte da sind
+            {
+                qDebug()<< "Kein Wert";
+                array[i] = stationtime[station][i];
+            }
+            else                                                //0 erhöhen die Zusammenfassungsanzahl um 1 und den Wert der unten getrichen wird. ergo die null wird am schluss gestrichen
+            {
+                filterzus=filterzus+1;
+                filterstreichenunten=filterstreichenunten+1;
+            }
+        }
+    }
 
-    std::sort(array, array+filterzus);
+    std::sort(array, array+filterzus);                          // Das array wird nach größe sortiert
     timef=0;
 
-    for(i=filterstr;i<(filterzus-filterstr);i++)
+    for(i=filterstreichenunten;i<(filterzus-filterstreichenoben);i++)   //Die Höchsten und niedrigsten Werte werden gestrichen, der Rest zusammengerechnet
             {timef=timef+array[i];}
 
-    timef=timef/(filterzus-(filterstr*2));
-    qDebug()<< "timef: " << timef;
+    timef=timef/(filterzus-(filterstreichenoben+filterstreichenunten)); //Mittelwert bilden
+
+    qDebug()<< "timef: " << timef << "zusammengefasst:"<< filterzus << "unten gestrichen:" << filterstreichenunten << "oben gestrichen:" << filterstreichenoben;
+
     return timef;
 
 }
-//STOP Filter
+//ENDE Filter
 
 
 
@@ -226,6 +247,7 @@ void ips::rechne()
         z = z_neu;
 
     }
+    qDebug() << "Schleife:" << i;
 
 //    x = x_neu;
 //    y = y_neu;
