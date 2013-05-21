@@ -99,7 +99,7 @@ int ips::gettimef(int station)
     double timef=0;
     int array[10];
     int filterzus=5;
-    int filterstr=1;
+    int filterstr=2;
 
     for(i=0;i<filterzus;i++)
        { array[i] = stationtime[station][i];}
