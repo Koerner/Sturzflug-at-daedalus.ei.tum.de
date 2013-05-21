@@ -20,14 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->s7x->setValue(0000);ui->s7y->setValue(2000);ui->s7z->setValue(1000);
     ui->s8x->setValue(1000);ui->s8y->setValue(2000);ui->s8z->setValue(0);
     ui->s9x->setValue(2000);ui->s9y->setValue(2000);ui->s9z->setValue(1000);
-
     //Ende default;
 
     setPosStation();
+    setHindernisse();
 
     map = new QGraphicsScene(this);
     ui->graphicsView->setScene(map);
-    ui->graphicsView->scale(0.05,0.05);  //zoomen der Karte so ist platz für 7,5 meter
+    ui->graphicsView->scale(0.1,0.1);  //zoomen der Karte so ist platz für 7,5 meter
     //ui->graphicsView->setSceneRect(0, 0, 1000, 1000);
     //Use ScrollHand Drag Mode to enable Panning
     //ui->graphicsView->setDragMode(ScrollHandDrag);
@@ -102,9 +102,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(IPSport, SIGNAL(readyRead()), SLOT(IPSonReadyRead()));
     connect(ui->posStationSetzen, SIGNAL(clicked()), SLOT(setPosStation()));
 
+
     //refresh connector ZENTRALES Takt-Element
     connect(Filtertimer, SIGNAL(timeout()), SLOT(refresh()));
     Filtertimer->start();
+
+    // Karte
+    connect(ui->deletkoordinaten, SIGNAL(clicked()), SLOT(deletekoordinaten()));
+    connect(ui->setHindernisse, SIGNAL(clicked()), SLOT(setHindernisse()));
 
 
     //ConnectorenSTOP
@@ -344,6 +349,60 @@ void MainWindow::setPosStation()
 
 //STOP Positionen der Bodenstationen speichern
 
+// Hindernisse speichern
+void MainWindow::setHindernisse()
+{
+    y.hin_x[0][0]=ui->h1x->value(); //x
+    y.hin_y[0][1]=ui->h1y->value(); //y
+
+    y.hin_x[1][0]=ui->h2x->value(); //x
+    y.hin_y[1][1]=ui->h2y->value(); //y
+
+    y.hin_x[2][0]=ui->h3x->value(); //x
+    y.hin_y[2][1]=ui->h3y->value(); //y
+
+    y.hin_x[3][0]=ui->h4x->value(); //x
+    y.hin_y[3][1]=ui->h4y->value(); //y
+
+    y.hin_x[4][0]=ui->h5x->value(); //x
+    y.hin_y[4][1]=ui->h5y->value(); //y
+
+    y.hin_x[5][0]=ui->h6x->value(); //x
+    y.hin_y[5][1]=ui->h6y->value(); //y
+
+    y.hin_x[6][0]=ui->h7x->value(); //x
+    y.hin_y[6][1]=ui->h7y->value(); //y
+
+    y.hin_x[7][0]=ui->h8x->value(); //x
+    y.hin_y[7][1]=ui->h8y->value(); //y
+
+    y.hin_x[8][0]=ui->h9x->value(); //x
+    y.hin_y[8][1]=ui->h9y->value(); //y
+
+    y.hin_x[9][0]=ui->h10x->value(); //x
+    y.hin_y[9][1]=ui->h10y->value(); //y
+
+    y.hin_x[10][0]=ui->h11x->value(); //x
+    y.hin_y[10][1]=ui->h11y->value(); //y
+
+    y.hin_x[11][0]=ui->h12x->value(); //x
+    y.hin_y[11][1]=ui->h12y->value(); //y
+
+    y.hin_x[12][0]=ui->h13x->value(); //x
+    y.hin_y[12][1]=ui->h13y->value(); //y
+
+    y.hin_x[13][0]=ui->h14x->value(); //x
+    y.hin_y[13][1]=ui->h14y->value(); //y
+
+    y.hin_x[14][0]=ui->h15x->value(); //x
+    y.hin_y[14][1]=ui->h15y->value(); //y
+
+    y.hin_x[15][0]=ui->h16x->value(); //x
+    y.hin_y[15][1]=ui->h16y->value(); //y
+
+}
+// ENDE Hindernisse speichern
+
 //array Daten übergebenen PosStation
 int MainWindow::getposStation(int station, int xyz)
 {
@@ -368,6 +427,13 @@ void MainWindow::wheelEvent(QWheelEvent* event) {
     // as wheel is normally used for moving scrollbars
 }
 
+void MainWindow::deletekoordinaten()
+{
+    x.xList.clear();
+    x.yList.clear();
+    x.zList.clear();
+}
+
 
 // Zentrale Erzeugung der Karte
 void MainWindow::DrawMap()
@@ -378,10 +444,13 @@ void MainWindow::DrawMap()
     normal.setWidth(20); // hängt vom scaling ab
 
     int i=0;
+    if(ui->printzeppelin->isChecked())
+    {
     for(i=0;i<(x.xList.size()-1);i++)
     {
         //map->addLine(x.xList.at(i),x.yList.at(i),x.xList.at(i+1),x.yList.at(i+1))->setPen(normal);  //Positionsdarstellung des Zeppelins
-        map->addRect(x.xList.at(i),x.yList.at(i),50,50)->setPen(normal);  // Positionsdarstellung Zeppelin - Rechtecke
+        map->addRect(x.xList.at(i),x.yList.at(i),20,20)->setPen(normal);  // Positionsdarstellung Zeppelin - Rechtecke
+    }
     }
 
     for(i=0;i<9;i++)
@@ -436,7 +505,13 @@ void MainWindow::onTestButtonClicked()
 void MainWindow::refresh()
 {
     qDebug()<<"Koordinaterefresh";
+
     x.wrapper();
+    y.xList.prepend(x.xList.at(0));
+    y.yList.prepend(x.yList.at(0));
+
+    y.berechneWeg();
+
     DrawMap();
 
 }

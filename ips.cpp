@@ -256,10 +256,20 @@ void ips::rechne()
 //    posx = x;
 //    posy = y;
 //    posz = z;
+    if(i==300)
+    {
+        posx=0;
+        posy=0;
+        posz=0;
+        qDebug()<< "Keinne Annäherung in 300 Schritten möglich";
+    }
+    else
+    {
+        posx = x_neu;
+        posy = y_neu;
+        posz = z_neu;
+    }
 
-    posx = x_neu;
-    posy = y_neu;
-    posz = z_neu;
 
 
     //int ret = 0;

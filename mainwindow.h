@@ -20,6 +20,8 @@
 #include <QWheelEvent>
 #include <QDebug>
 
+#include "weg.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -39,6 +41,7 @@ public:
     void IPSsendCOM(int sendCOM);
     int getposStation(int station, int xyz);
     ips x;
+    weg y;
 
 
 
@@ -79,8 +82,11 @@ private Q_SLOTS:
 
     void onTestButtonClicked();
     void setPosStation();
+    void setHindernisse();
     void refresh();
     virtual void wheelEvent(QWheelEvent* event);
+    void deletekoordinaten();
+
 
 };
 
