@@ -46,14 +46,16 @@ void ips::setdata(QString comdata)
                     {
 //                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10);  //geht nicht
                     }
-                    setstationtime(s,0); //keepstationtime()
+                    //setstationtime(s,0);
+                    keepstationtime(s);
                 }
                 else
                 {
 //                    bool ok;
                     int s=0;
 //                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10); //geht nicht
-                    setstationtime(s,0); //keepstationtime
+                    //setstationtime(s,0);
+                    keepstationtime(s);
                 }
 
 
@@ -109,7 +111,9 @@ int ips::gettimef(int station)
             {timef=timef+array[i];}
 
     timef=timef/(filterzus-(filterstr*2));
+    qDebug()<< "timef: " << timef;
     return timef;
+
 }
 //STOP Filter
 
@@ -158,6 +162,7 @@ int ips::wrapper()
         start_z = zList.at(0);
     }
     else {
+        qDebug() << "ohne startwert";
         start_x = 0;
         start_y = 0;
         start_z = 0;
@@ -171,15 +176,10 @@ int ips::wrapper()
     qDebug() << "fertig rechne";
 
     xList.prepend(posx);//posx
-    yList.prepend(posx);//posy
-    zList.prepend(posx);//posz
+    yList.prepend(posy);//posy
+    zList.prepend(posz);//posz
 
-    qDebug() << "Posx: ";
-    qDebug() << posx;
-    qDebug() << "Posy: ";
-    qDebug() << posy;
-    qDebug() << "Posz: ";
-    qDebug() << posz;
+    qDebug() << "Posx: " << posx << "Posy: " << posy <<"Posz: "<< posz;
 
     int genauigkeit = xList.at(0);
     return genauigkeit;
@@ -211,9 +211,9 @@ void ips::rechne()
         richtung[2] = erg[2];
         //Schrittweite nach Armijo (google it!!)
         schritt = armijo(x,y,z,n);
-qDebug() << schritt;
+//qDebug() << schritt;
         x_neu = x - schritt*richtung[0];
-   qDebug() << x_neu;
+//qDebug() << x_neu;
         y_neu = y - schritt*richtung[1];
         z_neu = z - schritt*richtung[2];
         i++;
@@ -227,13 +227,17 @@ qDebug() << schritt;
 
     }
 
-    x = x_neu;
-    y = y_neu;
-    z = z_neu;
+//    x = x_neu;
+//    y = y_neu;
+//    z = z_neu;
 
-    posx = x;
-    posy = y;
-    posz = z;
+//    posx = x;
+//    posy = y;
+//    posz = z;
+
+    posx = x_neu;
+    posy = y_neu;
+    posz = z_neu;
 
 
     //int ret = 0;

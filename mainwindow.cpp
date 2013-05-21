@@ -9,6 +9,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    //deafult
+    ui->s1x->setValue(1000);ui->s1y->setValue(1000);ui->s1z->setValue(0);
+    ui->s2x->setValue(2000);ui->s2y->setValue(1000);ui->s2z->setValue(0);
+    ui->s3x->setValue(2000);ui->s3y->setValue(0000);ui->s3z->setValue(1000);
+    ui->s4x->setValue(1000);ui->s4y->setValue(0000);ui->s4z->setValue(0);
+    ui->s5x->setValue(0000);ui->s5y->setValue(0000);ui->s5z->setValue(0);
+    ui->s6x->setValue(0000);ui->s6y->setValue(1000);ui->s6z->setValue(0);
+    ui->s7x->setValue(0000);ui->s7y->setValue(2000);ui->s7z->setValue(1000);
+    ui->s8x->setValue(1000);ui->s8y->setValue(2000);ui->s8z->setValue(0);
+    ui->s9x->setValue(2000);ui->s9y->setValue(2000);ui->s9z->setValue(1000);
+
+    //Ende default;
+
     setPosStation();
 
     map = new QGraphicsScene(this);
@@ -366,7 +380,8 @@ void MainWindow::DrawMap()
     int i=0;
     for(i=0;i<(x.xList.size()-1);i++)
     {
-        map->addLine(x.xList.at(i),x.yList.at(i),x.xList.at(i+1),x.yList.at(i+1))->setPen(normal);  //Positionsdarstellung des Zeppelins
+        //map->addLine(x.xList.at(i),x.yList.at(i),x.xList.at(i+1),x.yList.at(i+1))->setPen(normal);  //Positionsdarstellung des Zeppelins
+        map->addRect(x.xList.at(i),x.yList.at(i),50,50)->setPen(normal);  // Positionsdarstellung Zeppelin - Rechtecke
     }
 
     for(i=0;i<9;i++)
@@ -374,7 +389,7 @@ void MainWindow::DrawMap()
         map->addRect(x.posStation[i][0],x.posStation[i][1],100,100)->setPen(normal);  // Zeichnen der Stationen
     }
 
-    map->addLine(x.posStation[0][0],x.posStation[0][1],x.posStation[1][0],x.posStation[1][1])->setPen(normal);  // Test Strich zwischen Station 0 und 1
+    //map->addLine(x.posStation[0][0],x.posStation[0][1],x.posStation[1][0],x.posStation[1][1])->setPen(normal);  // Test Strich zwischen Station 0 und 1
 
 
 }
@@ -421,6 +436,7 @@ void MainWindow::onTestButtonClicked()
 void MainWindow::refresh()
 {
     qDebug()<<"Koordinaterefresh";
+    x.wrapper();
     DrawMap();
 
 }
