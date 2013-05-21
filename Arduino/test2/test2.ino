@@ -73,11 +73,11 @@ void loop(){
   }
   Serial.print("sync ");
   Serial.println(k);
-  Serial.print("pos: ");
-  Serial.print(posx);
-  Serial.print(" - ");
-  Serial.print(posy);
-  Serial.print(" - ");
+  Serial.print("pos");
+  Serial.print(posx+1000);
+  Serial.print("x");
+  Serial.print(-(posy-1000));
+  Serial.print("x");
   Serial.println(posz);
    
   randi = random(-1000,1000);
