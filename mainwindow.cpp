@@ -404,9 +404,6 @@ void MainWindow::onTestButtonClicked()
    str.append(QString("%1").arg(getposStation(0,0)));
    ergebnis = x.wrapper();
    str.append(QString("%1").arg(ergebnis));
-//   str.append(QString("%1").arg(x.xList.at(0)));
-//   str.append(QString("%1").arg(x.yList.at(0)));
-//   str.append(QString("%1").arg(x.zList.at(0)));
 
    //qDebug() << x.xList;
 

@@ -134,20 +134,35 @@ int ips::wrapper()
     for (i=0;i<numstations;i++) {
 
         base_x[i] = posStation[i][0];       //Die Koordinaten der
-        base_y[i] = posStation[i][1];       //Bdenstationen werden
+        base_y[i] = posStation[i][1];       //Bodenstationen werden
         base_z[i] = posStation[i][2];       //abgepeichert
 
-        //Berechnung des Abstandes des Zeppelins zu den einzelnen Bodenstationen anahnd der Laufzeiten
+        //Berechnung des Abstandes des Zeppelins zu den einzelnen Bodenstationen anhand der Laufzeiten
         r[i] = gettimef(i)*0.343;
-//        r[0]=1728;
-//        r[1]=3508;
-//        r[2]=4960;
+        //r[0]=1978*0.34;
+        //r[1]=3675*0.34;
+        //r[2]=5139*0.34;
+        //r[3]=4366*0.34;
+        //r[4]=4953*0.34;
+        //r[5]=3649*0.34;
+        //r[6]=3851*0.34;
+        //r[7]=2789*0.34;
+        //r[8]=3790*0.34;
+
 
     }
     n = numstations;
-    //start_x = xList.at(0);
-    //start_y = yList.at(0);
-    //start_z = zList.at(0);
+    if (xList.size()!=0){
+        start_x = xList.at(0);
+        start_y = yList.at(0);
+        start_z = zList.at(0);
+    }
+    else {
+        start_x = 0;
+        start_y = 0;
+        start_z = 0;
+    }
+
 
     qDebug() << "rechne";
 
@@ -159,7 +174,12 @@ int ips::wrapper()
     yList.prepend(posx);//posy
     zList.prepend(posx);//posz
 
+    qDebug() << "Posx: ";
     qDebug() << posx;
+    qDebug() << "Posy: ";
+    qDebug() << posy;
+    qDebug() << "Posz: ";
+    qDebug() << posz;
 
     int genauigkeit = xList.at(0);
     return genauigkeit;
@@ -191,8 +211,9 @@ void ips::rechne()
         richtung[2] = erg[2];
         //Schrittweite nach Armijo (google it!!)
         schritt = armijo(x,y,z,n);
-
+qDebug() << schritt;
         x_neu = x - schritt*richtung[0];
+   qDebug() << x_neu;
         y_neu = y - schritt*richtung[1];
         z_neu = z - schritt*richtung[2];
         i++;
@@ -242,7 +263,7 @@ double ips::f(double x, double y, double z, int n)
 void ips::gradf(double x, double y, double z, int n)
 {
 
-    //erg[0] = 0.0; erg[1] = 0.0; erg[2] = 0.0;
+    erg[0] = 0.0; erg[1] = 0.0; erg[2] = 0.0;
     int i = 0;
     double zwi = 0.0;
     //x-Komp
@@ -271,7 +292,7 @@ double ips::armijo(double x, double y, double z, int n)
     double ls = 0.0;
     double rs = 0.0;
     //double *gradient; Bärle
-    //gradient = grad_f(x,y,z,n); Bärle
+    //gradf(x,y,z,n);
     double gradient[3];
     gradient[0] = erg[0];
     gradient[1] = erg[1];
