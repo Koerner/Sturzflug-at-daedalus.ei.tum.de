@@ -19,6 +19,8 @@ void weg::moduscheck()
 void weg::berechneWeg()
 {
 
+    //Für den Notfallplan brauche ich das notfallziel array ausgefüllt, also die Daten wo das Zeppelin im Notfall hinsteuern soll (x und y) und den Ausrichtungswinkel, zum Schluss
+
 }
 
 int weg::Abweichung(int Radius, int Hindernisnummer)
@@ -33,7 +35,7 @@ int weg::Abweichung(int Radius, int Hindernisnummer)
 }
 
 
-//Für den Notfallplan brauche ich zusätzlich das notfallziel array ausgefüllt
+
 
 //NOTFALLPLAN
 
