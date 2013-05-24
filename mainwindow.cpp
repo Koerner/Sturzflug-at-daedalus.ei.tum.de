@@ -350,55 +350,100 @@ void MainWindow::setPosStation()
 //STOP Positionen der Bodenstationen speichern
 
 // Hindernisse speichern
+
 void MainWindow::setHindernisse()
 {
-    y.hin_x[0][0]=ui->h1x->value(); //x
-    y.hin_y[0][1]=ui->h1y->value(); //y
+    y.hin[0][0]=ui->h1x->value(); //x
+    y.hin[0][1]=ui->h1y->value(); //y
+    y.hin[0][2]=ui->h1w->value(); //x
+    y.hin[0][3]=ui->h1a->value(); //y
 
-    y.hin_x[1][0]=ui->h2x->value(); //x
-    y.hin_y[1][1]=ui->h2y->value(); //y
+    y.hin[1][0]=ui->h2x->value(); //x
+    y.hin[1][1]=ui->h2y->value(); //y
+    y.hin[1][2]=ui->h2w->value(); //x
+    y.hin[1][3]=ui->h2a->value(); //y
 
-    y.hin_x[2][0]=ui->h3x->value(); //x
-    y.hin_y[2][1]=ui->h3y->value(); //y
+    y.hin[2][0]=ui->h3x->value(); //x
+    y.hin[2][1]=ui->h3y->value(); //y
+    y.hin[2][2]=ui->h3w->value(); //x
+    y.hin[2][3]=ui->h3a->value(); //y
 
-    y.hin_x[3][0]=ui->h4x->value(); //x
-    y.hin_y[3][1]=ui->h4y->value(); //y
+    y.hin[3][0]=ui->h4x->value(); //x
+    y.hin[3][1]=ui->h4y->value(); //y
+    y.hin[3][2]=ui->h4w->value(); //x
+    y.hin[3][3]=ui->h4a->value(); //y
 
-    y.hin_x[4][0]=ui->h5x->value(); //x
-    y.hin_y[4][1]=ui->h5y->value(); //y
+    y.hin[4][0]=ui->h5x->value(); //x
+    y.hin[4][1]=ui->h5y->value(); //y
+    y.hin[4][2]=ui->h5w->value(); //x
+    y.hin[4][3]=ui->h5a->value(); //y
 
-    y.hin_x[5][0]=ui->h6x->value(); //x
-    y.hin_y[5][1]=ui->h6y->value(); //y
+    y.hin[5][0]=ui->h6x->value(); //x
+    y.hin[5][1]=ui->h6y->value(); //y
+    y.hin[5][2]=ui->h6w->value(); //x
+    y.hin[5][3]=ui->h6a->value(); //y
 
-    y.hin_x[6][0]=ui->h7x->value(); //x
-    y.hin_y[6][1]=ui->h7y->value(); //y
+    y.hin[6][0]=ui->h7x->value(); //x
+    y.hin[6][1]=ui->h7y->value(); //y
+    y.hin[6][2]=ui->h7w->value(); //x
+    y.hin[6][3]=ui->h7a->value(); //y
 
-    y.hin_x[7][0]=ui->h8x->value(); //x
-    y.hin_y[7][1]=ui->h8y->value(); //y
+    y.hin[7][0]=ui->h8x->value(); //x
+    y.hin[7][1]=ui->h8y->value(); //y
+    y.hin[7][2]=ui->h8w->value(); //x
+    y.hin[7][3]=ui->h8a->value(); //y
 
-    y.hin_x[8][0]=ui->h9x->value(); //x
-    y.hin_y[8][1]=ui->h9y->value(); //y
+    y.hin[8][0]=ui->h9x->value(); //x
+    y.hin[8][1]=ui->h9y->value(); //y
+    y.hin[8][2]=ui->h9w->value(); //x
+    y.hin[8][3]=ui->h9a->value(); //y
 
-    y.hin_x[9][0]=ui->h10x->value(); //x
-    y.hin_y[9][1]=ui->h10y->value(); //y
+    y.hin[9][0]=ui->h10x->value(); //x
+    y.hin[9][1]=ui->h10y->value(); //y
+    y.hin[9][2]=ui->h10w->value(); //x
+    y.hin[9][3]=ui->h10a->value(); //y
 
-    y.hin_x[10][0]=ui->h11x->value(); //x
-    y.hin_y[10][1]=ui->h11y->value(); //y
+    y.hin[10][0]=ui->h11x->value(); //x
+    y.hin[10][1]=ui->h11y->value(); //y
+    y.hin[10][2]=ui->h11w->value(); //x
+    y.hin[10][3]=ui->h11a->value(); //y
 
-    y.hin_x[11][0]=ui->h12x->value(); //x
-    y.hin_y[11][1]=ui->h12y->value(); //y
+    y.hin[11][0]=ui->h12x->value(); //x
+    y.hin[11][1]=ui->h12y->value(); //y
+    y.hin[11][2]=ui->h12w->value(); //x
+    y.hin[11][3]=ui->h12a->value(); //y
 
-    y.hin_x[12][0]=ui->h13x->value(); //x
-    y.hin_y[12][1]=ui->h13y->value(); //y
+    y.hin[12][0]=ui->h13x->value(); //x
+    y.hin[12][1]=ui->h13y->value(); //y
+    y.hin[12][2]=ui->h13w->value(); //x
+    y.hin[12][3]=ui->h13a->value(); //y
 
-    y.hin_x[13][0]=ui->h14x->value(); //x
-    y.hin_y[13][1]=ui->h14y->value(); //y
+    y.hin[13][0]=ui->h14x->value(); //x
+    y.hin[13][1]=ui->h14y->value(); //y
+    y.hin[13][2]=ui->h14w->value(); //x
+    y.hin[13][3]=ui->h14a->value(); //y
 
-    y.hin_x[14][0]=ui->h15x->value(); //x
-    y.hin_y[14][1]=ui->h15y->value(); //y
+    y.hin[14][0]=ui->h15x->value(); //x
+    y.hin[14][1]=ui->h15y->value(); //y
+    y.hin[14][2]=ui->h15w->value(); //x
+    y.hin[14][3]=ui->h15a->value(); //y
 
-    y.hin_x[15][0]=ui->h16x->value(); //x
-    y.hin_y[15][1]=ui->h16y->value(); //y
+    y.hin[15][0]=ui->h16x->value(); //x
+    y.hin[15][1]=ui->h16y->value(); //y
+    y.hin[15][2]=ui->h16w->value(); //x
+    y.hin[15][3]=ui->h16a->value(); //y
+
+    //Anzahl der Hindernisse ermitteln
+    int i=0;
+    for(i=0; i<16; i++)
+    {
+        if (y.hin[i][2]!=0) //Hondernisse werden akzeptiert wenn der umlaufweg bekannt gesetzt ist
+        {
+            y.hinanz +=1;
+        }
+    }
+
+
 
 }
 // ENDE Hindernisse speichern
