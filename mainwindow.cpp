@@ -263,12 +263,13 @@ void MainWindow::IPSonReadyRead()
 //ComPort lesen STOP
 
 //ComPort schreiben
-void MainWindow::XbeesendCOM(int sendCOM)
+void MainWindow::XbeesendCOM(unsigned long sendCOM)
 {
     if (Xbeeport->isOpen() )
     {
         QString str;
-        str.append(QString("%1").arg(sendCOM));
+        str.setNum(sendCOM);
+        qDebug() << str;
         ui->XbeesendEdit->insertPlainText(str);
         Xbeeport->write(ui->XbeesendEdit->toPlainText().toLatin1());
         // Textausgabe des gesendetetn
@@ -518,8 +519,10 @@ void MainWindow::DrawMap()
 //TestButton
 void MainWindow::onTestButtonClicked()
 {
-    int Test = 101000;
-   XbeesendCOM(Test);
+    unsigned long Test = 1199088177;//10199908881777;
+    //Test=y.abwurf*1000000000+y.schub[0]*1000000+y.schub[1]*1000+y.schub[2];
+    qDebug()<< Test;
+    XbeesendCOM(Test);
 
 
    QString str;
@@ -551,11 +554,11 @@ void MainWindow::refresh()
 {
     qDebug()<<"Koordinaterefresh";
 
-    x.wrapper();
-    y.xList.prepend(x.xList.at(0));
-    y.yList.prepend(x.yList.at(0));
+//    x.wrapper();
+//    y.xList.prepend(x.xList.at(0));
+//    y.yList.prepend(x.yList.at(0));
 
-    y.berechneWeg();
+    //y.berechneWeg();
 
     DrawMap();
 

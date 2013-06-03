@@ -37,21 +37,14 @@ void weg::berechneWeg()
             buf1 = xList.at(0) + buf1;
             buf2 = yList.at(0) + buf2;
 
-            Tangentenberechnung(buf1,buf2, Radius);
+            Tangentenberechnung(buf1,buf2, Radius); //Eintrittspunkt in Kreis
+
+            //Abfrage, ob links rum oder rechtsrum
             break;
         }
         case 1:
         {
-            verhaeltnis = kreisradius[Strecke]/kreisradius[Strecke+1];
-            if (verhaeltnis < 1)
-            {
-                verhaeltnis = 1/(1/verhaeltnis + 1);
-                //verhaeltnis = 1/verhaeltnis;
-            }
-            else
-            {
-                verhaeltnis = 1-1/(verhaeltnis + 1);
-            }
+            verhaeltnis = kreisradius[Strecke]/(kreisradius[Strecke]+kreisradius[Strecke+1]);
             buf1 =  (hin[Strecke+1][0] - hin[Strecke][0])*verhaeltnis;
             buf2 =  (hin[Strecke+1][1] - hin[Strecke][1])*verhaeltnis;
             Radius = sqrt(buf1*buf1+buf2*buf2);
@@ -59,6 +52,8 @@ void weg::berechneWeg()
             buf2 = hin[Strecke][1] + buf2;
 
             Tangentenberechnung(buf1,buf2, Radius); //Austrittspunkt
+
+            //abgrage, ob links rum oder rechts rum
 
         }
 
@@ -87,11 +82,6 @@ void GetCollisionPoint(Point P1, Point P2, double r1, double r2, Result *res)
      //Kein Schnittpunkt
      res->SetPoints(0);
 
-
-/* 01.04.2011
- * Beträge ergeben sich durch das Quadrieren, und müssen deshalb nicht nochmal extra berechnet werden
- * Mox Nöltner
-*/
      //double abc = sqrt(Abs(P2.x - P1.x)*Abs(P2.x - P1.x) + Abs(P2.y - P1.y)*Abs(P2.y - P1.y));
      double abc = sqrt((P2.x - P1.x)*(P2.x - P1.x) + (P2.y - P1.y)*(P2.y - P1.y));
 
@@ -107,10 +97,6 @@ void GetCollisionPoint(Point P1, Point P2, double r1, double r2, Result *res)
      if((P1.x - P2.x == 0) && (P1.y - P2.y == 0))
           return;
 
-/* 25.09.2007
- * Koordinatentausch war fehlerhaft
- * Jens Ziegler
-*/
 
      //ggf. Koordinaten tauschen, um Division durch Null vermeiden
      if(P2.x == P1.x)
@@ -147,11 +133,8 @@ void GetCollisionPoint(Point P1, Point P2, double r1, double r2, Result *res)
 
      if(res->P1.y == res->P2.y && res->P1.x == res->P2.x)
           res->SetPoints(1);
-/* 01.04.2011
- * Schließende Klammer fehlte
- * Mox Nöltner
-*/
 }
+
 void weg::Tangentenberechnung(double mittelx, double mittely, double rad)
 {
     double x,y;//, r1, r2;
@@ -176,10 +159,6 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double rad)
         S[1][0] = test.P2.x;
         S[1][1] = test.P2.y;
     }
-    //else if(test.GetPoints() == 1)
-    //     std::cout << "Schnittpunkt S(" << test.P1.x << "," << test.P1.y << ")" << std::endl;
-
-
 }
 
 //Radien um die Stangen berechnen
@@ -281,15 +260,19 @@ void weg::notfallplanende(int EndSollwinkel)
 
 void weg::geradeaus(int geschwindigkeit)
 {
+    schub[0]=geschwindigkeit;
+    schub[1]=geschwindigkeit;
 }
 
 
 void weg::kurve(bool linksrechts, int radius)
 {
+
 }
 
 void weg::standdrehung(int winkel)
 {
+
 }
 
 

@@ -36,7 +36,7 @@ class MainWindow : public QMainWindow
 public:
 
     void XbeewriteComText(QString writeComText);
-    void XbeesendCOM(int sendCOM);
+    void XbeesendCOM(unsigned long sendCOM);
     void IPSwriteComText(QString writeComText);
     void IPSsendCOM(int sendCOM);
     int getposStation(int station, int xyz);

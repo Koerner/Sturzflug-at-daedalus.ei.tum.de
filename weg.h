@@ -11,6 +11,9 @@ public:
 
     int hin[16][4];     //Erste Spalte: x-Koordinate, 2.: y-Koordinate 3.: rechts oder links rum 4.: Abstand Hindernis/Wand
     int hinanz;       // Anzahl der eingetragenen Hindernisse
+    int schub[3];    //Schub link, schub rechts, schub höhe
+    int spannweite;
+    int abwurf; //0 ist nei 1 ist ja
 
     int S[2][2];
     //Zeppelindaten
