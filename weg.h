@@ -16,7 +16,8 @@ public:
     int abwurf; //0 ist nein 1 ist ja
     int strecke; // welche Stange wird angeflogen
 
-    int S[2][2]; //Tangenpunkte
+    int EP[2]; //Eintrittspunkt in Kreis
+    int AP[2]; //Ausrittspunkt aus Kreis
     //Zeppelindaten
 
     QList<int> Ausrichtung;  //Winkel in Grad gegen 0
@@ -35,15 +36,18 @@ public:
     int kreisradius[16];
     int naechsterNachbar[16];
 
+    //gerade(0) oder kreis(1)
+    int flug;
+
 //Funktionen:
 
     //Wegberechnung
     void moduscheck();
     void berechneWeg();
     void berechneRadien();
-    //double Winkel(double x, double y);
-    //double Abs(double x);
-    //void GetCollisionPoint(Point P1, Point P2, double r1, double r2, Result *res);
+    double Winkel(double x, double y, int i);
+    double Abs(double x);
+    void GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, double r1, double r2, double *res1, double *res2, double *res3, double *res4);
     void Tangentenberechnung(double mittelx, double mittely, double rad);
     int Abweichung(int Radius, int Hindernisnummer); //Abweichung vom Radius um das Hindernis
 
@@ -56,51 +60,20 @@ public:
     void geradeaus(int geschwindigkeit);  //Geschw. von 0 bis 100
     void kurve(bool linksrechts, int radius);
     void standdrehung(int winkel);
-};
-class Point
-{
-     public:
 
-     Point()
-     {
-          x = y = 0;
-     }
+    //Test
+    void SetPoints(int p)
+    {
+         Points = p;
+    }
 
-     Point(double x_, double y_)
-     {
-          x = x_;
-          y = y_;
-     }
-
-     double x;
-     double y;
+    int GetPoints()
+    {
+         return Points;
+    }
+    int Points;
+    //Test Ende
 };
 
-class Result
-{
-     public:
-
-     Result()
-     {
-          Points = 0;
-     }
-
-     void SetPoints(int p)
-     {
-          Points = p;
-     }
-
-     int GetPoints()
-     {
-          return Points;
-     }
-
-     Point P1;
-     Point P2;
-
-     private:
-
-     int Points;
-};
 
 #endif // WEG_H
