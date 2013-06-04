@@ -2,6 +2,9 @@
 #include "QDebug"
 #include "math.h"
 
+#define PI 3.14159265
+
+
 void weg::moduscheck()
 {
     // Prüfen ob normaler Modus oder Notfallmodus
@@ -18,56 +21,141 @@ void weg::moduscheck()
 
 void weg::berechneWeg()
 {
-    int Strecke;
-    //int i;
+    //int Strecke;
+    int i = 0;
     int flug;//0=geradeaus; 1= kreis
     double verhaeltnis=0;
-    double buf1,buf2;
+    double buf3, buf4, buf1, buf2;
     double Radius;
+    double alpha;
+    double beta[2];
+    //strecke = 0;
 
-    //i = Strecke %2;
+    //Abfrage, ob Punkt erreicht ist
+    if (xList.at(0)== EP[0] && yList(0)== EP[1])
+    {
+        flug = 1;
+    }
+    if (xList.at(0)== AP[0] && yList(0)==AP[1])
+    {
+        flug = 0;
+        strecke = strecke+1;
+    }
+    //qDebug()<< "Strecke:" << strecke;
+    //strecke = strecke+1;
 
-        switch(flug)
+
+
+//        switch(flug)
+//        {
+//        case 0:{
+//            //Punkt zu Kreis-Tangente
+//            buf3 =  (hin[strecke][0] - xList.at(0))/2;
+//            buf4 =  (hin[strecke][1] - yList.at(0))/2;
+//            Radius = sqrt(buf3*buf3+buf4*buf4);
+//            buf1 = xList.at(0) + buf3;
+//            buf2 = yList.at(0) + buf4;
+
+//            Tangentenberechnung(buf1,buf2, Radius); //Eintrittspunkt in Kreis
+
+//            //Abfrage, ob links rum oder rechtsrum
+    alpha = Winkel(buf3,buf4);
+    for (i=0,i<2,i++)
+    {
+                buf1 = S[i][0]-xList.at(0);
+                buf2 = S[i][1]-yList.at(0);
+                beta[i] = Winkel(buf1,buf2);
+    }
+    switch (buf3) {
+    case (0):
+    {
+        if (beta[0]<alpha)
         {
-        case 0:{
-            //Punkt zu Kreis-Tangente
-            buf1 =  (hin[Strecke][0] - xList.at(0))/2;
-            buf2 =  (hin[Strecke][1] - yList.at(0))/2;
-            Radius = sqrt(buf1*buf1+buf2*buf2);
-            buf1 = xList.at(0) + buf1;
-            buf2 = yList.at(0) + buf2;
-
-            Tangentenberechnung(buf1,buf2, Radius); //Eintrittspunkt in Kreis
-
-            //Abfrage, ob links rum oder rechtsrum
-            break;
-        }
-        case 1:
-        {
-            verhaeltnis = kreisradius[Strecke]/(kreisradius[Strecke]+kreisradius[Strecke+1]);
-            buf1 =  (hin[Strecke+1][0] - hin[Strecke][0])*verhaeltnis;
-            buf2 =  (hin[Strecke+1][1] - hin[Strecke][1])*verhaeltnis;
-            Radius = sqrt(buf1*buf1+buf2*buf2);
-            buf1 = hin[Strecke][0] + buf1;
-            buf2 = hin[Strecke][1] + buf2;
-
-            Tangentenberechnung(buf1,buf2, Radius); //Austrittspunkt
-
-            //abgrage, ob links rum oder rechts rum
-
+            EP[0]=S[0][0];
+            EP[1]=S[0][1];
         }
 
+        break;
+    case (buf3<0):
+    case (buf3>0):
+    default:
+        break;
     }
 
+//            if (buf3 ==0)
+//            {
+//                if (buf 2 >0)
+//                    alpha = 90;
+//                else
+//                    alpha = -90;
+//            }alpha = atan(buf4 / buf3);
+//            buf1 = S[0][0]-xList.at(0);
+//            buf2 = S[0][1]-yList.at(0);
+//            beta = atan (buf2 / buf1);
 
 
+//            if (hin[strecke][2] = 0)
+//            {
+//                if ((S[0][1]- yList.at(0))<buf)
+//                {
+//                    EPunkt[0] = S[0][0];
+//                    EPunkt[1] = S[0][1];
+//                }
+//                else
+//                {
+//                    EPunkt[0] = S[1][0];
+//                    EPunkt[1] = S[1][1];
+//                }
+//            }
+//            break;
+//        }
+//        case 1:
+//        {
+//            verhaeltnis = kreisradius[Strecke]/(kreisradius[Strecke]+kreisradius[Strecke+1]);
+//            buf1 =  (hin[strecke+1][0] - hin[strecke][0])*verhaeltnis;
+//            buf2 =  (hin[strecke+1][1] - hin[strecke][1])*verhaeltnis;
+//            Radius = sqrt(buf1*buf1+buf2*buf2);
+//            buf1 = hin[strecke][0] + buf1;
+//            buf2 = hin[strecke][1] + buf2;
 
-    //Für den Notfallplan brauche ich das notfallziel array ausgefüllt, also die Daten wo das Zeppelin im Notfall hinsteuern soll (x und y) und den Ausrichtungswinkel, zum Schluss
+//            Tangentenberechnung(buf1,buf2, Radius); //Austrittspunkt
 
+//            //abgrage, ob links rum oder rechts rum
+
+//        }
+
+//    }
+ //Für den Notfallplan brauche ich das notfallziel array ausgefüllt, also die Daten wo das Zeppelin im Notfall hinsteuern soll (x und y) und den Ausrichtungswinkel, zum Schluss
+}
+
+double weg::Winkel (double x, double y)
+{
+
+     double param, result;
+     x=-1;
+     y=-1;
+     param = x/sqrt(x*x+y*y);
+     if (V[1] < 0)
+     {
+         param = -param;
+         result = ((acos (param) * 180.0) / PI)-180.0;
+     }
+     else
+     {
+         result = acos (param) * 180.0 / PI;
+     }
+
+
+              //cout<<"The arc cosine of "<< param << " is " << result << " degrees.\n"<<endl;
+     return 0;
 }
 
 
-double Abs(double x)
+
+
+
+
+double weg::Abs(double x)
 {
      if(x < 0)
           x *= -1;

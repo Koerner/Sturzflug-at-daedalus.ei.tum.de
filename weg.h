@@ -13,9 +13,10 @@ public:
     int hinanz;       // Anzahl der eingetragenen Hindernisse
     int schub[3];    //Schub link, schub rechts, schub höhe
     int spannweite;
-    int abwurf; //0 ist nei 1 ist ja
+    int abwurf; //0 ist nein 1 ist ja
+    int strecke; // welche Stange wird angeflogen
 
-    int S[2][2];
+    int S[2][2]; //Tangenpunkte
     //Zeppelindaten
 
     QList<int> Ausrichtung;  //Winkel in Grad gegen 0
@@ -40,6 +41,7 @@ public:
     void moduscheck();
     void berechneWeg();
     void berechneRadien();
+    double weg::Winkel(double x, double y);
     //double Abs(double x);
     //void GetCollisionPoint(Point P1, Point P2, double r1, double r2, Result *res);
     void Tangentenberechnung(double mittelx, double mittely, double rad);

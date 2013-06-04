@@ -538,6 +538,7 @@ void MainWindow::onTestButtonClicked()
    str.append(QString("%1").arg(ergebnis));
 
    //qDebug() << x.xList;
+   y.berechneWeg();
 
    IPSwriteComText(str);
 }
