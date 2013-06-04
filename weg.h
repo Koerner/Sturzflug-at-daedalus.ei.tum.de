@@ -41,7 +41,7 @@ public:
     void moduscheck();
     void berechneWeg();
     void berechneRadien();
-    double weg::Winkel(double x, double y);
+    //double Winkel(double x, double y);
     //double Abs(double x);
     //void GetCollisionPoint(Point P1, Point P2, double r1, double r2, Result *res);
     void Tangentenberechnung(double mittelx, double mittely, double rad);

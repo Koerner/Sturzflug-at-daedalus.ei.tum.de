@@ -71,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
     IPStimer->setInterval(40); //könnte probleme lösen
 
     Filtertimer = new QTimer(this);
-    Filtertimer->setInterval(1000); //Aktuallisierungsrate 1sec
+    Filtertimer->setInterval(ui->refreshTime->value()); //Aktuallisierungsrate aus der GUI in ms
 
     //Vordefinierte Einstelluneg
     PortSettings Xbeesettings = {BAUD9600, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10};
@@ -105,6 +105,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //refresh connector ZENTRALES Takt-Element
     connect(Filtertimer, SIGNAL(timeout()), SLOT(refresh()));
+    connect(ui->refreshTime, SIGNAL(currentIndexChanged(int)), SLOT(setrefreshrate()));  //Funktioniert noch nicht
     Filtertimer->start();
 
     // Karte
@@ -272,6 +273,10 @@ void MainWindow::XbeesendCOM(unsigned long sendCOM)
         qDebug() << str;
         ui->XbeesendEdit->insertPlainText(str);
         Xbeeport->write(ui->XbeesendEdit->toPlainText().toLatin1());
+        // Schubbalken setzen
+        ui->MotorLinks->setValue(y.schub[0]);
+        ui->MotorRechts->setValue(y.schub[1]);
+        ui->MotorHoehe->setValue(y.schub[2]);
         // Textausgabe des gesendetetn
         XbeewriteComText("<-");
         XbeewriteComText(ui->XbeesendEdit->toPlainText().toLatin1());
@@ -480,6 +485,12 @@ void MainWindow::deletekoordinaten()
     x.zList.clear();
 }
 
+void MainWindow::setrefreshrate()
+{
+    Filtertimer->setInterval(ui->refreshTime->value());
+    qDebug() << Filtertimer->interval();
+}
+
 
 // Zentrale Erzeugung der Karte
 void MainWindow::DrawMap()
@@ -538,7 +549,7 @@ void MainWindow::onTestButtonClicked()
    str.append(QString("%1").arg(ergebnis));
 
    //qDebug() << x.xList;
-   y.berechneWeg();
+   //y.berechneWeg();
 
    IPSwriteComText(str);
 }

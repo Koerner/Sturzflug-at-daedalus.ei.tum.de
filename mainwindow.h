@@ -86,6 +86,7 @@ private Q_SLOTS:
     void refresh();
     virtual void wheelEvent(QWheelEvent* event);
     void deletekoordinaten();
+    void setrefreshrate();
 
 
 };

@@ -22,25 +22,25 @@ void weg::moduscheck()
 void weg::berechneWeg()
 {
     //int Strecke;
-    int i = 0;
-    int flug;//0=geradeaus; 1= kreis
-    double verhaeltnis=0;
-    double buf3, buf4, buf1, buf2;
-    double Radius;
-    double alpha;
-    double beta[2];
+//    int i = 0;
+//    int flug;//0=geradeaus; 1= kreis
+//    double verhaeltnis=0;
+//    double buf3, buf4, buf1, buf2;
+//    double Radius;
+//    double alpha;
+//    double beta[2];
     //strecke = 0;
 
     //Abfrage, ob Punkt erreicht ist
-    if (xList.at(0)== EP[0] && yList(0)== EP[1])
-    {
-        flug = 1;
-    }
-    if (xList.at(0)== AP[0] && yList(0)==AP[1])
-    {
-        flug = 0;
-        strecke = strecke+1;
-    }
+//    if (xList.at(0)== EP[0] && yList(0)== EP[1])
+//    {
+//        flug = 1;
+//    }
+//    if (xList.at(0)== AP[0] && yList(0)==AP[1])
+//    {
+//        flug = 0;
+//        strecke = strecke+1;
+//    }
     //qDebug()<< "Strecke:" << strecke;
     //strecke = strecke+1;
 
@@ -59,28 +59,28 @@ void weg::berechneWeg()
 //            Tangentenberechnung(buf1,buf2, Radius); //Eintrittspunkt in Kreis
 
 //            //Abfrage, ob links rum oder rechtsrum
-    alpha = Winkel(buf3,buf4);
-    for (i=0,i<2,i++)
-    {
-                buf1 = S[i][0]-xList.at(0);
-                buf2 = S[i][1]-yList.at(0);
-                beta[i] = Winkel(buf1,buf2);
-    }
-    switch (buf3) {
-    case (0):
-    {
-        if (beta[0]<alpha)
-        {
-            EP[0]=S[0][0];
-            EP[1]=S[0][1];
-        }
+//    alpha = Winkel(buf3,buf4);
+//    for (i=0,i<2,i++)
+//    {
+//                buf1 = S[i][0]-xList.at(0);
+//                buf2 = S[i][1]-yList.at(0);
+//                beta[i] = Winkel(buf1,buf2);
+//    }
+//    switch (buf3) {
+//    case (0):
+//    {
+//        if (beta[0]<alpha)
+//        {
+//            EP[0]=S[0][0];
+//            EP[1]=S[0][1];
+//        }
 
-        break;
-    case (buf3<0):
-    case (buf3>0):
-    default:
-        break;
-    }
+//        break;
+//    case (buf3<0):
+//    case (buf3>0):
+//    default:
+//        break;
+//    }
 
 //            if (buf3 ==0)
 //            {
@@ -128,34 +128,34 @@ void weg::berechneWeg()
  //Für den Notfallplan brauche ich das notfallziel array ausgefüllt, also die Daten wo das Zeppelin im Notfall hinsteuern soll (x und y) und den Ausrichtungswinkel, zum Schluss
 }
 
-double weg::Winkel (double x, double y)
-{
+//double weg::Winkel (double x, double y)
+//{
 
-     double param, result;
-     x=-1;
-     y=-1;
-     param = x/sqrt(x*x+y*y);
-     if (V[1] < 0)
-     {
-         param = -param;
-         result = ((acos (param) * 180.0) / PI)-180.0;
-     }
-     else
-     {
-         result = acos (param) * 180.0 / PI;
-     }
-
-
-              //cout<<"The arc cosine of "<< param << " is " << result << " degrees.\n"<<endl;
-     return 0;
-}
+//     double param, result;
+//     x=-1;
+//     y=-1;
+//     param = x/sqrt(x*x+y*y);
+//     if (V[1] < 0)
+//     {
+//         param = -param;
+//         result = ((acos (param) * 180.0) / PI)-180.0;
+//     }
+//     else
+//     {
+//         result = acos (param) * 180.0 / PI;
+//     }
 
 
+//              //cout<<"The arc cosine of "<< param << " is " << result << " degrees.\n"<<endl;
+//     return 0;
+//}
 
 
 
 
-double weg::Abs(double x)
+
+
+double Abs(double x)
 {
      if(x < 0)
           x *= -1;
