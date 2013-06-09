@@ -44,17 +44,17 @@ public:
 //Funktionen:
 
     void start();
-    int abweichung(); //IST/Sollwertabweichung in %
+    int GetAbweichung(); //IST/Sollwertabweichung in %
 
     //Wegberechnung
     void moduscheck();
     void berechneWeg();
     void berechneRadien();
-    double Winkel(double x, double y, int i);
+    double GetWinkel(double x, double y, int i);
     double Abs(double x);
     void GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, double r1, double r2, double *res1, double *res2, double *res3, double *res4);
-    void Tangentenberechnung(double mittelx, double mittely, double rad);
-    int Abweichung(int Radius, int Hindernisnummer); //Abweichung vom Radius um das Hindernis
+    void Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt_x, double Bezugspunkt_y, double rad);
+    //int Abweichung(int Radius, int Hindernisnummer); //Abweichung vom Radius um das Hindernis
 
     //Notfallplan
     void notfallplan();
