@@ -2,21 +2,42 @@
 #include "QDebug"
 #include "math.h"
 
-#define PI 3.14159265
 
 
-void weg::moduscheck()
+void weg::start()
 {
-    // Prüfen ob normaler Modus oder Notfallmodus
-    if (!modus)
+    //Hier gehts los, das ist der Startpunkt für jedes mal
+
+    //Prüfe ob Istkoordinaten = okay, leichte abweichung, starke abweichung
+    if(abweichung()<10)
     {
-        berechneWeg();
+        //Passt, weiterfliegen
     }
     else
     {
-        qDebug()<< "Notfallplan";
-        notfallplan();
+        if(abweichung()>30)
+        {
+            //Notfallmodus
+        }
+        else
+        {
+            //Reglermodus
+        }
     }
+
+}
+
+
+int weg::abweichung()
+{
+    //modus, demnach auswählen
+
+    //ngative abweichung ist links, positive ist rechts!!!
+
+    // Differenz Soll Ist Abwichung von der gerade (parallele!) in%
+
+    //Differenz zwischen Soll und Ist Radius in %
+    return 0;
 }
 
 void weg::berechneWeg()
@@ -30,11 +51,11 @@ void weg::berechneWeg()
     strecke = 0;
 
     //Abfrage, ob Punkt erreicht ist
-    if (xList.at(0)== EP[0] && yList(0)== EP[1])
+    if (xList.at(0)== EP[0] && yList.at(0)== EP[1])
     {
         flug = 1;
     }
-    if (xList.at(0)== AP[0] && yList(0)==AP[1])
+    if (xList.at(0)== AP[0] && yList.at(0)==AP[1])
     {
         flug = 0;
         strecke = strecke+1;
@@ -211,7 +232,6 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double rad)
 
 
 }
-#define PI 3.14159265
 
 double weg::Winkel (double x, double y, int i)
 {
@@ -301,6 +321,14 @@ int weg::Abweichung(int Radius, int Hindernisnummer)
 
 
 
+
+
+
+
+
+
+
+
 //NOTFALLPLAN
 
 
@@ -311,7 +339,6 @@ void weg::notfallplan()
     if(abs(notfallziel[0]-xList.at(0))<zieltol&&abs(notfallziel[1]-yList.at(0)<zieltol))
     {
         notfallplanende(notfallziel[2]);
-        modus=false;
         //Filtertimer->setInterval(1000);
     }
     else

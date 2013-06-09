@@ -87,6 +87,7 @@ private Q_SLOTS:
     virtual void wheelEvent(QWheelEvent* event);
     void deletekoordinaten();
     void setrefreshrate();
+    void setAbweichung();
 
 
 };

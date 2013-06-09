@@ -21,7 +21,8 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     ips.h \
-    weg.h
+    weg.h \
+    define.h
 
 FORMS    += mainwindow.ui
 

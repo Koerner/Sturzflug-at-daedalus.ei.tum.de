@@ -105,12 +105,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //refresh connector ZENTRALES Takt-Element
     connect(Filtertimer, SIGNAL(timeout()), SLOT(refresh()));
-    connect(ui->refreshTime, SIGNAL(currentIndexChanged(int)), SLOT(setrefreshrate()));  //Funktioniert noch nicht
+    connect(ui->refreshTime, SIGNAL(valueChanged(int)), SLOT(setrefreshrate()));
     Filtertimer->start();
 
     // Karte
     connect(ui->deletkoordinaten, SIGNAL(clicked()), SLOT(deletekoordinaten()));
     connect(ui->setHindernisse, SIGNAL(clicked()), SLOT(setHindernisse()));
+
+    //Einstellungen
+    connect(ui->setAbweichung, SIGNAL(clicked()), SLOT(setAbweichung()));
 
 
     //ConnectorenSTOP
@@ -122,6 +125,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
  //Funktionen GUI
 
+
 //Baud Rate
 void MainWindow::XbeeonBaudRateChanged(int idx)
 {
@@ -132,6 +136,7 @@ void MainWindow::IPSonBaudRateChanged(int idx)
     IPSport->setBaudRate((BaudRateType)ui->IPSBaudRateBox->itemData(idx).toInt());
 }
 //Baus Rate STOP
+
 
 
 // Port Änderung
@@ -161,6 +166,7 @@ void MainWindow::IPSonPortAddedOrRemoved()
 }
 //Port Änderung STOP
 
+
 //Senden an ComPort
 void MainWindow::XbeewriteComText(QString writeComText)
 {
@@ -175,6 +181,8 @@ void MainWindow::IPSwriteComText(QString writeComText)
     ui->IPSComText->moveCursor(QTextCursor::End);
 }
 // Senden an ComPort STOP
+
+
 
 // Ändern des ComPorts und öffnen
 void MainWindow::XbeeonPortNameChanged(const QString & /*name*/)
@@ -263,6 +271,8 @@ void MainWindow::IPSonReadyRead()
 }
 //ComPort lesen STOP
 
+
+
 //ComPort schreiben
 void MainWindow::XbeesendCOM(unsigned long sendCOM)
 {
@@ -312,8 +322,10 @@ void MainWindow::IPSsendCOM(int sendCOM)
 
 //ComPort schreiben STOP
 
-//Positionen der Bodenstationen speichern
 
+
+
+//Positionen der Bodenstationen speichern
 void MainWindow::setPosStation()
 {
     x.posStation[0][0]=ui->s1x->value(); //x
@@ -352,8 +364,8 @@ void MainWindow::setPosStation()
     x.posStation[8][1]=ui->s9y->value(); //y
     x.posStation[8][2]=ui->s9z->value(); //z
 }
-
 //STOP Positionen der Bodenstationen speichern
+
 
 // Hindernisse speichern
 
@@ -487,8 +499,17 @@ void MainWindow::deletekoordinaten()
 
 void MainWindow::setrefreshrate()
 {
+    qDebug() << "Refreshrate geändert:" << ui->refreshTime->value();
     Filtertimer->setInterval(ui->refreshTime->value());
     qDebug() << Filtertimer->interval();
+}
+
+void MainWindow::setAbweichung()
+{
+    y.abweichungGUI[0]=ui->AbweichungOkay->value();
+    y.abweichungGUI[1]=ui->AbweichungOkayRegler->value();
+    y.abweichungGUI[2]=ui->mmProzent->value();
+    qDebug() << "alle Abweichungen gesetzt";
 }
 
 

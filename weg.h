@@ -2,12 +2,16 @@
 #define WEG_H
 
 #include <QList>
+#include "define.h"
 
 class weg
 {
 public:
 
 //Variablen:
+
+    enum modus {GERADEAUS, KREIS};
+    int abweichungGUI[3];
 
     int hin[16][4];     //Erste Spalte: x-Koordinate, 2.: y-Koordinate 3.: rechts oder links rum 4.: Abstand Hindernis/Wand
     int hinanz;       // Anzahl der eingetragenen Hindernisse
@@ -26,8 +30,6 @@ public:
     QList<int> yList;
     QList<int> zList;
 
-    bool modus; //0 ist normal, 1 ist Notfall
-
     //Notfallplan variable
     int notfallziel[3]; //x und y Koordinate Notfallplan Ziel + Ausrichtungswinkel
     int zieltol; // Tolleranz ob Ziel erreicht ist
@@ -40,6 +42,9 @@ public:
     int flug;
 
 //Funktionen:
+
+    void start();
+    int abweichung(); //IST/Sollwertabweichung in %
 
     //Wegberechnung
     void moduscheck();
@@ -73,6 +78,7 @@ public:
     }
     int Points;
     //Test Ende
+
 };
 
 

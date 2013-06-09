@@ -203,7 +203,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -752,25 +752,6 @@
        <string>Hindernisse</string>
       </property>
      </widget>
-     <widget class="QSpinBox" name="refreshTime">
-      <property name="geometry">
-       <rect>
-        <x>420</x>
-        <y>30</y>
-        <width>101</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="minimum">
-       <number>100</number>
-      </property>
-      <property name="maximum">
-       <number>1000</number>
-      </property>
-      <property name="value">
-       <number>1000</number>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="tab_7">
      <attribute name="title">
@@ -1000,6 +981,82 @@
         <widget class="QPushButton" name="posStationSetzen">
          <property name="text">
           <string>Stationen speichern</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="gridLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>10</y>
+        <width>441</width>
+        <height>291</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Abweichungen</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QSpinBox" name="mmProzent">
+         <property name="toolTip">
+          <string extracomment="Wieviel mm sind ein % bei geraden Strecken"/>
+         </property>
+         <property name="value">
+          <number>30</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="AbweichungOkay">
+         <property name="toolTip">
+          <string extracomment="Wert in % bis zu dem die Abweichung tolleriert wird"/>
+         </property>
+         <property name="value">
+          <number>15</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QSpinBox" name="AbweichungOkayRegler">
+         <property name="toolTip">
+          <string extracomment="Wert bis zu welcher Abweichung gereglt wird, danach Notfallmodus"/>
+         </property>
+         <property name="value">
+          <number>30</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="refreshTime">
+         <property name="minimum">
+          <number>100</number>
+         </property>
+         <property name="maximum">
+          <number>1000</number>
+         </property>
+         <property name="value">
+          <number>1000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Refreshrate</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QPushButton" name="setAbweichung">
+         <property name="text">
+          <string>&gt;&gt; speichern</string>
          </property>
         </widget>
        </item>
