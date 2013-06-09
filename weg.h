@@ -20,13 +20,14 @@ public:
     int abwurfkoordinate[2];      // Abwurfkoordinaten
     int zielkoordinaten[2]; // Zielkoordinaten
 
-
     //Variablen für die Berechnung
 
-    int strecke; // welche Stange wird angeflogen
-    bool modus;
+    int hinnummer; // welche Stange wird angeflogen
+    bool modus; //true: geradeaus; false: Kurve;
     int EP[2]; //Eintrittspunkt in Kreis
     int AP[2]; //Ausrittspunkt aus Kreis
+    int ziel_x; //Zielkoordinaten
+    int ziel_y; //Zielkoordinaten
 
 
     //Zeppelindaten

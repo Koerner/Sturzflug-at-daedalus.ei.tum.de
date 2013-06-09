@@ -123,6 +123,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setZieltolleranz();
     setAbweichung();
 
+    //IPS und Wegklasse erstellen
+    y.hinnummer = 0;
+    y.modus = true;
 
 }
 
@@ -592,7 +595,8 @@ void MainWindow::onTestButtonClicked()
    str.append(QString("%1").arg(ergebnis));
 
    //qDebug() << x.xList;
-   //y.berechneWeg();
+   y.berechneRadien();//all Kurvenradien berechnen
+   y.berechneWeg();//erste Zielkoordinate berechnen
 
    IPSwriteComText(str);
 }

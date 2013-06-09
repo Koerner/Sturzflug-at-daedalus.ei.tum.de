@@ -6,55 +6,63 @@
 //Start Aufruf
 void weg::start()
 {
+    int streckenlange;
     //Hier gehts los, das ist der Startpunkt für jedes mal
 
-    if (punktabweichung(0,0,xList.at(0),yList.at(0))<zieltol)
+    if (punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol)
     {
+        if (modus = false){
+            modus = true;
+            hinnummer = hinnummer + 1;
+        }
+        else{
+            modus = false;
+        }
         //Starte neue Punktberechnung
         berechneWeg();
     }
-    else
-    {
+
+    if (modus){
+        streckenlange = punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y);
         if(GetAbweichung()<10)
-        {
-            //Passt, weiterfliegen
-        }
-        else
-        {
-            if(GetAbweichung()>30)
             {
-                //Notfallmodus
+            geradeaus(streckenlange);
             }
             else
             {
-                //Reglermodus
+                if(GetAbweichung()>30)
+                {
+                    //Notfallmodus
+                }
+                else
+                {
+                    //geradeaus2(streckennlange,GetAbweichung)
+                }
             }
-        }
     }
-
 }
 //Ende Aufruf
 
 // Beginn Abweichung von idealer Flugbahn berechnen
 int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vektor1_y, int i*/)
 {
-    int x,y, distance;
+    int x,y, distance, abweichung;
 
     switch (modus){
-         case 0:{
+         case true:{
                 double alpha, beta, gamma;
                 int b = 1;
-                if (strecke == 0)
+                if (hinnummer == 0)
                 {
                         //AP[0]=Startpunkt_x;  //Startpunkt festsetzen
                         //AP[1]=Startpunkt_y;  //Startpunkt festsetzen
                 }
-                x = AP[0] - EP[0];
-                y = AP[1] - EP[1];
+                x = EP[0] - AP[0];
+                y = EP[1] - AP[1];
                 if (x>0)
                     {b=0;}
                 alpha = GetWinkel(x, y, b);
-                distance = sqrt(x*x+y*y);
+                distance = punktabweichung(AP[0],AP[1],EP[0],EP[1]);
 
                 x = xList.at(0) - AP[0];
                 y = yList.at(0) - AP[1];
@@ -68,15 +76,14 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 
 
                 distance = sin(gamma)*distance;
+                abweichung = (distance/kreisradius[hinnummer])*100;
              }
-    case 1 :{
-        distance = (hin[strecke][0]-xList.at(0))*(hin[strecke][0]-xList.at(0))+(hin[strecke][1]-yList.at(0))*(hin[strecke][1]-yList.at(0));
-        distance = sqrt(distance);
-        distance = distance - kreisradius[strecke];
+    case false :{
+        distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]);
+        distance = distance - kreisradius[hinnummer];
+        abweichung = (distance/kreisradius[hinnummer])*100;
     }
     }
-
-
 
     //modus, demnach auswählen
 
@@ -85,7 +92,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
     // Differenz Soll Ist Abwichung von der gerade (parallele!) in%
 
     //Differenz zwischen Soll und Ist Radius in %
-    return distance;
+    return abweichung;
 }
 //Ende Abweichung berechnen
 
@@ -101,31 +108,31 @@ void weg::berechneWeg()
 
         switch(modus)
         {
-        case 0:{
+        case true:{
 
-            if (strecke == 0)
+            if (hinnummer == 0)
             {
                     //AP[0]=Startpunkt_x;//Startpunkt festsetzen
                     //AP[1]=Startpunkt_y;//Startpunkt festsetzen
             }
 
-            buf3 =  (hin[strecke][0] - AP[0])/2;
-            buf4 =  (hin[strecke][1] - AP[1])/2;
-            Radius = sqrt(buf3*buf3+buf4*buf4);
+            buf3 =  (hin[hinnummer][0] - AP[0])/2;
+            buf4 =  (hin[hinnummer][1] - AP[1])/2;
+            Radius = sqrt(buf1*buf1+buf2*buf2);
             buf1 = AP[0] + buf3;
             buf2 = AP[1] + buf4;
             Tangentenberechnung(buf1,buf2, AP[0], AP[1], Radius); //Eintrittspunkt in Kreis
 
 
         }
-        case 1:
+        case false:
         {
-            verhaeltnis = kreisradius[strecke]/(kreisradius[strecke]+kreisradius[strecke+1]);
-            buf1 =  (hin[strecke+1][0] - hin[strecke][0])*verhaeltnis;
-            buf2 =  (hin[strecke+1][1] - hin[strecke][1])*verhaeltnis;
+            verhaeltnis = kreisradius[hinnummer]/(kreisradius[hinnummer]+kreisradius[hinnummer+1]);
+            buf1 =  (hin[hinnummer+1][0] - hin[hinnummer][0])*verhaeltnis;
+            buf2 =  (hin[hinnummer+1][1] - hin[hinnummer][1])*verhaeltnis;
             Radius = sqrt(buf1*buf1+buf2*buf2);
-            buf1 = hin[strecke][0] + buf1;
-            buf2 = hin[strecke][1] + buf2;
+            buf1 = hin[hinnummer][0] + buf1;
+            buf2 = hin[hinnummer][1] + buf2;
 
             Tangentenberechnung(buf1,buf2, buf1, buf2, Radius); //Austrittspunkt
 
@@ -158,7 +165,7 @@ void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, doub
      //Kein Schnittpunkt
      SetPoints(0);
 
-     double abc = sqrt((Q_x - P_x)*(Q_x - P_x) + (Q_y - P_y)*(Q_y - P_y));
+     double abc = punktabweichung(P_x,P_y,Q_x,Q_y);
 
      //Kreise innerhalb
      if(abc <= Abs(r1-r2))
@@ -218,12 +225,12 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
     double x,y,x1,x2,y1,y2;//, r1, r2;
     double alpha, beta, gamma;
 
-    GetCollisionPoint(mittelx, mittely, hin[strecke][0], hin[strecke][1], rad, kreisradius[strecke],&x1,&y1,&x2,&y2); //Schnittpunkte der zwei Kreise berechnen
+    GetCollisionPoint(mittelx, mittely, hin[hinnummer][0], hin[hinnummer][1], rad, kreisradius[hinnummer],&x1,&y1,&x2,&y2); //Schnittpunkte der zwei Kreise berechnen
 
     //Entscheidung, welcher Punkt der richtige ist, abhängig davon, ob der zeppelin rechts oder links herum fliegen soll
     int b=1;
-    x= (hin[strecke][0] - Bezugspunkt_x);
-    y= (hin[strecke][1] - Bezugspunkt_y);
+    x= (hin[hinnummer][0] - Bezugspunkt_x);
+    y= (hin[hinnummer][1] - Bezugspunkt_y);
     if (x>=0)
     {b=0;}
     alpha = GetWinkel(x,y,b);
@@ -234,9 +241,9 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
 //    y=y2-yList.at(0);
 //    gamma = GetWinkel(x,y,b);
 
-    if (modus == 0)
+    if (modus)
     {
-        if (hin[strecke][2]==1) //falls linksrum
+        if (hin[hinnummer][2]==1) //falls linksrum
         {
             if ((beta-alpha)<0)
             {
@@ -249,11 +256,12 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
                 EP[1]=y2;
             }
         }
-
+        ziel_x = EP[0];
+        ziel_y = EP[1];
     }
     else
     {
-        if (hin[strecke][2]==1) //falls linksrum
+        if (hin[hinnummer][2]==1) //falls linksrum
         {
             if ((beta-alpha)<0)
             {
@@ -266,6 +274,8 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
                 AP[1]=y1;
             }
         }
+        ziel_x = AP[0];
+        ziel_y = AP[1];
     }
     //Entscheidung Ende
 
@@ -275,7 +285,7 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
 
 int weg::punktabweichung(int x_1, int y_1, int x_2, int y_2)
 {
-    //Berechnet den Abtsand zweier Punkte
+    //Berechnet den Abstand zweier Punkte
     return sqrt(((x_2-x_1)*(x_2-x_1))+((y_2-y_1)*(y_2-y_1)));
 }
 
@@ -338,11 +348,7 @@ void weg::berechneRadien()
         {
             if (i!=j)
             {
-                bef1 = (hin[j][0]-hin[i][0]);
-                bef1 = bef1*bef1;
-                bef2 = (hin[j][1]-hin[i][1]);
-                bef2=bef2*bef2;
-                Abstand=sqrt(bef1+bef2);
+                Abstand=punktabweichung(hin[i][0],hin[i][1],hin[j][0],hin[j][1]);
 
                 if (Abstand<d)
                 {
