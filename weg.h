@@ -42,8 +42,10 @@ public:
 
 
     //Notfallplan variable
+    bool notfallmodus; //1 ist an 0 ist aus
     int notfallziel[3]; //x und y Koordinate Notfallplan Ziel + Ausrichtungswinkel
-    int zieltol; // Tolleranz ob Ziel erreicht ist
+    int notfalltol; // Tolleranz ob Ziel erreicht ist
+    int notfalltolwinkel;
 
 
     //Kreisradien um die Stangen
@@ -75,13 +77,15 @@ public:
 
     //Notfallplan
     void notfallplan();
-    void notfallplananfang(int AnfangsSollwinkel);
-    void notfallplanende(int EndSollwinkel);
+    void notfallplananfang(winkel);
+    void notfallplanende();
 
     //Motorsteuerung
-    void geradeaus(int geschwindigkeit);  //Geschw. von 0 bis 100
+    void geradeaus(int streckenlaenge);  //Strecke in mm
+    void geradeaus(int streckenlaenge, int abweichung); //Strecke in mm, abweichung in %
     void kurve(bool linksrechts, int radius);
     void standdrehung(int winkel);
+    void stop();
 
     //Test
     void SetPoints(int p)

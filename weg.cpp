@@ -373,39 +373,44 @@ void weg::berechneRadien()
 
 void weg::notfallplan()
 {
+    notfallmodus=1;
     //Filtertimer->setInterval(400);   EVENTUELL BENÖTIGT
-    if(abs(notfallziel[0]-xList.at(0))<zieltol&&abs(notfallziel[1]-yList.at(0)<zieltol))
+    if(Abstand(xList.at(0),yList.at(0),notfallziel[0],notfallziel[1])<notfalltol)
     {
-        notfallplanende(notfallziel[2]);
+        notfallplanende();
         //Filtertimer->setInterval(1000);
     }
     else
     {
         int winkelzumziel=0;
-        //Berechnung Winkel nach 0 von Zeppelin zu ziel
-        if(abs(winkelzumziel-Ausrichtung.at(0))<1)
+        //Berechnung Winkel nach 0 von Zeppelin zu ziel <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        if(abs(winkelzumziel-Ausrichtung.at(0))<notfalltolwinkel)
         {
-            geradeaus(10);
+            geradeaus(MITTEL);
         }
         else
         {
             notfallplananfang(winkelzumziel-Ausrichtung.at(0));
         }
     }
-
-
-
-
 }
 
-void weg::notfallplananfang(int AnfangsSollwinkel)
+void weg::notfallplananfang(winkel)
 {
-    standdrehung(AnfangsSollwinkel-Ausrichtung.at(0));
+    standdrehung(winkel);
 }
 
-void weg::notfallplanende(int EndSollwinkel)
+void weg::notfallplanende()
 {
-    standdrehung(EndSollwinkel-Ausrichtung.at(0));
+    if(notfallziel[2]-Ausrichtung.at(0)<notfalltolwinkel)
+    {
+        stop();
+        notfallmodus=0;
+    }
+    else
+    {
+        standdrehung(notfallziel[2]-Ausrichtung.at(0));
+    }
 }
 
 
@@ -415,21 +420,59 @@ void weg::notfallplanende(int EndSollwinkel)
 
 
 
-void weg::geradeaus(int geschwindigkeit)
+void weg::geradeaus(int streckenlaenge)
 {
-    schub[0]=geschwindigkeit;
-    schub[1]=geschwindigkeit;
+    if(streckenlaenge>1000)
+    {
+        schub[0]=50;
+        schub[1]=50;
+    }
+    else if (streckenlaenge>500)
+    {
+        schub[0]=20;
+        schub[1]=20;
+    }
+    else if (streckenlaenge<500)
+    {
+        schub[0]=5;
+        schub[1]=5;
+    }
+}
+
+void weg::geradeaus(int streckenlaenge, int abweichung)
+{
+    if(streckenlaenge>1000)
+    {
+        schub[0]=50;
+        schub[1]=50;
+        schub[0]=schub[0]-((abweichung/100)*schub[0]/3);
+        schub[1]=schub[1]-((abweichung/100)*schub[1]/3);
+    }
+    else
+    {
+        schub[0]=20;
+        schub[1]=20;
+        schub[0]=schub[0]-((abweichung/100)*schub[0]/1);
+        schub[1]=schub[1]-((abweichung/100)*schub[1]/1);
+    }
 }
 
 
 void weg::kurve(bool linksrechts, int radius)
 {
-
+    //Kurvenflugmodus
 }
 
 void weg::standdrehung(int winkel)
 {
+    schub[0]=winkel/3.6;
+    schub[1]=-winkel/3.6;
+}
 
+void weg::stop()
+{
+    schub[0]=0;
+    schub[1]=0;
 }
 
 
