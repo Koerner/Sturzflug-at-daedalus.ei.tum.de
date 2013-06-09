@@ -94,9 +94,9 @@ private Q_SLOTS:
     void setHindernisse();
     void setrefreshrate();
     void setAbweichung();
-    void setZiel();
-    void setAbwurfkoordinaten();
+    void setZiel(); //ABwurfkoordinaten
     void setZieltolleranz();
+    void setHoehe();
 
 
 

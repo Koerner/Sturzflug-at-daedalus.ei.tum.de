@@ -13,12 +13,13 @@ public:
 
     //Variablen aus der GUI
 
-    int abweichungGUI[3];
+    int abweichungGUI[2]; //feste bis Regelung, und % bis Notfall
     int spannweite;
     int hin[16][4];     // Erste Spalte: x-Koordinate, 2.: y-Koordinate 3.: rechts oder links rum 4.: Abstand Hindernis/Wand
     int hinanz;         // Anzahl der eingetragenen Hindernisse
     int abwurfkoordinate[2];      // Abwurfkoordinaten
     int zielkoordinaten[2]; // Zielkoordinaten
+    int zieltol;        //Tolleranz, wann es als Ziel erreicht gilt
 
     //Variablen für die Berechnung
 
@@ -52,6 +53,10 @@ public:
     int kreisradius[16];
     int naechsterNachbar[16];
 
+    //Hoehensteuerung
+    int sollHoehe;
+    int hoehentol;
+
 
     //gerade(0) oder kreis(1)
     //int flug;
@@ -77,7 +82,7 @@ public:
 
     //Notfallplan
     void notfallplan();
-    void notfallplananfang(winkel);
+    void notfallplananfang(int winkel);
     void notfallplanende();
 
     //Motorsteuerung
@@ -87,17 +92,15 @@ public:
     void standdrehung(int winkel);
     void stop();
 
-    //Test
-    void SetPoints(int p)
-    {
-         Points = p;
-    }
+    //Hoehensteuerung
 
-    int GetPoints()
-    {
-         return Points;
-    }
+    void hoehensteuerung ();
+
+    //Test
     int Points;
+    void SetPoints(int p){Points = p;}
+    int GetPoints(){return Points;}
+
     //Test Ende
 
 };

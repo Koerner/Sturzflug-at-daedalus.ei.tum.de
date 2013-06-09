@@ -9,6 +9,11 @@ void weg::start()
     int streckenlange;
     //Hier gehts los, das ist der Startpunkt für jedes mal
 
+    if(notfallmodus==1)
+    {notfallplan();}
+    else
+    {
+
     if (punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol)
     {
         if (modus = false){
@@ -39,6 +44,7 @@ void weg::start()
                     //geradeaus2(streckennlange,GetAbweichung)
                 }
             }
+    }
     }
 }
 //Ende Aufruf
@@ -343,7 +349,7 @@ void weg::berechneRadien()
 
     for (i=0;hinanz;i++)
     {
-        d = hin[j][3];
+        d = hin[i][3];
         for (j=0;hinanz;j++)
         {
             if (i!=j)
@@ -375,7 +381,7 @@ void weg::notfallplan()
 {
     notfallmodus=1;
     //Filtertimer->setInterval(400);   EVENTUELL BENÖTIGT
-    if(Abstand(xList.at(0),yList.at(0),notfallziel[0],notfallziel[1])<notfalltol)
+    if(punktabweichung(xList.at(0),yList.at(0),notfallziel[0],notfallziel[1])<notfalltol)
     {
         notfallplanende();
         //Filtertimer->setInterval(1000);
@@ -383,10 +389,10 @@ void weg::notfallplan()
     else
     {
         int winkelzumziel=0;
-        //Berechnung Winkel nach 0 von Zeppelin zu ziel <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        winkelzumziel=GetWinkel(notfallziel[0]-xList.at(0), notfallziel[1]-yList.at(0),0); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         if(abs(winkelzumziel-Ausrichtung.at(0))<notfalltolwinkel)
         {
-            geradeaus(MITTEL);
+            geradeaus(punktabweichung(xList.at(0),yList.at(0),notfallziel[0],notfallziel[1]));
         }
         else
         {
@@ -395,7 +401,7 @@ void weg::notfallplan()
     }
 }
 
-void weg::notfallplananfang(winkel)
+void weg::notfallplananfang(int winkel)
 {
     standdrehung(winkel);
 }
@@ -413,7 +419,32 @@ void weg::notfallplanende()
     }
 }
 
+// HOEHENSTEUERUNG
 
+void weg::hoehensteuerung()
+{
+    int dif;
+    dif=sollHoehe-zList.at(0);
+    if (abs(dif)<hoehentol)
+    {
+        schub[2]=0;
+    }
+    else
+    {
+        if(abs(dif)<40)
+        {
+            schub[2]=dif;
+        }
+        else
+        {
+            if(dif<0)
+            {schub[2]=-MAX;}
+            else
+            {schub[2]=MAX;}
+        }
+    }
+
+}
 
 
 // MOTORSTEUERUNG
@@ -443,17 +474,17 @@ void weg::geradeaus(int streckenlaenge, int abweichung)
 {
     if(streckenlaenge>1000)
     {
-        schub[0]=50;
-        schub[1]=50;
+        schub[0]=SCHNELL;
+        schub[1]=SCHNELL;
         schub[0]=schub[0]-((abweichung/100)*schub[0]/3);
-        schub[1]=schub[1]-((abweichung/100)*schub[1]/3);
+        schub[1]=schub[1]+((abweichung/100)*schub[1]/3);
     }
     else
     {
-        schub[0]=20;
-        schub[1]=20;
+        schub[0]=LANGSAM;
+        schub[1]=LANGSAM;
         schub[0]=schub[0]-((abweichung/100)*schub[0]/1);
-        schub[1]=schub[1]-((abweichung/100)*schub[1]/1);
+        schub[1]=schub[1]+((abweichung/100)*schub[1]/1);
     }
 }
 

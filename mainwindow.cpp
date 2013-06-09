@@ -112,7 +112,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->setAbweichung, SIGNAL(clicked()), SLOT(setAbweichung()));
     connect(ui->setZiel, SIGNAL(clicked()), SLOT(setZiel()));
     connect(ui->setZieltolleranz, SIGNAL(clicked()), SLOT(setZieltolleranz()));
-    connect(ui->setZieltolleranz, SIGNAL(clicked()), SLOT(setAbwurfkoordinaten()));
+    //connect(ui->A, SIGNAL(clicked()), SLOT(setAbwurfkoordinaten()));
+    connect(ui->setHoehe, SIGNAL(clicked()), SLOT(setHoehe()));
 
 
     //ConnectorenSTOP
@@ -122,6 +123,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setZiel();
     setZieltolleranz();
     setAbweichung();
+    setHoehe();
 
     //IPS und Wegklasse erstellen
     y.hinnummer = 0;
@@ -508,16 +510,15 @@ void MainWindow::deletekoordinaten()
 
 void MainWindow::setrefreshrate()
 {
-    qDebug() << "Refreshrate geändert:" << ui->refreshTime->value();
+
     Filtertimer->setInterval(ui->refreshTime->value());
-    qDebug() << Filtertimer->interval();
+    qDebug() << "Refreshrate geändert:" << ui->refreshTime->value();
 }
 
 void MainWindow::setAbweichung()
 {
     y.abweichungGUI[0]=ui->AbweichungOkay->value();
     y.abweichungGUI[1]=ui->AbweichungOkayRegler->value();
-    y.abweichungGUI[2]=ui->mmProzent->value();
     qDebug() << "alle Abweichungen gesetzt";
 }
 
@@ -525,17 +526,22 @@ void MainWindow::setZiel()
 {
     y.zielkoordinaten[0]=ui->zielkkordinaten_x->value();
     y.zielkoordinaten[1]=ui->Zielkoordinaten_y->value();
+    y.abwurfkoordinate[0]=ui->abwurfpunkt_x->value();
+    y.abwurfkoordinate[1]=ui->abwurfpunkt_y->value();
+    qDebug() << "Zielkoordinaten und Abwurfunkt gestezt:" << y.zielkoordinaten[0] << y.zielkoordinaten[1] << y.abwurfkoordinate[0] << y.abwurfkoordinate[1];
 }
 
 void MainWindow::setZieltolleranz()
 {
     y.zieltol=ui->zieltolleranz->value();
+    qDebug() << "Zieltolleranz gesetzt: "<< y.zieltol;
 }
 
-void MainWindow::setAbwurfkoordinaten()
+void MainWindow::setHoehe()
 {
-    y.abwurfkoordinate[0]=ui->abwurfpunkt_x->value();
-    y.abwurfkoordinate[1]=ui->abwurfpunkt_y->value();
+    y.sollHoehe=ui->SollHoehe->value();
+    y.hoehentol=ui->HoeheTol->value();
+    qDebug()<<"Hoehe + Hoehentol gesetzt: " << y.sollHoehe << y.hoehentol;
 }
 
 // Zentrale Erzeugung der Karte

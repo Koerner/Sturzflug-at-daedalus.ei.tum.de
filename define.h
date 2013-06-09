@@ -7,5 +7,6 @@
 #define MITTEL 40
 #define LANGSAM 20
 #define SUPERLANGSAM 10
+#define MAX 99
 
 #endif // DEFINE_H
