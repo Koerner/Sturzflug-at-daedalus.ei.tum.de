@@ -1,33 +1,34 @@
 #include "weg.h"
 #include "QDebug"
 #include "math.h"
-#define PI 3.14159265
+
 
 //Start Aufruf
 void weg::start()
 {
     //Hier gehts los, das ist der Startpunkt für jedes mal
 
-    //Prüfe, ob Zielkoordinaten erreicht sind
-    //falls ja
-            //Starte neue Punkteberechnung
-            //berechneWeg()
-    //Prüfe Ende
-
-    //Prüfe ob Istkoordinaten = okay, leichte abweichung, starke abweichung
-    if(GetAbweichung()<10)
+    if (punktabweichung(0,0,xList.at(0),yList.at(0))<zieltol)
     {
-        //Passt, weiterfliegen
+        //Starte neue Punktberechnung
+        berechneWeg();
     }
     else
     {
-        if(GetAbweichung()>30)
+        if(GetAbweichung()<10)
         {
-            //Notfallmodus
+            //Passt, weiterfliegen
         }
         else
         {
-            //Reglermodus
+            if(GetAbweichung()>30)
+            {
+                //Notfallmodus
+            }
+            else
+            {
+                //Reglermodus
+            }
         }
     }
 
@@ -39,7 +40,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 {
     int x,y, distance;
 
-    switch (flug){
+    switch (modus){
          case 0:{
                 double alpha, beta, gamma;
                 int b = 1;
@@ -68,7 +69,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 
                 distance = sin(gamma)*distance;
              }
-    case 1:{
+    case 1 :{
         distance = (hin[strecke][0]-xList.at(0))*(hin[strecke][0]-xList.at(0))+(hin[strecke][1]-yList.at(0))*(hin[strecke][1]-yList.at(0));
         distance = sqrt(distance);
         distance = distance - kreisradius[strecke];
@@ -98,7 +99,7 @@ void weg::berechneWeg()
     double Radius;
 
 
-        switch(flug)
+        switch(modus)
         {
         case 0:{
 
@@ -233,7 +234,7 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
 //    y=y2-yList.at(0);
 //    gamma = GetWinkel(x,y,b);
 
-    if (flug == 0)
+    if (modus == 0)
     {
         if (hin[strecke][2]==1) //falls linksrum
         {
@@ -271,6 +272,13 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
 
 }
 //Ende Tangentenberechnung
+
+int weg::punktabweichung(int x_1, int y_1, int x_2, int y_2)
+{
+    //Berechnet den Abtsand zweier Punkte
+    return sqrt(((x_2-x_1)*(x_2-x_1))+((y_2-y_1)*(y_2-y_1)));
+}
+
 
 //Winkel zwischen zwei Geraden
 double weg::GetWinkel (double x, double y, int i)
@@ -346,22 +354,6 @@ void weg::berechneRadien()
         kreisradius[i]=d/2;
     }
 }
-
-//int weg::Abweichung(int Radius, int Hindernisnummer)
-//{
-//    int Abweichungx=0;
-//    int Abweichungy=0;
-//    int Abweichung=0;
-//    Abweichungx=(xList.at(0)-hin[Hindernisnummer][0]);
-//    Abweichungy=(yList.at(0)-hin[Hindernisnummer][1]);
-//    Abweichung=Radius-sqrt((Abweichungx*Abweichungx)+(Abweichungy*Abweichungy));
-//    return Abweichung;
-//}
-
-
-
-
-
 
 
 

@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="TestButton">
     <property name="geometry">
      <rect>
-      <x>890</x>
-      <y>410</y>
+      <x>760</x>
+      <y>10</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -30,10 +30,10 @@
    <widget class="QPlainTextEdit" name="XbeesendEdit">
     <property name="geometry">
      <rect>
-      <x>970</x>
-      <y>410</y>
-      <width>16</width>
-      <height>16</height>
+      <x>810</x>
+      <y>40</y>
+      <width>10</width>
+      <height>10</height>
      </rect>
     </property>
    </widget>
@@ -43,7 +43,7 @@
       <x>840</x>
       <y>0</y>
       <width>181</width>
-      <height>401</height>
+      <height>361</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -93,7 +93,7 @@
           <x>0</x>
           <y>0</y>
           <width>181</width>
-          <height>341</height>
+          <height>291</height>
          </rect>
         </property>
         <property name="font">
@@ -175,7 +175,7 @@
           <x>0</x>
           <y>0</y>
           <width>181</width>
-          <height>341</height>
+          <height>291</height>
          </rect>
         </property>
        </widget>
@@ -186,10 +186,10 @@
    <widget class="QPlainTextEdit" name="IPSsendEdit">
     <property name="geometry">
      <rect>
-      <x>990</x>
-      <y>410</y>
-      <width>21</width>
-      <height>21</height>
+      <x>781</x>
+      <y>40</y>
+      <width>10</width>
+      <height>10</height>
      </rect>
     </property>
    </widget>
@@ -203,7 +203,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -752,6 +752,51 @@
        <string>Hindernisse</string>
       </property>
      </widget>
+     <widget class="QWidget" name="gridLayoutWidget_5">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>20</y>
+        <width>341</width>
+        <height>251</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="zielkkordinaten_x"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QSpinBox" name="Zielkoordinaten_y"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_Zielkkordinaten">
+         <property name="text">
+          <string>Zielkkordinaten</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_Abwurfpunkt">
+         <property name="text">
+          <string>Abwurfpunkt</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="abwurfpunkt_x"/>
+       </item>
+       <item row="1" column="2">
+        <widget class="QSpinBox" name="abwurfpunkt_y"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="setZiel">
+         <property name="text">
+          <string>Speichern</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_7">
      <attribute name="title">
@@ -1060,6 +1105,43 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="zieltolleranz">
+         <property name="toolTip">
+          <string extracomment="Tolleranz der Zielabweichung in mm"/>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+         <property name="value">
+          <number>300</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_zieltolleranz">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>zieltolleranz</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QPushButton" name="setRefresh">
+         <property name="text">
+          <string>&gt;&gt; speichern</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4">
+        <widget class="QPushButton" name="setZieltolleranz">
+         <property name="text">
+          <string>&gt;&gt; speichern</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -1068,9 +1150,9 @@
     <property name="geometry">
      <rect>
       <x>760</x>
-      <y>430</y>
+      <y>400</y>
       <width>251</width>
-      <height>111</height>
+      <height>134</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_4">
@@ -1082,6 +1164,28 @@
        <property name="value">
         <number>25</number>
        </property>
+       <property name="textVisible">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QProgressBar" name="motorrechtsminus">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>0</number>
+       </property>
+       <property name="value">
+        <number>-1</number>
+       </property>
+       <property name="textVisible">
+        <bool>false</bool>
+       </property>
+       <property name="invertedAppearance">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item row="2" column="1">
@@ -1092,22 +1196,24 @@
        <property name="value">
         <number>24</number>
        </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QProgressBar" name="MotorRechts">
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="value">
-        <number>24</number>
+       <property name="textVisible">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QProgressBar" name="progressBar">
+      <widget class="QProgressBar" name="motorlinkminus">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>0</number>
+       </property>
        <property name="value">
-        <number>24</number>
+        <number>-50</number>
+       </property>
+       <property name="textVisible">
+        <bool>false</bool>
        </property>
        <property name="invertedAppearance">
         <bool>true</bool>
@@ -1128,6 +1234,25 @@
        </property>
       </widget>
      </item>
+     <item row="6" column="0">
+      <widget class="QProgressBar" name="motorhoeheminus">
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>0</number>
+       </property>
+       <property name="value">
+        <number>-60</number>
+       </property>
+       <property name="textVisible">
+        <bool>false</bool>
+       </property>
+       <property name="invertedAppearance">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
      <item row="5" column="0">
       <widget class="QLabel" name="label_9">
        <property name="text">
@@ -1135,23 +1260,37 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QProgressBar" name="progressBar_2">
-       <property name="value">
-        <number>24</number>
+     <item row="4" column="1">
+      <widget class="QProgressBar" name="MotorRechts">
+       <property name="minimum">
+        <number>0</number>
        </property>
-       <property name="invertedAppearance">
-        <bool>true</bool>
+       <property name="value">
+        <number>66</number>
+       </property>
+       <property name="textVisible">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
-      <widget class="QProgressBar" name="progressBar_3">
-       <property name="value">
-        <number>24</number>
+     <item row="2" column="2">
+      <widget class="QLabel" name="linksM">
+       <property name="text">
+        <string>TextLabel</string>
        </property>
-       <property name="invertedAppearance">
-        <bool>true</bool>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLabel" name="rechtsM">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QLabel" name="hoeheM">
+       <property name="text">
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>

@@ -1,8 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "vector"
-#include "QPainter"
-#include "QDebug"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -105,8 +101,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //refresh connector ZENTRALES Takt-Element
     connect(Filtertimer, SIGNAL(timeout()), SLOT(refresh()));
-    connect(ui->refreshTime, SIGNAL(valueChanged(int)), SLOT(setrefreshrate()));
-    Filtertimer->start();
+    connect(ui->setRefresh, SIGNAL(clicked()), SLOT(setrefreshrate()));
+
 
     // Karte
     connect(ui->deletkoordinaten, SIGNAL(clicked()), SLOT(deletekoordinaten()));
@@ -114,11 +110,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Einstellungen
     connect(ui->setAbweichung, SIGNAL(clicked()), SLOT(setAbweichung()));
+    connect(ui->setZiel, SIGNAL(clicked()), SLOT(setZiel()));
+    connect(ui->setZieltolleranz, SIGNAL(clicked()), SLOT(setZieltolleranz()));
+    connect(ui->setZieltolleranz, SIGNAL(clicked()), SLOT(setAbwurfkoordinaten()));
 
 
     //ConnectorenSTOP
 
-
+    setrefreshrate();
+    Filtertimer->start();
+    setZiel();
+    setZieltolleranz();
+    setAbweichung();
 
 
 }
@@ -285,8 +288,11 @@ void MainWindow::XbeesendCOM(unsigned long sendCOM)
         Xbeeport->write(ui->XbeesendEdit->toPlainText().toLatin1());
         // Schubbalken setzen
         ui->MotorLinks->setValue(y.schub[0]);
+        ui->motorlinkminus->setValue(y.schub[0]);
         ui->MotorRechts->setValue(y.schub[1]);
+        ui->motorrechtsminus->setValue(y.schub[1]);
         ui->MotorHoehe->setValue(y.schub[2]);
+        ui->motorhoeheminus->setValue(y.schub[2]);
         // Textausgabe des gesendetetn
         XbeewriteComText("<-");
         XbeewriteComText(ui->XbeesendEdit->toPlainText().toLatin1());
@@ -512,6 +518,22 @@ void MainWindow::setAbweichung()
     qDebug() << "alle Abweichungen gesetzt";
 }
 
+void MainWindow::setZiel()
+{
+    y.zielkoordinaten[0]=ui->zielkkordinaten_x->value();
+    y.zielkoordinaten[1]=ui->Zielkoordinaten_y->value();
+}
+
+void MainWindow::setZieltolleranz()
+{
+    y.zieltol=ui->zieltolleranz->value();
+}
+
+void MainWindow::setAbwurfkoordinaten()
+{
+    y.abwurfkoordinate[0]=ui->abwurfpunkt_x->value();
+    y.abwurfkoordinate[1]=ui->abwurfpunkt_y->value();
+}
 
 // Zentrale Erzeugung der Karte
 void MainWindow::DrawMap()

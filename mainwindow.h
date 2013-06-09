@@ -20,6 +20,10 @@
 #include <QWheelEvent>
 #include <QDebug>
 
+#include "vector"
+#include "QPainter"
+#include "QDebug"
+
 #include "weg.h"
 
 namespace Ui {
@@ -80,14 +84,20 @@ private Q_SLOTS:
     void IPSonPortNameChanged(const QString &name);
     void IPSonReadyRead();
 
+    void refresh();
+    void deletekoordinaten();
+    virtual void wheelEvent(QWheelEvent* event);
+
     void onTestButtonClicked();
+
     void setPosStation();
     void setHindernisse();
-    void refresh();
-    virtual void wheelEvent(QWheelEvent* event);
-    void deletekoordinaten();
     void setrefreshrate();
     void setAbweichung();
+    void setZiel();
+    void setAbwurfkoordinaten();
+    void setZieltolleranz();
+
 
 
 };
