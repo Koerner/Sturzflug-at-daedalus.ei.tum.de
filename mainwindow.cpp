@@ -113,13 +113,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->setZiel, SIGNAL(clicked()), SLOT(setZiel()));
     connect(ui->setZieltolleranz, SIGNAL(clicked()), SLOT(setZieltolleranz()));
     //connect(ui->A, SIGNAL(clicked()), SLOT(setAbwurfkoordinaten()));
-    connect(ui->setHoehe, SIGNAL(clicked()), SLOT(setHoehe()));
+    connect(ui->setHoehe, SIGNAL(stateChanged(int)), SLOT(setHoehe()));
+
+    connect(ui->Handsteuerung, SIGNAL(stateChanged(int)), SLOT(setHandsteuerung()));
 
 
     //ConnectorenSTOP
 
     //Handsteuerung
-    QWidget::grabKeyboard();
     geradeabweichung=0;
     hoehenschubHand=0;
     //ENDE Handsteuerung
@@ -267,7 +268,7 @@ void MainWindow::IPSonPortNameChanged(const QString & /*name*/)
 void MainWindow::XbeeonReadyRead()
 {
     if (Xbeeport->bytesAvailable()) {
-        QString comdata = QString::fromLatin1(IPSport->readAll());
+        QString comdata = QString::fromLatin1(Xbeeport->readAll());
         XbeewriteComText ("->");
         XbeewriteComText(comdata);
         XbeewriteComText ("\n");
@@ -548,6 +549,19 @@ void MainWindow::setHoehe()
     qDebug()<<"Hoehe + Hoehentol gesetzt: " << y.sollHoehe << y.hoehentol;
 }
 
+void MainWindow::setHandsteuerung()
+{
+    qDebug() << "Handsteuerung Aenderung";
+    if(ui->Handsteuerung->isChecked())
+    {
+        QWidget::grabKeyboard();
+    }
+    else
+    {
+        QWidget::releaseKeyboard();
+    }
+}
+
 // Zentrale Erzeugung der Karte
 void MainWindow::DrawMap()
 {
@@ -687,7 +701,7 @@ void MainWindow::refresh()
 
     DrawMap();
     schubsenden();
-    z.spannweite=y.spannweite;
+    //z.spannweite=y.spannweite;
     qDebug() << "start sim";
 
     z.sim(y.modus);

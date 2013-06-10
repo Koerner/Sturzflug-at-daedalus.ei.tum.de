@@ -203,7 +203,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -257,7 +257,7 @@
        <string>alle Positionen löschen</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox">
+     <widget class="QCheckBox" name="Handsteuerung">
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -776,10 +776,30 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="1">
-        <widget class="QSpinBox" name="zielkkordinaten_x"/>
+        <widget class="QSpinBox" name="zielkkordinaten_x">
+         <property name="minimum">
+          <number>-99999</number>
+         </property>
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
+        </widget>
        </item>
        <item row="0" column="2">
-        <widget class="QSpinBox" name="Zielkoordinaten_y"/>
+        <widget class="QSpinBox" name="Zielkoordinaten_y">
+         <property name="minimum">
+          <number>-99999</number>
+         </property>
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
+        </widget>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_Zielkkordinaten">
@@ -796,10 +816,30 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QSpinBox" name="abwurfpunkt_x"/>
+        <widget class="QSpinBox" name="abwurfpunkt_x">
+         <property name="minimum">
+          <number>-99999</number>
+         </property>
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
+        </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QSpinBox" name="abwurfpunkt_y"/>
+        <widget class="QSpinBox" name="abwurfpunkt_y">
+         <property name="minimum">
+          <number>-99999</number>
+         </property>
+         <property name="maximum">
+          <number>99999</number>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
+        </widget>
        </item>
        <item row="3" column="1">
         <widget class="QPushButton" name="setZiel">
@@ -1220,11 +1260,6 @@
        </item>
       </layout>
      </widget>
-    </widget>
-    <widget class="QWidget" name="Handsteuerung">
-     <attribute name="title">
-      <string>Seite</string>
-     </attribute>
     </widget>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget_4">

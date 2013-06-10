@@ -105,6 +105,7 @@ private Q_SLOTS:
     void setZiel(); //ABwurfkoordinaten
     void setZieltolleranz();
     void setHoehe();
+    void setHandsteuerung();
 
 
 
