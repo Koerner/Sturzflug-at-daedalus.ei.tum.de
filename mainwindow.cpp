@@ -697,9 +697,12 @@ void MainWindow::onTestButtonClicked()
 
 void MainWindow::refresh()
 {
+    DrawMap();
+
+    if(ui->refresh->isChecked())
+    {
     qDebug()<<"Koordinaterefresh";
 
-    DrawMap();
     schubsenden();
     //z.spannweite=y.spannweite;
     qDebug() << "start sim";
@@ -713,8 +716,7 @@ void MainWindow::refresh()
     y.yList.prepend(x.yList.at(0));
     qDebug()<< "Posx: "<<y.xList.at(0);
     qDebug()<< "Posy: "<<y.yList.at(0);
-
-    //y.berechneWeg();
+    }
 
 
 
