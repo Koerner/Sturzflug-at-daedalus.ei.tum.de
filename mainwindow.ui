@@ -1218,12 +1218,12 @@
     </property>
     <layout class="QGridLayout" name="gridLayout_4">
      <item row="6" column="1">
-      <widget class="QProgressBar" name="MotorHoehe">
+      <widget class="QProgressBar" name="motorhoeheplus">
        <property name="minimum">
         <number>0</number>
        </property>
        <property name="value">
-        <number>25</number>
+        <number>0</number>
        </property>
        <property name="textVisible">
         <bool>false</bool>
@@ -1233,13 +1233,13 @@
      <item row="4" column="0">
       <widget class="QProgressBar" name="motorrechtsminus">
        <property name="minimum">
-        <number>-100</number>
-       </property>
-       <property name="maximum">
         <number>0</number>
        </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
        <property name="value">
-        <number>-1</number>
+        <number>0</number>
        </property>
        <property name="textVisible">
         <bool>false</bool>
@@ -1250,12 +1250,12 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QProgressBar" name="MotorLinks">
+      <widget class="QProgressBar" name="motorlinksplus">
        <property name="minimum">
         <number>0</number>
        </property>
        <property name="value">
-        <number>24</number>
+        <number>0</number>
        </property>
        <property name="textVisible">
         <bool>false</bool>
@@ -1265,13 +1265,13 @@
      <item row="2" column="0">
       <widget class="QProgressBar" name="motorlinkminus">
        <property name="minimum">
-        <number>-100</number>
-       </property>
-       <property name="maximum">
         <number>0</number>
        </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
        <property name="value">
-        <number>-50</number>
+        <number>0</number>
        </property>
        <property name="textVisible">
         <bool>false</bool>
@@ -1298,13 +1298,13 @@
      <item row="6" column="0">
       <widget class="QProgressBar" name="motorhoeheminus">
        <property name="minimum">
-        <number>-100</number>
-       </property>
-       <property name="maximum">
         <number>0</number>
        </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
        <property name="value">
-        <number>-60</number>
+        <number>0</number>
        </property>
        <property name="textVisible">
         <bool>false</bool>
@@ -1322,12 +1322,12 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QProgressBar" name="MotorRechts">
+      <widget class="QProgressBar" name="motorrechtsplus">
        <property name="minimum">
         <number>0</number>
        </property>
        <property name="value">
-        <number>66</number>
+        <number>0</number>
        </property>
        <property name="textVisible">
         <bool>false</bool>

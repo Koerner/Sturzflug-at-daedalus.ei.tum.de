@@ -297,13 +297,6 @@ void MainWindow::XbeesendCOM(unsigned long sendCOM)
         qDebug() << str;
         ui->XbeesendEdit->insertPlainText(str);
         Xbeeport->write(ui->XbeesendEdit->toPlainText().toLatin1());
-        // Schubbalken setzen
-        ui->MotorLinks->setValue(y.schub[0]);
-        ui->motorlinkminus->setValue(y.schub[0]);
-        ui->MotorRechts->setValue(y.schub[1]);
-        ui->motorrechtsminus->setValue(y.schub[1]);
-        ui->MotorHoehe->setValue(y.schub[2]);
-        ui->motorhoeheminus->setValue(y.schub[2]);
         // Textausgabe des gesendetetn
         XbeewriteComText("<-");
         XbeewriteComText(ui->XbeesendEdit->toPlainText().toLatin1());
@@ -591,25 +584,48 @@ void MainWindow::schubsenden()
     if(y.schub[2]>99||y.schub[2]<-99)
     {qDebug() << "Schubfehler Hoehe!!!!!!!!"; y.schub[2]=0;}
     if(y.schub[2]<0)
-    {var=abs(y.schub[2])+100;}
+    {
+        var=abs(y.schub[2])+100;
+        ui->motorhoeheminus->setValue(abs(y.schub[2]));
+        ui->motorhoeheplus->setValue(0);
+    }
     else
-    {var=y.schub[2];}
+    {
+        var=y.schub[2];
+        ui->motorhoeheminus->setValue(0);
+        ui->motorhoeheplus->setValue(y.schub[2]);
+    }
 
     //Motor rechts
     if(y.schub[1]>99||y.schub[1]<-99)
     {qDebug() << "Schubfehler Rechts!!!!!!!!"; y.schub[1]=0;}
     if(y.schub[1]<0)
-    {var+=(abs(y.schub[1])+100)*1000;}
+    {
+        var+=(abs(y.schub[1])+100)*1000;
+        ui->motorrechtsminus->setValue(abs(y.schub[1]));
+        ui->motorrechtsplus->setValue(0);
+    }
     else
-    {var+=y.schub[1]*1000;}
+    {
+        var+=y.schub[1]*1000;
+        ui->motorrechtsminus->setValue(0);
+        ui->motorrechtsplus->setValue(y.schub[1]);
+    }
 
     //Motor links
     if(y.schub[0]>99||y.schub[0]<-99)
-    {qDebug() << "Schubfehler Links!!!!!!!!"; y.schub[2]=0;}
+    {qDebug() << "Schubfehler Links!!!!!!!!"; y.schub[0]=0;}
     if(y.schub[0]<0)
-    {var+=(abs(y.schub[0])+100)*1000000;}
+    {
+        var+=(abs(y.schub[0])+100)*1000000;
+        ui->motorlinkminus->setValue(abs(y.schub[0]));
+        ui->motorlinksplus->setValue(0);
+    }
     else
-    {var+=y.schub[0]*1000000;}
+    {
+        var+=y.schub[0]*1000000;
+        ui->motorlinkminus->setValue(0);
+        ui->motorlinksplus->setValue(y.schub[0]);}
 
     //Abwurf
     var+=(y.abwurfmodus+1)*1000000000;
