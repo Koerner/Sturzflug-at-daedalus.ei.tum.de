@@ -531,6 +531,7 @@ void MainWindow::setZiel()
     y.zielkoordinaten[1]=ui->Zielkoordinaten_y->value();
     y.abwurfkoordinate[0]=ui->abwurfpunkt_x->value();
     y.abwurfkoordinate[1]=ui->abwurfpunkt_y->value();
+    y.spannweite=ui->spannweite->value();
     qDebug() << "Zielkoordinaten und Abwurfunkt gestezt:" << y.zielkoordinaten[0] << y.zielkoordinaten[1] << y.abwurfkoordinate[0] << y.abwurfkoordinate[1];
 }
 
@@ -686,6 +687,7 @@ void MainWindow::refresh()
 
     DrawMap();
     schubsenden();
+    z.spannweite=y.spannweite;
     qDebug() << "start sim";
 
     z.sim();
