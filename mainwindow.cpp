@@ -690,15 +690,15 @@ void MainWindow::refresh()
     z.spannweite=y.spannweite;
     qDebug() << "start sim";
 
-    z.sim();
+    z.sim(y.modus);
     qDebug()<< "ende sim";
-    x.xList.prepend(z.xList.at(0));
+   x.xList.prepend(z.xList.at(0));
     x.yList.prepend(z.yList.at(0));
-//    x.wrapper();
+//   x.wrapper();
     y.xList.prepend(x.xList.at(0));
     y.yList.prepend(x.yList.at(0));
-    qDebug()<< "Posx"<<y.xList.at(0);
-    qDebug()<< "Posx"<<y.yList.at(0);
+    qDebug()<< "Posx: "<<y.xList.at(0);
+    qDebug()<< "Posy: "<<y.yList.at(0);
 
     //y.berechneWeg();
 

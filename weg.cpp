@@ -13,7 +13,7 @@ weg::weg(){
     schub[2]=0;
 
 }
-//Ende konstruktor
+//Ende Konstruktor
 
 //Start Aufruf
 void weg::start()

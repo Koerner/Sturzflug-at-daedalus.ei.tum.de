@@ -10,17 +10,27 @@ class simulation
 {
 public:
     simulation();
-    void sim();
+    void sim(bool modus);
     int schub[2];
     QList<int> xList;
     QList<int> yList;
+    double spannweite;
 
 private:
     double posx;
     double posy;
+    int pos1x;
+    int pos1y;
+    int pos2x;
+    int pos2y;
+    double buf1;
+    //double buf2;
     double start_x;
     double start_y;
     double start_ausrichtung;
+    double rechteDistanz;
+    double linkeDistanz;
+    double scheitel;
 
 };
 
