@@ -267,9 +267,13 @@ void MainWindow::IPSonPortNameChanged(const QString & /*name*/)
 void MainWindow::XbeeonReadyRead()
 {
     if (Xbeeport->bytesAvailable()) {
+        QString comdata = QString::fromLatin1(IPSport->readAll());
         XbeewriteComText ("->");
-        XbeewriteComText(QString::fromLatin1(Xbeeport->readAll()));
+        XbeewriteComText(comdata);
         XbeewriteComText ("\n");
+        bool *ok;
+        y.Ausrichtung.prepend(comdata.toInt(ok,10));
+        qDebug() << y.Ausrichtung.at(0);
     }
 }
 void MainWindow::IPSonReadyRead()
