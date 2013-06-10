@@ -7,6 +7,7 @@
 weg::weg(){
     hinnummer = 0;
     modus = true;
+    abwurfmodus = 0;
 
 }
 //Ende konstruktor
