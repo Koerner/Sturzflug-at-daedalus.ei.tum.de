@@ -137,13 +137,17 @@ void weg::berechneWeg()
         {
         case true:{
 
-            if (hinanz == 0)
+            if (hinanz == 0||hinnummer>hinanz)
             {
                 AP[0]=xList.at(0);//Startpunkt festsetzen
                 AP[1]=xList.at(0);//Startpunkt festsetzen
                 EP[0]= zielkoordinaten[0];
                 EP[1]= zielkoordinaten[1];
+                ziel_x=EP[0];
+                ziel_y=EP[1];
             }
+            else
+            {
 
             if (hinnummer == 0)
             {
@@ -153,15 +157,24 @@ void weg::berechneWeg()
 
             buf3 =  (hin[hinnummer][0] - AP[0])/2;
             buf4 =  (hin[hinnummer][1] - AP[1])/2;
-            Radius = sqrt(buf1*buf1+buf2*buf2);
+            Radius = sqrt(buf3*buf3+buf4*buf4);
             buf1 = AP[0] + buf3;
             buf2 = AP[1] + buf4;
             Tangentenberechnung(buf1,buf2, AP[0], AP[1], Radius); //Eintrittspunkt in Kreis
-
+            }
 
         }
         case false:
         {
+            if (hinnummer==hinanz){
+                buf3 =  (zielkoordinaten[0] - hin[hinnummer][0])/2;
+                buf4 =  (zielkoordinaten[1] - hin[hinnummer][1])/2;
+                Radius = sqrt(buf3*buf3+buf4*buf4);
+                buf1 = hin[hinnummer][0] + buf3;
+                buf2 = hin[hinnummer][1] + buf4;
+                Tangentenberechnung(buf1,buf2, zielkoordinaten[0], zielkoordinaten[1], Radius); //Eintrittspunkt in Kreis
+            }
+            else{
             verhaeltnis = kreisradius[hinnummer]/(kreisradius[hinnummer]+kreisradius[hinnummer+1]);
             buf1 =  (hin[hinnummer+1][0] - hin[hinnummer][0])*verhaeltnis;
             buf2 =  (hin[hinnummer+1][1] - hin[hinnummer][1])*verhaeltnis;
@@ -170,6 +183,7 @@ void weg::berechneWeg()
             buf2 = hin[hinnummer][1] + buf2;
 
             Tangentenberechnung(buf1,buf2, buf1, buf2, Radius); //Austrittspunkt
+            }
 
 
 

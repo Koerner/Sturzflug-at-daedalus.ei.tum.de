@@ -19,8 +19,8 @@ void simulation::sim(bool modus)
         //start_z = zList.at(0);
     }
     else {
-        scheitel=100;
-        start_ausrichtung=90;
+        scheitel=spannweite;
+        start_ausrichtung=45;
         qDebug() << "else";
         start_x = 0;
         start_y = 0;

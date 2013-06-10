@@ -681,8 +681,8 @@ void MainWindow::onTestButtonClicked()
 //   str.append(QString("%1").arg(ergebnis));
 
 //   //qDebug() << x.xList;
-//   y.berechneRadien();//all Kurvenradien berechnen
-//   y.berechneWeg();//erste Zielkoordinate berechnen
+   y.berechneRadien();//all Kurvenradien berechnen
+   y.berechneWeg();//erste Zielkoordinate berechnen
 
 //   IPSwriteComText(str);
 }
