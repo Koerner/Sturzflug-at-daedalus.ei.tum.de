@@ -6,7 +6,7 @@
 //Start Aufruf
 void weg::start()
 {
-    int streckenlange;
+    //int streckenlange;
     //Hier gehts los, das ist der Startpunkt für jedes mal
 
     if(notfallmodus==1)
@@ -28,10 +28,10 @@ void weg::start()
     }
 
     if (modus){
-        streckenlange = punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y);
+        //streckenlange = punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y);
         if(GetAbweichung()<10)
             {
-            geradeaus(streckenlange);
+            geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y));
             }
             else
             {
@@ -41,7 +41,7 @@ void weg::start()
                 }
                 else
                 {
-                    //geradeaus2(streckennlange,GetAbweichung)
+                    geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),GetAbweichung());
                 }
             }
     }
@@ -58,17 +58,19 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
          case true:{
                 double alpha, beta, gamma;
                 int b = 1;
-                if (hinnummer == 0)
-                {
-                        //AP[0]=Startpunkt_x;  //Startpunkt festsetzen
-                        //AP[1]=Startpunkt_y;  //Startpunkt festsetzen
-                }
+//                if (hinnummer == 0)
+//                {
+//                        AP[0]=startpunkt;  //Startpunkt festsetzen
+//                        AP[1]=startpunkt;  //Startpunkt festsetzen
+//                }
                 x = EP[0] - AP[0];
                 y = EP[1] - AP[1];
                 if (x>0)
                     {b=0;}
                 alpha = GetWinkel(x, y, b);
                 distance = punktabweichung(AP[0],AP[1],EP[0],EP[1]);
+                notfallziel[0]=x/distance;
+                notfallziel[1]=y/distance;
 
                 x = xList.at(0) - AP[0];
                 y = yList.at(0) - AP[1];
@@ -83,10 +85,13 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 
                 distance = sin(gamma)*distance;
                 abweichung = (distance/kreisradius[hinnummer])*100;
+                notfallziel[0]=cos(gamma)*notfallziel[0]+AP[0];
+                notfallziel[1]=cos(gamma)*notfallziel[1]+AP[1];
+                GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1],0);
              }
     case false :{
-        distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]);
-        distance = distance - kreisradius[hinnummer];
+        //distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]);
+        distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]) - kreisradius[hinnummer];
         abweichung = (distance/kreisradius[hinnummer])*100;
     }
     }
@@ -118,8 +123,8 @@ void weg::berechneWeg()
 
             if (hinnummer == 0)
             {
-                    //AP[0]=Startpunkt_x;//Startpunkt festsetzen
-                    //AP[1]=Startpunkt_y;//Startpunkt festsetzen
+                AP[0]=xList.at(0);//Startpunkt festsetzen
+                AP[1]=xList.at(0);//Startpunkt festsetzen
             }
 
             buf3 =  (hin[hinnummer][0] - AP[0])/2;
