@@ -6,20 +6,22 @@
 #include "define.h"
 
 
-class sim
+class simulation
 {
 public:
-    void Simulation();
-
-private:
-    int posx;
-    int posy;
-    int start_x;
-    int start_y;
-    int start_ausrichtung;
+    simulation();
+    void sim();
     int schub[2];
     QList<int> xList;
     QList<int> yList;
+
+private:
+    double posx;
+    double posy;
+    int start_x;
+    int start_y;
+    int start_ausrichtung;
+
 };
 
 #endif // SIMULATION_H

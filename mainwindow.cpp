@@ -120,7 +120,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Handsteuerung
     QWidget::grabKeyboard();
-    geradeausschub=0;
     geradeabweichung=0;
     hoehenschubHand=0;
     //ENDE Handsteuerung
@@ -586,6 +585,7 @@ void MainWindow::schubsenden()
 {
     //y.abwurfmodus=0;
     unsigned long var;
+    var=0;
 
     //Hoehenmotor
     if(y.schub[2]>99||y.schub[2]<-99)
@@ -607,15 +607,18 @@ void MainWindow::schubsenden()
     if(y.schub[0]>99||y.schub[0]<-99)
     {qDebug() << "Schubfehler Links!!!!!!!!"; y.schub[2]=0;}
     if(y.schub[0]<0)
-    {var=(abs(y.schub[0])+100)*1000000;}
+    {var+=(abs(y.schub[0])+100)*1000000;}
     else
-    {var=y.schub[0]*1000000;}
+    {var+=y.schub[0]*1000000;}
 
     //Abwurf
-    var=(y.abwurfmodus+1)*1000000000;
+    var+=(y.abwurfmodus+1)*1000000000;
 
     XbeesendCOM(var);
     qDebug()<< "gesendetet Schubdaten:" << var;
+
+    z.schub[0]=y.schub[0];
+    z.schub[1]=y.schub[1];
 }
 
 //ENDE Schubumwandlung
@@ -661,14 +664,23 @@ void MainWindow::refresh()
 {
     qDebug()<<"Koordinaterefresh";
 
+    DrawMap();
+    schubsenden();
+    qDebug() << "start sim";
+
+    z.sim();
+    qDebug()<< "ende sim";
+    x.xList.prepend(z.xList.at(0));
+    x.yList.prepend(z.yList.at(0));
+    qDebug()<< "Posx"<<x.xList.at(0);
+    qDebug()<< "Posx"<<x.yList.at(0);
 //    x.wrapper();
-//    y.xList.prepend(x.xList.at(0));
-//    y.yList.prepend(x.yList.at(0));
+    y.xList.prepend(x.xList.at(0));
+    y.yList.prepend(x.yList.at(0));
 
     //y.berechneWeg();
 
-    DrawMap();
-    schubsenden();
+
 
 }
 
@@ -681,30 +693,37 @@ void MainWindow::keyPressEvent(QKeyEvent *qkeyevent)
     switch(qkeyevent->key())
     {
     case Qt::Key_Up:
-        if(geradeausschub<95)
-        {geradeausschub+=5;}
-        y.schub[0]=geradeausschub;
-        qDebug() << "Key_Up:" << geradeausschub;
+        if(y.schub[0]<95&&y.schub[1]<95)
+        {
+        y.schub[0]+=5;
+        y.schub[1]+=5;
+        }
+        qDebug() << "Key_Up:" << y.schub[0];
         break;
     case Qt::Key_Down:
-        if(geradeausschub>-95)
-        {geradeausschub-=5;}
-        y.schub[0]=geradeausschub;
-        qDebug() << "Key_Down:" << geradeausschub;
+        if(y.schub[0]>-95&&y.schub[1]>-95)
+        {
+        y.schub[0]-=5;
+        y.schub[1]-=5;
+        }
+        qDebug() << "Key_Down:" << y.schub[0];
         break;
     case Qt::Key_Right:
         geradeabweichung-=50;
-        y.geradeaus(501, geradeabweichung);
+        y.geradeaus(500, geradeabweichung);
         qDebug() << "Key_Right:" << geradeabweichung;
         break;
     case Qt::Key_Left:
         geradeabweichung+=50;
-        y.geradeaus(501, geradeabweichung);
+        y.geradeaus(500, geradeabweichung);
         qDebug() << "Key_Left:" << geradeabweichung;
         break;
     case Qt::Key_Space:
         y.stop();
-        qDebug() << "Key_Space: Abweichung:" << geradeabweichung << "Schub: " << geradeausschub;
+        y.schub[2]=0;
+        geradeabweichung=0;
+        hoehenschubHand=0;
+        qDebug() << "Key_Space: Abweichung:" << geradeabweichung << "Schub: " << y.schub[0];
         break;
     case Qt::Key_X:
         if(hoehenschubHand<95)

@@ -1,7 +1,12 @@
 #include "simulation.h"
 #include "math.h"
 
-void sim::Simulation()
+simulation::simulation()
+{
+
+}
+
+void simulation::sim()
 {
     if (xList.size()!=0){
         start_x = xList.at(0);
@@ -18,6 +23,6 @@ void sim::Simulation()
     posx=start_x+cos((start_ausrichtung*PI)/180)*(schub[0]/100)*SIMULATIONMAX;
     posy=start_y+sin((start_ausrichtung*PI)/180)*(schub[1]/100)*SIMULATIONMAX;
 
-    xList.prepend(posx);
-    yList.prepend(posy);
+    xList.prepend(static_cast<int>(posx));
+    yList.prepend(static_cast<int>(posy));
 }

@@ -8,6 +8,9 @@ weg::weg(){
     hinnummer = 0;
     modus = true;
     abwurfmodus = 0;
+    schub[0]=0;
+    schub[1]=0;
+    schub[2]=0;
 
 }
 //Ende konstruktor
@@ -499,8 +502,10 @@ void weg::geradeaus(int streckenlaenge, int abweichung)
     {
         schub[0]=LANGSAM;
         schub[1]=LANGSAM;
-        schub[0]=schub[0]-((abweichung/100)*schub[0]/1);
-        schub[1]=schub[1]+((abweichung/100)*schub[1]/1);
+        qDebug() << "schub ohne abweichung:" << schub[0];
+        schub[0]=(schub[0]*(100-abweichung))/100;
+        schub[1]=(schub[1]*(100+abweichung))/100;
+        qDebug() << "schub mit abweichung:" << schub[0];
     }
 }
 

@@ -25,6 +25,7 @@
 #include "QDebug"
 
 #include "weg.h"
+#include "simulation.h"
 
 namespace Ui {
 class MainWindow;
@@ -47,6 +48,7 @@ public:
     int getposStation(int station, int xyz);
     ips x;
     weg y;
+    simulation z;
 
 
 
@@ -72,7 +74,6 @@ private:
     QGraphicsScene *map;
 
     //Handsteuerung
-    int geradeausschub;
     int geradeabweichung;
     int hoehenschubHand;
     void keyPressEvent(QKeyEvent *qkeyevent);
