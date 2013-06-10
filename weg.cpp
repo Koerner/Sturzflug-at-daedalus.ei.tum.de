@@ -3,12 +3,23 @@
 #include "math.h"
 
 
+//Start Konstruktor
+weg::weg(){
+    hinnummer = 0;
+    modus = true;
+
+}
+//Ende konstruktor
+
 //Start Aufruf
 void weg::start()
 {
     //int streckenlange;
     //Hier gehts los, das ist der Startpunkt für jedes mal
-
+    if (punktabweichung(xList.at(0),yList.at(0),zielkoordinaten[0],zielkoordinaten[1])<zieltol)
+    {stop();}
+    else
+    {
     if(notfallmodus==1)
     {notfallplan();}
     else
@@ -44,6 +55,7 @@ void weg::start()
                     geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),GetAbweichung());
                 }
             }
+    }
     }
     }
 }
@@ -121,6 +133,14 @@ void weg::berechneWeg()
         {
         case true:{
 
+            if (hinanz == 0)
+            {
+                AP[0]=xList.at(0);//Startpunkt festsetzen
+                AP[1]=xList.at(0);//Startpunkt festsetzen
+                EP[0]= zielkoordinaten[0];
+                EP[1]= zielkoordinaten[1];
+            }
+
             if (hinnummer == 0)
             {
                 AP[0]=xList.at(0);//Startpunkt festsetzen
@@ -157,21 +177,11 @@ void weg::berechneWeg()
 //Ende neue Zielkoordinaten berechnen
 
 
-
-//Beginn Betrag nehmen
-double weg::Abs(double x)
-{
-     if(x < 0)
-          x *= -1;
-     return x;
-}
-//Ende Betrag nehmen
-
 //Beginn Schnittpunktberechnung
 void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, double r1, double r2, double *res1, double *res2, double *res3, double *res4 )
 {
-     r1 = Abs(r1);
-     r2 = Abs(r2);
+     r1 = abs(r1);
+     r2 = abs(r2);
 
      //Kein Schnittpunkt
      SetPoints(0);
@@ -179,11 +189,11 @@ void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, doub
      double abc = punktabweichung(P_x,P_y,Q_x,Q_y);
 
      //Kreise innerhalb
-     if(abc <= Abs(r1-r2))
+     if(abc <= abs(r1-r2))
           return;
 
      //Kreise ausserhalb
-     if(abc > Abs(r1 + r2))
+     if(abc > abs(r1 + r2))
           return;
 
      //Unendlich Schnittpunkte

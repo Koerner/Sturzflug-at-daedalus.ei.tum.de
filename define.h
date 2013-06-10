@@ -9,4 +9,6 @@
 #define SUPERLANGSAM 10
 #define MAX 99
 
+#define SIMULATIONMAX 250
+
 #endif // DEFINE_H
