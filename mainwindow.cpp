@@ -118,6 +118,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //ConnectorenSTOP
 
+    //Handsteuerung
+    QWidget::grabKeyboard();
+    geradeausschub=0;
+    geradeabweichung=0;
+    hoehenschubHand=0;
+    //ENDE Handsteuerung
+
     setrefreshrate();
     Filtertimer->start();
     setZiel();
@@ -574,6 +581,44 @@ void MainWindow::DrawMap()
 
 // STOP Zentrale erzeugung der Karte
 
+//Schubumwandlung fürs Senden
+void MainWindow::schubsenden()
+{
+    //y.abwurfmodus=0;
+    unsigned long var;
+
+    //Hoehenmotor
+    if(y.schub[2]>99||y.schub[2]<-99)
+    {qDebug() << "Schubfehler Hoehe!!!!!!!!"; y.schub[2]=0;}
+    if(y.schub[2]<0)
+    {var=abs(y.schub[2])+100;}
+    else
+    {var=y.schub[2];}
+
+    //Motor rechts
+    if(y.schub[1]>99||y.schub[1]<-99)
+    {qDebug() << "Schubfehler Rechts!!!!!!!!"; y.schub[1]=0;}
+    if(y.schub[1]<0)
+    {var+=(abs(y.schub[1])+100)*1000;}
+    else
+    {var+=y.schub[1]*1000;}
+
+    //Motor links
+    if(y.schub[0]>99||y.schub[0]<-99)
+    {qDebug() << "Schubfehler Links!!!!!!!!"; y.schub[2]=0;}
+    if(y.schub[0]<0)
+    {var=(abs(y.schub[0])+100)*1000000;}
+    else
+    {var=y.schub[0]*1000000;}
+
+    //Abwurf
+    var=(y.abwurfmodus+1)*1000000000;
+
+    XbeesendCOM(var);
+    qDebug()<< "gesendetet Schubdaten:" << var;
+}
+
+//ENDE Schubumwandlung
 
 
 
@@ -582,29 +627,26 @@ void MainWindow::DrawMap()
 //TestButton
 void MainWindow::onTestButtonClicked()
 {
-    unsigned long Test = 1199088177;//10199908881777;
-    //Test=y.abwurf*1000000000+y.schub[0]*1000000+y.schub[1]*1000+y.schub[2];
-    qDebug()<< Test;
-    XbeesendCOM(Test);
 
 
-   QString str;
-   int ergebnis;
-   int i=0;
-   for(i=0;i<9;i++)
-   {str.append(QString("%1").arg(x.gettime(1,i)));}
-   str.append(QString("%1").arg(x.gettimef(1)));
 
-   str.append(QString("%1").arg(x.posStation[0][0]));
-   str.append(QString("%1").arg(getposStation(0,0)));
-   ergebnis = x.wrapper();
-   str.append(QString("%1").arg(ergebnis));
+//   QString str;
+//   int ergebnis;
+//   int i=0;
+//   for(i=0;i<9;i++)
+//   {str.append(QString("%1").arg(x.gettime(1,i)));}
+//   str.append(QString("%1").arg(x.gettimef(1)));
 
-   //qDebug() << x.xList;
-   y.berechneRadien();//all Kurvenradien berechnen
-   y.berechneWeg();//erste Zielkoordinate berechnen
+//   str.append(QString("%1").arg(x.posStation[0][0]));
+//   str.append(QString("%1").arg(getposStation(0,0)));
+//   ergebnis = x.wrapper();
+//   str.append(QString("%1").arg(ergebnis));
 
-   IPSwriteComText(str);
+//   //qDebug() << x.xList;
+//   y.berechneRadien();//all Kurvenradien berechnen
+//   y.berechneWeg();//erste Zielkoordinate berechnen
+
+//   IPSwriteComText(str);
 }
 //TestButton STOP
 
@@ -626,10 +668,59 @@ void MainWindow::refresh()
     //y.berechneWeg();
 
     DrawMap();
+    schubsenden();
 
 }
 
 // STOP refreshaktion
+
+//Handsteuerung
+
+void MainWindow::keyPressEvent(QKeyEvent *qkeyevent)
+{
+    switch(qkeyevent->key())
+    {
+    case Qt::Key_Up:
+        if(geradeausschub<95)
+        {geradeausschub+=5;}
+        y.schub[0]=geradeausschub;
+        qDebug() << "Key_Up:" << geradeausschub;
+        break;
+    case Qt::Key_Down:
+        if(geradeausschub>-95)
+        {geradeausschub-=5;}
+        y.schub[0]=geradeausschub;
+        qDebug() << "Key_Down:" << geradeausschub;
+        break;
+    case Qt::Key_Right:
+        geradeabweichung-=50;
+        y.geradeaus(501, geradeabweichung);
+        qDebug() << "Key_Right:" << geradeabweichung;
+        break;
+    case Qt::Key_Left:
+        geradeabweichung+=50;
+        y.geradeaus(501, geradeabweichung);
+        qDebug() << "Key_Left:" << geradeabweichung;
+        break;
+    case Qt::Key_Space:
+        y.stop();
+        qDebug() << "Key_Space: Abweichung:" << geradeabweichung << "Schub: " << geradeausschub;
+        break;
+    case Qt::Key_X:
+        if(hoehenschubHand<95)
+        {hoehenschubHand+=5;}
+        y.schub[2]=hoehenschubHand;
+        qDebug() << "Key_X:" << y.schub[2];
+        break;
+    case Qt::Key_Y:
+        if(hoehenschubHand>-95)
+        {hoehenschubHand-=5;}
+        y.schub[2]=hoehenschubHand;
+        qDebug() << "Key_Y:" << y.schub[2];
+        break;
+       }
+}
+
 
 
 

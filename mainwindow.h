@@ -43,6 +43,7 @@ public:
     void XbeesendCOM(unsigned long sendCOM);
     void IPSwriteComText(QString writeComText);
     void IPSsendCOM(int sendCOM);
+    void schubsenden();
     int getposStation(int station, int xyz);
     ips x;
     weg y;
@@ -69,6 +70,12 @@ private:
     QextSerialPort *IPSport;
     QextSerialEnumerator *enumerator;
     QGraphicsScene *map;
+
+    //Handsteuerung
+    int geradeausschub;
+    int geradeabweichung;
+    int hoehenschubHand;
+    void keyPressEvent(QKeyEvent *qkeyevent);
 
 
 

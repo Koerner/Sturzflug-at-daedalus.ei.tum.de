@@ -471,18 +471,18 @@ void weg::geradeaus(int streckenlaenge)
 {
     if(streckenlaenge>1000)
     {
-        schub[0]=50;
-        schub[1]=50;
+        schub[0]=SCHNELL;
+        schub[1]=SCHNELL;
     }
     else if (streckenlaenge>500)
     {
-        schub[0]=20;
-        schub[1]=20;
+        schub[0]=LANGSAM;
+        schub[1]=LANGSAM;
     }
     else if (streckenlaenge<500)
     {
-        schub[0]=5;
-        schub[1]=5;
+        schub[0]=SUPERLANGSAM;
+        schub[1]=SUPERLANGSAM;
     }
 }
 

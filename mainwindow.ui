@@ -203,7 +203,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -255,6 +255,19 @@
       </property>
       <property name="text">
        <string>alle Positionen löschen</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>0</y>
+        <width>101</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Handsteuerung</string>
       </property>
      </widget>
     </widget>
@@ -1187,6 +1200,11 @@
        </item>
       </layout>
      </widget>
+    </widget>
+    <widget class="QWidget" name="Handsteuerung">
+     <attribute name="title">
+      <string>Seite</string>
+     </attribute>
     </widget>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget_4">
