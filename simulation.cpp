@@ -1,4 +1,5 @@
 #include "simulation.h"
+#include "QDebug"
 #include "math.h"
 
 simulation::simulation()
@@ -19,10 +20,10 @@ void simulation::sim()
         //start_z = 0;
     }
     start_ausrichtung = 45;
+    posx=start_x+(schub[0]*SIMULATIONMAX*cos((start_ausrichtung*PI)/180))/100;
+    posy=start_y+(schub[1]*SIMULATIONMAX*sin((start_ausrichtung*PI)/180))/100;
 
-    posx=start_x+cos((start_ausrichtung*PI)/180)*(schub[0]/100)*SIMULATIONMAX;
-    posy=start_y+sin((start_ausrichtung*PI)/180)*(schub[1]/100)*SIMULATIONMAX;
 
-    xList.prepend(static_cast<int>(posx));
-    yList.prepend(static_cast<int>(posy));
+    xList.prepend(posx);
+    yList.prepend(posy);
 }

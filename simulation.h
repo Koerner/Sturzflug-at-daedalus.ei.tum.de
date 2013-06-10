@@ -18,9 +18,9 @@ public:
 private:
     double posx;
     double posy;
-    int start_x;
-    int start_y;
-    int start_ausrichtung;
+    double start_x;
+    double start_y;
+    double start_ausrichtung;
 
 };
 
