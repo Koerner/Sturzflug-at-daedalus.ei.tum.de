@@ -6,6 +6,7 @@
 //Start Konstruktor
 weg::weg(){
     hinnummer = 0;
+    hinanz = 0;
     modus = true;
     abwurfmodus = 0;
     schub[0]=0;
@@ -46,6 +47,7 @@ void weg::start()
         //streckenlange = punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y);
         if(abs(GetAbweichung())<10)
             {
+            qDebug()<<"Regeln";
             geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y));
             }
             else
@@ -131,7 +133,8 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 //Beginn neue Zielkoordinaten berechnen
 void weg::berechneWeg()
 {
-
+    qDebug()<<"Start_Berechne";
+    qDebug()<<hinanz<<hinnummer;
 
     double verhaeltnis=0;
     double buf3, buf4, buf1, buf2;
@@ -492,6 +495,7 @@ void weg::hoehensteuerung()
 
 void weg::geradeaus(int streckenlaenge)
 {
+    qDebug()<<"ohne Regelung";
     if(streckenlaenge>1000)
     {
         schub[0]=SCHNELL;
@@ -511,7 +515,7 @@ void weg::geradeaus(int streckenlaenge)
 
 void weg::geradeaus(int streckenlaenge, int abweichung)
 {
-
+qDebug()<<"mit Regelung";
     if(streckenlaenge>1000)
     {
         schub[0]=SCHNELL;
