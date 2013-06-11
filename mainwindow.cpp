@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //Xbee connectoren
     connect(ui->XbeeBaudRateBox, SIGNAL(currentIndexChanged(int)), SLOT(XbeeonBaudRateChanged(int)));
     connect(ui->XbeeportBox, SIGNAL(editTextChanged(QString)), SLOT(XbeeonPortNameChanged(QString)));
-    connect(Xbeetimer, SIGNAL(timeout()), SLOT(XbeeonReadyRead()));
+    //connect(Xbeetimer, SIGNAL(timeout()), SLOT(XbeeonReadyRead()));
     connect(Xbeeport, SIGNAL(readyRead()), SLOT(XbeeonReadyRead()));
 
     //IPS connectoren
@@ -214,7 +214,7 @@ void MainWindow::XbeeonPortNameChanged(const QString & /*name*/)
 
     // Com Port setzen und öffnen
      Xbeeport->setPortName(ui->XbeeportBox->currentText());  //Com setzen
-     Xbeeport->setQueryMode(QextSerialPort::Polling); //Pollin Mode einstellen
+     Xbeeport->setQueryMode(QextSerialPort::EventDriven); //Pollin Mode einstellen
      Xbeeport->open(QIODevice::ReadWrite);
 
      if (Xbeeport->isOpen()) { //Abfrage ob's geklappt hat
@@ -226,9 +226,15 @@ void MainWindow::XbeeonPortNameChanged(const QString & /*name*/)
      //STOP
         //Da polling mode, Ein QTimer
         if (Xbeeport->isOpen() && Xbeeport->queryMode() == QextSerialPort::Polling)
-        Xbeetimer->start();
+        {
+            qDebug() << "Polling";
+            Xbeetimer->start();
+        }
         else
-        Xbeetimer->stop();
+        {
+            qDebug()<< "EventDriven";
+            Xbeetimer->stop();
+        }
      }
 void MainWindow::IPSonPortNameChanged(const QString & /*name*/)
 {
