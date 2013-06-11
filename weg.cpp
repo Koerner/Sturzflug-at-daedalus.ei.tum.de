@@ -12,6 +12,7 @@ weg::weg(){
     schub[0]=0;
     schub[1]=0;
     schub[2]=0;
+    notfallmodus=0;
 
 }
 //Ende Konstruktor
@@ -21,6 +22,7 @@ void weg::start()
 {
     //int streckenlange;
     //Hier gehts los, das ist der Startpunkt für jedes mal
+    qDebug()<<"Start und Modus:"<<modus;
     if (punktabweichung(xList.at(0),yList.at(0),zielkoordinaten[0],zielkoordinaten[1])<zieltol)
     {stop();}
     else
@@ -133,8 +135,8 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 //Beginn neue Zielkoordinaten berechnen
 void weg::berechneWeg()
 {
-    qDebug()<<"Start_Berechne";
-    qDebug()<<hinanz<<hinnummer;
+    qDebug()<<"hStart_Berechne";
+    qDebug()<<"hindernisse"<<hinanz<<hinnummer;
 
     double verhaeltnis=0;
     double buf3, buf4, buf1, buf2;
