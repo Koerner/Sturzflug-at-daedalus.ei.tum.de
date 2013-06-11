@@ -44,20 +44,20 @@ void weg::start()
 
     if (modus){
         //streckenlange = punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y);
-        if(GetAbweichung()<10)
+        if(abs(GetAbweichung())<10)
             {
             geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y));
             }
             else
             {
-                if(GetAbweichung()>30)
-                {
-                    //Notfallmodus
-                }
-                else
-                {
+                //if(GetAbweichung()>30)
+                //{
+                //    //Notfallmodus
+               // }
+                //else
+                //{
                     geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),GetAbweichung());
-                }
+                //}
             }
     }
     }
@@ -68,11 +68,11 @@ void weg::start()
 // Beginn Abweichung von idealer Flugbahn berechnen
 int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vektor1_y, int i*/)
 {
-    int x,y, distance, abweichung;
+    int x,y,abweichung;
 
     switch (modus){
          case true:{
-                double alpha, beta, gamma;
+                double alpha, beta, gamma,distance;
                 int b = 1;
 //                if (hinnummer == 0)
 //                {
@@ -84,6 +84,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
                 if (x>0)
                     {b=0;}
                 alpha = GetWinkel(x, y, b);
+                qDebug()<<"alpha"<<alpha;
                 distance = punktabweichung(AP[0],AP[1],EP[0],EP[1]);
                 notfallziel[0]=x/distance;
                 notfallziel[1]=y/distance;
@@ -92,7 +93,8 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
                 y = yList.at(0) - AP[1];
 
                 beta = GetWinkel(x, y, b);
-                gamma = alpha - beta;
+                gamma = beta-alpha;
+                qDebug()<<"gamma"<<gamma;
             //    if (gamma >= 0)
             //    {h = 0;}
             //    gamma = Abs(gamma);
@@ -100,15 +102,17 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 
 
                 distance = sin(gamma)*distance;
-                abweichung = (distance/kreisradius[hinnummer])*100;
+                qDebug()<<"Distanz"<<distance;
+                //abweichung = (distance/kreisradius[hinnummer])*100;
+                abweichung = (distance/500)*100;
                 notfallziel[0]=cos(gamma)*notfallziel[0]+AP[0];
                 notfallziel[1]=cos(gamma)*notfallziel[1]+AP[1];
                 GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1],0);
              }
     case false :{
         //distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]);
-        distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]) - kreisradius[hinnummer];
-        abweichung = (distance/kreisradius[hinnummer])*100;
+        //distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]) - kreisradius[hinnummer];
+        //abweichung = (distance/kreisradius[hinnummer])*100;
     }
     }
 
@@ -119,6 +123,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
     // Differenz Soll Ist Abwichung von der gerade (parallele!) in%
 
     //Differenz zwischen Soll und Ist Radius in %
+    qDebug()<<"Abweichung:"<<abweichung;
     return abweichung;
 }
 //Ende Abweichung berechnen
@@ -145,6 +150,7 @@ void weg::berechneWeg()
                 EP[1]= zielkoordinaten[1];
                 ziel_x=EP[0];
                 ziel_y=EP[1];
+                qDebug()<<"Ziel"<<ziel_x<<ziel_y;
             }
             else
             {
@@ -505,6 +511,7 @@ void weg::geradeaus(int streckenlaenge)
 
 void weg::geradeaus(int streckenlaenge, int abweichung)
 {
+
     if(streckenlaenge>1000)
     {
         schub[0]=SCHNELL;

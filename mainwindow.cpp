@@ -681,7 +681,10 @@ void MainWindow::onTestButtonClicked()
 //   str.append(QString("%1").arg(ergebnis));
 
 //   //qDebug() << x.xList;
-   y.berechneRadien();//all Kurvenradien berechnen
+   z.sim(y.modus);
+   y.xList.prepend(z.xList.at(0));
+   y.yList.prepend(z.yList.at(0));
+   //y.berechneRadien();//all Kurvenradien berechnen
    y.berechneWeg();//erste Zielkoordinate berechnen
 
 //   IPSwriteComText(str);
@@ -716,6 +719,9 @@ void MainWindow::refresh()
     y.yList.prepend(x.yList.at(0));
     qDebug()<< "Posx: "<<y.xList.at(0);
     qDebug()<< "Posy: "<<y.yList.at(0);
+    qDebug() << "start start";
+    y.start();
+    qDebug()<<y.schub[0];
     }
 
 

@@ -5,7 +5,8 @@
 simulation::simulation()
 {
 //start_ausrichtung=0;
-
+    schub[0]=0;
+    schub[1]=0;
 }
 
 void simulation::sim(bool modus)
@@ -19,8 +20,8 @@ void simulation::sim(bool modus)
         //start_z = zList.at(0);
     }
     else {
-        scheitel=spannweite;
-        start_ausrichtung=45;
+        scheitel=100;
+        start_ausrichtung=10;
         qDebug() << "else";
         start_x = 0;
         start_y = 0;
@@ -40,9 +41,9 @@ void simulation::sim(bool modus)
         linkeDistanz=(schub[1]*SIMULATIONMAX)/100;
         buf1=rechteDistanz-linkeDistanz;
         buf1=buf1/scheitel;
-        qDebug()<<buf1;
+        //qDebug()<<buf1;
         alpha = (atan(buf1)*180)/PI;
-        qDebug()<<alpha;
+        //qDebug()<<alpha;
         start_ausrichtung+=alpha;
         pos1x += cos((start_ausrichtung*PI)/180)*rechteDistanz;
         pos1y += sin((start_ausrichtung*PI)/180)*rechteDistanz;
@@ -67,7 +68,7 @@ void simulation::sim(bool modus)
 //        posy=pos1y+0.5*(pos2y-pos1y);
 
 //    }
-
+qDebug() << "Position1: x: "<<posx<<" y: "<<posy;
     xList.prepend(posx);
     yList.prepend(posy);
 }
