@@ -727,7 +727,7 @@ void MainWindow::refresh()
     qDebug()<< "Posy: "<<y.yList.at(0);
     qDebug() << "start start";
     y.start();
-    qDebug()<<y.schub[0];
+    qDebug()<<"Schub:"<<y.schub[0];
     }
 
 
