@@ -759,12 +759,12 @@ void MainWindow::keyPressEvent(QKeyEvent *qkeyevent)
         qDebug() << "Key_Down:" << y.schub[0];
         break;
     case Qt::Key_Right:
-        geradeabweichung-=50;
+        geradeabweichung-=5;
         y.geradeaus(500, geradeabweichung);
         qDebug() << "Key_Right:" << geradeabweichung;
         break;
     case Qt::Key_Left:
-        geradeabweichung+=50;
+        geradeabweichung+=5;
         y.geradeaus(500, geradeabweichung);
         qDebug() << "Key_Left:" << geradeabweichung;
         break;
