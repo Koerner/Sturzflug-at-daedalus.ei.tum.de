@@ -224,7 +224,7 @@ void weg::berechneWeg()
 //Ende neue Zielkoordinaten berechnen
 
 
-//Beginn Schnittpunktberechnung
+//Beginn Tangentenpunktberechnung
 void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, double r1, double r2, double *res1, double *res2, double *res3, double *res4 )
 {
      r1 = abs(r1);
@@ -233,19 +233,19 @@ void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, doub
      //Kein Schnittpunkt
      SetPoints(0);
 
-     double abc = punktabweichung(P_x,P_y,Q_x,Q_y);
+//     double abc = punktabweichung(P_x,P_y,Q_x,Q_y);
 
-     //Kreise innerhalb
-     if(abc <= abs(r1-r2))
-          return;
+//     //Kreise innerhalb
+//     if(abc <= abs(r1-r2))
+//          return;
 
-     //Kreise ausserhalb
-     if(abc > abs(r1 + r2))
-          return;
+//     //Kreise ausserhalb
+//     if(abc > abs(r1 + r2))
+//          return;
 
-     //Unendlich Schnittpunkte
-     if((P_x - Q_x == 0) && (P_y - Q_y == 0))
-          return;
+//     //Unendlich Schnittpunkte
+//     if((P_x - Q_x == 0) && (P_y - Q_y == 0))
+//          return;
 
 
      //ggf. Koordinaten tauschen, um Division durch Null vermeiden
@@ -254,7 +254,7 @@ void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, doub
           SetPoints(2);
 
           double a = (P_x - Q_x)/(Q_y - P_y); // =0
-          double b = ( (r1*r1 - r2*r2)- (P_y*P_y - Q_y*Q_y) - (P_x*P_x - Q_x*Q_x)  )/(2*Q_y - 2*Q_y); // =((r1^2 -r2^2) - (y^2 - y^2) - 0 ) / (2 * (y - y))
+          double b = ( (r1*r1 - r2*r2)- (P_y*P_y - Q_y*Q_y) - (P_x*P_x - Q_x*Q_x)  )/(2*Q_y - 2*P_y); // =((r1^2 -r2^2) - (y^2 - y^2) - 0 ) / (2 * (y - y))
           double e = a*a+1; // =1
           double f = (2*a*(b-P_y))-(2*P_x); // =0 -(2*x)
           double g = (b-P_y)*(b-P_y) -r1*r1 + P_x*P_x;
@@ -407,10 +407,10 @@ void weg::berechneRadien()
     int d;
     int Abstand;
 
-    for (i=0;hinanz;i++)
+    for (i=0;i<hinanz;i++)
     {
         d = hin[i][3];
-        for (j=0;hinanz;j++)
+        for (j=0;j<hinanz;j++)
         {
             if (i!=j)
             {
@@ -424,6 +424,7 @@ void weg::berechneRadien()
             }
         }
         kreisradius[i]=d/2;
+        qDebug()<<"Kreisradius"<<kreisradius[i];
     }
 }
 
