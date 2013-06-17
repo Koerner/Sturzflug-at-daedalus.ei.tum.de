@@ -64,7 +64,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Xbeetimer = new QTimer(this);
     Xbeetimer->setInterval(40);
     IPStimer = new QTimer(this);
-    IPStimer->setInterval(40); //könnte probleme lösen
+    IPStimer->setInterval(80); //könnte probleme lösen
 
     Filtertimer = new QTimer(this);
     Filtertimer->setInterval(ui->refreshTime->value()); //Aktuallisierungsrate aus der GUI in ms
@@ -214,7 +214,7 @@ void MainWindow::XbeeonPortNameChanged(const QString & /*name*/)
 
     // Com Port setzen und öffnen
      Xbeeport->setPortName(ui->XbeeportBox->currentText());  //Com setzen
-     Xbeeport->setQueryMode(QextSerialPort::EventDriven); //Pollin Mode einstellen
+     Xbeeport->setQueryMode(QextSerialPort::Polling); //Polling Mode einstellen
      Xbeeport->open(QIODevice::ReadWrite);
 
      if (Xbeeport->isOpen()) { //Abfrage ob's geklappt hat
@@ -598,59 +598,78 @@ void MainWindow::DrawMap()
 
 // STOP Zentrale erzeugung der Karte
 
+// Offset zu den Schubdaten hinzufügen
+void MainWindow::offset()
+{
+    qDebug() << "offset hinzufühen";
+    if(!y.schub[0]==0||!y.schub[1]==0)
+    {
+    schuboffset[0]=y.schub[0]+ui->offsetAbs->value();
+    schuboffset[0]=(schuboffset[0]*(100+(ui->offsetPro->value())))/100;
+    }
+    else
+    {
+        qDebug()<<"Im Stand wird kein Offest hinzugefügt";
+        schuboffset[0]=0;
+    }
+    schuboffset[1]=y.schub[1];
+    schuboffset[2]=y.schub[2];
+}
+//ENDE Offset
+
 //Schubumwandlung fürs Senden
 void MainWindow::schubsenden()
 {
-    //y.abwurfmodus=0;
     unsigned long var;
     var=0;
+    offset();
 
     //Hoehenmotor
-    if(y.schub[2]>99||y.schub[2]<-99)
-    {qDebug() << "Schubfehler Hoehe!!!!!!!!"; y.schub[2]=0;}
-    if(y.schub[2]<0)
+    if(schuboffset[2]>99||schuboffset[2]<-99)
+    {qDebug() << "Schubfehler Hoehe!!!!!!!!"; schuboffset[2]=0;}
+    if(schuboffset[2]<0)
     {
-        var=abs(y.schub[2])+100;
-        ui->motorhoeheminus->setValue(abs(y.schub[2]));
+        var=abs(schuboffset[2])+100;
+        ui->motorhoeheminus->setValue(abs(schuboffset[2]));
         ui->motorhoeheplus->setValue(0);
     }
     else
     {
-        var=y.schub[2];
+        var=schuboffset[2];
         ui->motorhoeheminus->setValue(0);
-        ui->motorhoeheplus->setValue(y.schub[2]);
+        ui->motorhoeheplus->setValue(schuboffset[2]);
     }
 
     //Motor rechts
-    if(y.schub[1]>99||y.schub[1]<-99)
-    {qDebug() << "Schubfehler Rechts!!!!!!!!"; y.schub[1]=0;}
-    if(y.schub[1]<0)
+    if(schuboffset[1]>99||schuboffset[1]<-99)
+    {qDebug() << "Schubfehler Rechts!!!!!!!!"; schuboffset[1]=0;}
+    if(schuboffset[1]<0)
     {
-        var+=(abs(y.schub[1])+100)*1000;
-        ui->motorrechtsminus->setValue(abs(y.schub[1]));
+        var+=(abs(schuboffset[1])+100)*1000;
+        ui->motorrechtsminus->setValue(abs(schuboffset[1]));
         ui->motorrechtsplus->setValue(0);
     }
     else
     {
-        var+=y.schub[1]*1000;
+        var+=schuboffset[1]*1000;
         ui->motorrechtsminus->setValue(0);
-        ui->motorrechtsplus->setValue(y.schub[1]);
+        ui->motorrechtsplus->setValue(schuboffset[1]);
     }
 
     //Motor links
-    if(y.schub[0]>99||y.schub[0]<-99)
-    {qDebug() << "Schubfehler Links!!!!!!!!"; y.schub[0]=0;}
-    if(y.schub[0]<0)
+    if(schuboffset[0]>99||schuboffset[0]<-99)
+    {qDebug() << "Schubfehler Links!!!!!!!!"; schuboffset[0]=0;}
+    if(schuboffset[0]<0)
     {
-        var+=(abs(y.schub[0])+100)*1000000;
-        ui->motorlinkminus->setValue(abs(y.schub[0]));
+        var+=(abs(schuboffset[0])+100)*1000000;
+        ui->motorlinkminus->setValue(abs(schuboffset[0]));
         ui->motorlinksplus->setValue(0);
     }
     else
     {
         var+=y.schub[0]*1000000;
         ui->motorlinkminus->setValue(0);
-        ui->motorlinksplus->setValue(y.schub[0]);}
+        ui->motorlinksplus->setValue(schuboffset[0]);}
 
     //Abwurf
     var+=(y.abwurfmodus+1)*1000000000;
@@ -743,18 +762,18 @@ void MainWindow::keyPressEvent(QKeyEvent *qkeyevent)
     switch(qkeyevent->key())
     {
     case Qt::Key_Up:
-        if(y.schub[0]<95&&y.schub[1]<95)
+        if(y.schub[0]<95&&y.schub[1]<90)
         {
-        y.schub[0]+=5;
-        y.schub[1]+=5;
+        y.schub[0]+=2;
+        y.schub[1]+=2;
         }
         qDebug() << "Key_Up:" << y.schub[0];
         break;
     case Qt::Key_Down:
-        if(y.schub[0]>-95&&y.schub[1]>-95)
+        if(y.schub[0]>-95&&y.schub[1]>-90)
         {
-        y.schub[0]-=5;
-        y.schub[1]-=5;
+        y.schub[0]-=2;
+        y.schub[1]-=2;
         }
         qDebug() << "Key_Down:" << y.schub[0];
         break;

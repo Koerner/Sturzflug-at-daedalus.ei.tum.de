@@ -45,10 +45,14 @@ public:
     void IPSwriteComText(QString writeComText);
     void IPSsendCOM(int sendCOM);
     void schubsenden();
+    void offset();
     int getposStation(int station, int xyz);
     ips x;
     weg y;
     simulation z;
+
+    //Schub offset
+    int schuboffset[3];
 
 
 
