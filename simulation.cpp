@@ -23,8 +23,8 @@ void simulation::sim()
         scheitel=100;
         start_ausrichtung=0;
         //qDebug() << "else";
-        start_x = 500;
-        start_y = 0;
+        start_x = 0;
+        start_y = -800;
         //start_ausrichtung = (start_ausrichtung*PI)/180;
         pos1x=start_x+cos(((start_ausrichtung-90)*PI)/180)*(scheitel/2);
         pos1y=start_y+sin(((start_ausrichtung-90)*PI)/180)*(scheitel/2);

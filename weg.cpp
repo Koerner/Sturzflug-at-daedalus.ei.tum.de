@@ -154,7 +154,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 void weg::berechneWeg()
 {
     qDebug()<<"hStart_Berechne";
-    qDebug()<<"hindernisse"<<hinanz<<hinnummer;
+    qDebug()<<"hindernisse"<<hinnummer<<"Modus"<<modus;
 
     double verhaeltnis=0;
     double buf3, buf4, buf1, buf2;
@@ -165,10 +165,10 @@ void weg::berechneWeg()
         {
         case true:{
 
-            if (hinanz == 0||hinnummer-1>hinanz)
+            if (hinanz == 0)//||hinnummer-1>hinanz)
             {
                 AP[0]=xList.at(0);//Startpunkt festsetzen
-                AP[1]=xList.at(0);//Startpunkt festsetzen
+                AP[1]=yList.at(0);//Startpunkt festsetzen
                 EP[0]= zielkoordinaten[0];
                 EP[1]= zielkoordinaten[1];
                 ziel_x=EP[0];
@@ -181,7 +181,7 @@ void weg::berechneWeg()
             if (hinnummer == 0)
             {
                 AP[0]=xList.at(0);//Startpunkt festsetzen
-                AP[1]=xList.at(0);//Startpunkt festsetzen
+                AP[1]=yList.at(0);//Startpunkt festsetzen
             }
 
             buf3 =  (hin[hinnummer][0] - AP[0])/2;
@@ -294,26 +294,41 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
     double alpha, beta;// gamma;
 
     GetCollisionPoint(mittelx, mittely, hin[hinnummer][0], hin[hinnummer][1], rad, kreisradius[hinnummer],&x1,&y1,&x2,&y2); //Schnittpunkte der zwei Kreise berechnen
-
+    qDebug()<<"Punkt1"<<x1<<y1;
+    qDebug()<<"Punkt2"<<x2<<y2;
     //Entscheidung, welcher Punkt der richtige ist, abhängig davon, ob der zeppelin rechts oder links herum fliegen soll
     int b=1;
-    x= (hin[hinnummer][0] - Bezugspunkt_x);
-    y= (hin[hinnummer][1] - Bezugspunkt_y);
+    x= (hin[hinnummer][0] - mittelx);
+    y= (hin[hinnummer][1] - mittely);
     if (x>=0)
     {b=0;}
     alpha = GetWinkel(x,y,b);
-    x=x1-Bezugspunkt_x;
-    y=y1-Bezugspunkt_y;
+    qDebug()<<"alpha"<<alpha;
+    x=x1-mittelx;
+    y=y1-mittely;
+    qDebug()<<x<<y;
     beta = GetWinkel(x,y,b);
+    qDebug()<<"beta"<<beta;
 //    x=x2-xList.at(0);
 //    y=y2-yList.at(0);
 //    gamma = GetWinkel(x,y,b);
 
-    if (modus)
-    {
         if (hin[hinnummer][2]==1) //falls linksrum
         {
-            if ((beta-alpha)<0)
+            if ((alpha-beta)<0)
+            {
+                EP[0]=x1;
+                EP[1]=y1;
+            }
+            else
+            {
+                EP[0]=x2;
+                EP[1]=y2;
+            }
+        }
+        else
+        {
+            if ((alpha-beta)>0)
             {
                 EP[0]=x1;
                 EP[1]=y1;
@@ -326,25 +341,26 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
         }
         ziel_x = EP[0];
         ziel_y = EP[1];
-    }
-    else
-    {
-        if (hin[hinnummer][2]==1) //falls linksrum
-        {
-            if ((beta-alpha)<0)
-            {
-                AP[0]=x2;
-                AP[1]=y2;
-            }
-            else
-            {
-                AP[0]=x1;
-                AP[1]=y1;
-            }
-        }
-        ziel_x = AP[0];
-        ziel_y = AP[1];
-    }
+
+//    else
+//    {
+//        if (hin[hinnummer][2]==1) //falls linksrum
+//        {
+//            if ((beta-alpha)<0)
+//            {
+//                AP[0]=x2;
+//                AP[1]=y2;
+//            }
+//            else
+//            {
+//                AP[0]=x1;
+//                AP[1]=y1;
+//            }
+//        }
+//        ziel_x = AP[0];
+//        ziel_y = AP[1];
+//     }
+
     //Entscheidung Ende
     qDebug()<<"Zielpunkte Hindernis"<<ziel_x<<ziel_y;
 
@@ -361,41 +377,43 @@ int weg::punktabweichung(int x_1, int y_1, int x_2, int y_2)
 //Winkel zwischen zwei Geraden
 double weg::GetWinkel (double x, double y, int i)
 {
- //double V[2];
- double param;
- double result;
- //V[0]=0.5;
- //V[1]=0.5;
- param = x/sqrt(x*x+y*y);
- if (i == 0)
- {
-     if (y<0)
-     {
-     param = -param;
-     result = ((acos (param) * 180.0) / PI)-180.0;
-     }
-     else
-     {
-     result = acos (param) * 180.0 / PI;
-     }
- }
- else if (i==1)
- {
-     if (y<0)
-     {
-     param = -param;
-     result = ((acos (param) * 180.0) / PI)+180.0;
-     }
-     else
-     {
-     result = acos (param) * 180.0 / PI;
-     }
- }
+    //double V[2];
+    double param;
+    double result;
+    //V[0]=0.5;
+    //V[1]=0.5;
+    param = x/sqrt(x*x+y*y);
 
- //param = -(1/sqrt(2));
+    if (i == 0)
+    {
+        if (y<0)
+        {
+            param = -param;
+            result = ((acos (param) * 180.0) / PI)-180.0;
+        }
+        else
+        {
+            qDebug()<<"Param"<<param;
+            result = acos (param) * (180.0 / PI);
 
- //cout<<"The arc cosine of "<< param << " is " << result << " degrees.\n"<<endl;
- return result;
+        }
+    }
+    else
+    {
+        if (y<0)
+        {
+            param = -param;
+            result = ((acos (param) * 180.0) / PI)+180.0;
+        }
+        else
+        {
+            result = acos (param) * 180.0 / PI;
+        }
+    }
+
+    //param = -(1/sqrt(2));
+    qDebug()<<"result"<<result;
+    return result;
 }
 //Ende Winkel
 

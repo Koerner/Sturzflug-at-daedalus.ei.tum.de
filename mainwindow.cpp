@@ -722,7 +722,7 @@ void MainWindow::onTestButtonClicked()
    z.sim();
    y.xList.prepend(z.xList.at(0));
    y.yList.prepend(z.yList.at(0));
-   //y.berechneRadien();//alle Kurvenradien berechnen
+   y.berechneRadien();//alle Kurvenradien berechnen
    y.berechneWeg();//erste Zielkoordinate berechnen
 
 //   IPSwriteComText(str);
@@ -739,7 +739,7 @@ void MainWindow::onTestButtonClicked()
 void MainWindow::refresh()
 {
     DrawMap();
-    schubsenden();
+    //schubsenden();
     if(ui->refresh->isChecked())
     {
     qDebug()<<"Koordinaterefresh";
