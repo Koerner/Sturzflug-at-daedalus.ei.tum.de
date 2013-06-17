@@ -474,13 +474,15 @@ void MainWindow::setHindernisse()
 
     //Anzahl der Hindernisse ermitteln
     int i=0;
+    y.hinanz=0;
     for(i=0; i<16; i++)
     {
-        if (y.hin[i][2]!=0) //Hondernisse werden akzeptiert wenn der umlaufweg bekannt gesetzt ist
+        if (y.hin[i][3]!=0) //Hondernisse werden akzeptiert wenn der umlaufweg bekannt gesetzt ist
         {
             y.hinanz +=1;
         }
     }
+    qDebug() << "Anzahl der Hindernisse: " << y.hinanz;
 
 
 
@@ -626,7 +628,10 @@ void MainWindow::schubsenden()
 
     //Hoehenmotor
     if(schuboffset[2]>99||schuboffset[2]<-99)
-    {qDebug() << "Schubfehler Hoehe!!!!!!!!"; schuboffset[2]=0;}
+    {
+        qDebug() << "Schub Höhenregleung MAX" << schuboffset[2];
+        schuboffset[2]=schuboffset[2]/abs(schuboffset[2])*MAX;
+    }
     if(schuboffset[2]<0)
     {
         var=abs(schuboffset[2])+100;
@@ -642,7 +647,10 @@ void MainWindow::schubsenden()
 
     //Motor rechts
     if(schuboffset[1]>99||schuboffset[1]<-99)
-    {qDebug() << "Schubfehler Rechts!!!!!!!!"; schuboffset[1]=0;}
+    {
+        qDebug() << "Schub Links MAX" << schuboffset[1];
+        schuboffset[1]=schuboffset[1]/abs(schuboffset[1])*MAX;
+    }
     if(schuboffset[1]<0)
     {
         var+=(abs(schuboffset[1])+100)*1000;
@@ -658,7 +666,10 @@ void MainWindow::schubsenden()
 
     //Motor links
     if(schuboffset[0]>99||schuboffset[0]<-99)
-    {qDebug() << "Schubfehler Links!!!!!!!!"; schuboffset[0]=0;}
+    {
+        qDebug() << "Schub Links MAX" << schuboffset[0];
+        schuboffset[0]=schuboffset[0]/abs(schuboffset[0])*MAX;
+    }
     if(schuboffset[0]<0)
     {
         var+=(abs(schuboffset[0])+100)*1000000;

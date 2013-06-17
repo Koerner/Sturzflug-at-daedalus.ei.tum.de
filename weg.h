@@ -16,7 +16,7 @@ public:
 
     int abweichungGUI[2]; //feste bis Regelung, und % bis Notfall
     int spannweite;
-    int hin[16][4];     // Erste Spalte: x-Koordinate, 2.: y-Koordinate 3.: rechts oder links rum 4.: Abstand Hindernis/Wand
+    int hin[16][4];     // Erste Spalte: x-Koordinate, 2.: y-Koordinate 3.: rechts(0) oder links(1) rum 4.: Abstand Hindernis/Wand
     int hinanz;         // Anzahl der eingetragenen Hindernisse
     int abwurfkoordinate[2];      // Abwurfkoordinaten
     int zielkoordinaten[2]; // Zielkoordinaten
@@ -89,6 +89,7 @@ public:
     void geradeaus(int streckenlaenge);  //Strecke in mm
     void geradeaus(int streckenlaenge, int abweichung); //Strecke in mm, abweichung in %
     void kurve(bool linksrechts, int radius);
+    void kurve(bool linksrechts, int radius, int abweichung);
     void standdrehung(int winkel);
     void stop();
 

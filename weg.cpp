@@ -34,7 +34,7 @@ void weg::start()
 
     if (punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol)
     {
-        if (modus = false){
+        if (modus == false){
             modus = true;
             hinnummer = hinnummer + 1;
         }
@@ -49,7 +49,6 @@ void weg::start()
         //streckenlange = punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y);
         if(abs(GetAbweichung())<10)
             {
-            qDebug()<<"Regeln";
             geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y));
             }
             else
@@ -60,7 +59,26 @@ void weg::start()
                // }
                 //else
                 //{
+                    qDebug()<<"Regeln";
                     geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),GetAbweichung());
+                //}
+            }
+    }
+    else{
+        if(abs(GetAbweichung())<10)
+            {
+            kurve(hin[hinnummer][2],kreisradius[hinnummer]);
+            }
+            else
+            {
+                //if(GetAbweichung()>30)
+                //{
+                //    //Notfallmodus
+               // }
+                //else
+                //{
+                    qDebug()<<"Regeln";
+                    kurve(hin[hinnummer][2],kreisradius[hinnummer],GetAbweichung());
                 //}
             }
     }
@@ -147,7 +165,7 @@ void weg::berechneWeg()
         {
         case true:{
 
-            if (hinanz == 0||hinnummer>hinanz)
+            if (hinanz == 0||hinnummer-1>hinanz)
             {
                 AP[0]=xList.at(0);//Startpunkt festsetzen
                 AP[1]=xList.at(0);//Startpunkt festsetzen
@@ -273,7 +291,7 @@ void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, doub
 void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt_x, double Bezugspunkt_y, double rad)
 {
     double x,y,x1,x2,y1,y2;//, r1, r2;
-    double alpha, beta, gamma;
+    double alpha, beta;// gamma;
 
     GetCollisionPoint(mittelx, mittely, hin[hinnummer][0], hin[hinnummer][1], rad, kreisradius[hinnummer],&x1,&y1,&x2,&y2); //Schnittpunkte der zwei Kreise berechnen
 
@@ -388,8 +406,6 @@ void weg::berechneRadien()
     int j;
     int d;
     int Abstand;
-    int bef1;
-    int bef2;
 
     for (i=0;hinanz;i++)
     {
@@ -475,9 +491,9 @@ void weg::hoehensteuerung()
     }
     else
     {
-        if(abs(dif)<40)
+        if(abs(dif)<400)
         {
-            schub[2]=dif;
+            schub[2]=dif/5;
         }
         else
         {
@@ -522,8 +538,8 @@ qDebug()<<"mit Regelung";
     {
         schub[0]=SCHNELL;
         schub[1]=SCHNELL;
-        schub[0]=schub[0]-((abweichung/100)*schub[0]/3);
-        schub[1]=schub[1]+((abweichung/100)*schub[1]/3);
+        schub[0]=(schub[0]*(100-abweichung/3))/100;
+        schub[1]=(schub[1]*(100+abweichung/3))/100;
     }
     else
     {
@@ -540,6 +556,35 @@ qDebug()<<"mit Regelung";
 void weg::kurve(bool linksrechts, int radius)
 {
     //Kurvenflugmodus
+    if (linksrechts == 0){
+        schub[0]=LANGSAM;
+        schub[1]=schub[0]*((radius+spannweite)/(radius-spannweite));
+        qDebug() << "Rechtskurve:" << schub[0]<< schub[1];
+    }
+    else{
+        schub[1]=LANGSAM;
+        schub[0]=schub[1]*((radius+spannweite)/(radius-spannweite));
+        qDebug() << "Linkskurve:" << schub[0]<< schub[1];
+    }
+}
+
+void weg::kurve(bool linksrechts, int radius, int abweichung)
+{
+    //Kurvenflugmodus
+    if (linksrechts == 0){
+        schub[0]=LANGSAM;
+        schub[1]=schub[0]*((radius+spannweite)/(radius-spannweite));
+        schub[0]=(schub[0]*(100-abweichung))/100;
+        schub[1]=(schub[1]*(100+abweichung))/100;
+        qDebug() << "Rechtskurve mit Regelung:" << schub[0]<< schub[1];
+    }
+    else{
+        schub[1]=LANGSAM;
+        schub[0]=schub[1]*((radius+spannweite)/(radius-spannweite));
+        schub[0]=(schub[0]*(100-abweichung))/100;
+        schub[1]=(schub[1]*(100+abweichung))/100;
+        qDebug() << "Linkskurve mit Regelung:" << schub[0]<< schub[1];
+    }
 }
 
 void weg::standdrehung(int winkel)

@@ -26,6 +26,7 @@
 
 #include "weg.h"
 #include "simulation.h"
+#include "define.h"
 
 namespace Ui {
 class MainWindow;
