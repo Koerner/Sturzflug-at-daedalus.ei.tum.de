@@ -62,9 +62,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //ComText Box STOP
 
     Xbeetimer = new QTimer(this);
-    Xbeetimer->setInterval(40);
+    Xbeetimer->setInterval(80);
     IPStimer = new QTimer(this);
-    IPStimer->setInterval(80); //könnte probleme lösen
+    IPStimer->setInterval(40); //könnte probleme lösen
 
     Filtertimer = new QTimer(this);
     Filtertimer->setInterval(ui->refreshTime->value()); //Aktuallisierungsrate aus der GUI in ms
@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //Xbee connectoren
     connect(ui->XbeeBaudRateBox, SIGNAL(currentIndexChanged(int)), SLOT(XbeeonBaudRateChanged(int)));
     connect(ui->XbeeportBox, SIGNAL(editTextChanged(QString)), SLOT(XbeeonPortNameChanged(QString)));
-    //connect(Xbeetimer, SIGNAL(timeout()), SLOT(XbeeonReadyRead()));
+    connect(Xbeetimer, SIGNAL(timeout()), SLOT(XbeeonReadyRead()));
     connect(Xbeeport, SIGNAL(readyRead()), SLOT(XbeeonReadyRead()));
 
     //IPS connectoren
@@ -273,7 +273,9 @@ void MainWindow::IPSonPortNameChanged(const QString & /*name*/)
 // ComPort lesen
 void MainWindow::XbeeonReadyRead()
 {
+    qDebug() << "lesen..";
     if (Xbeeport->bytesAvailable()) {
+        qDebug()<<"Daten..";
         QString comdata = QString::fromLatin1(Xbeeport->readAll());
         XbeewriteComText ("->");
         XbeewriteComText(comdata);
@@ -737,7 +739,7 @@ void MainWindow::onTestButtonClicked()
 void MainWindow::refresh()
 {
     DrawMap();
-    //schubsenden();
+    schubsenden();
     if(ui->refresh->isChecked())
     {
     qDebug()<<"Koordinaterefresh";
