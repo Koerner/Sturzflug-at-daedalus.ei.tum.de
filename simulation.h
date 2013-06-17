@@ -10,7 +10,7 @@ class simulation
 {
 public:
     simulation();
-    void sim(bool modus);
+    void sim();
     int schub[2];
     QList<int> xList;
     QList<int> yList;

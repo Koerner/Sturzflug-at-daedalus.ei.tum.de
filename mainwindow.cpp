@@ -706,10 +706,10 @@ void MainWindow::onTestButtonClicked()
 //   str.append(QString("%1").arg(ergebnis));
 
 //   //qDebug() << x.xList;
-   z.sim(y.modus);
+   z.sim();
    y.xList.prepend(z.xList.at(0));
    y.yList.prepend(z.yList.at(0));
-   //y.berechneRadien();//all Kurvenradien berechnen
+   //y.berechneRadien();//alle Kurvenradien berechnen
    y.berechneWeg();//erste Zielkoordinate berechnen
 
 //   IPSwriteComText(str);
@@ -726,7 +726,7 @@ void MainWindow::onTestButtonClicked()
 void MainWindow::refresh()
 {
     DrawMap();
-    schubsenden();
+    //schubsenden();
     if(ui->refresh->isChecked())
     {
     qDebug()<<"Koordinaterefresh";
@@ -735,7 +735,7 @@ void MainWindow::refresh()
     //z.spannweite=y.spannweite;
     qDebug() << "start sim";
 
-    z.sim(y.modus);
+    z.sim();
     qDebug()<< "ende sim";
    x.xList.prepend(z.xList.at(0));
     x.yList.prepend(z.yList.at(0));

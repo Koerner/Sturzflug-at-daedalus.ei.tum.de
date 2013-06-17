@@ -9,7 +9,7 @@ simulation::simulation()
     schub[1]=0;
 }
 
-void simulation::sim(bool modus)
+void simulation::sim()
 {
     double alpha;
     if (xList.size()!=0){
@@ -21,17 +21,17 @@ void simulation::sim(bool modus)
     }
     else {
         scheitel=100;
-        start_ausrichtung=10;
-        qDebug() << "else";
-        start_x = 0;
+        start_ausrichtung=0;
+        //qDebug() << "else";
+        start_x = 500;
         start_y = 0;
         //start_ausrichtung = (start_ausrichtung*PI)/180;
         pos1x=start_x+cos(((start_ausrichtung-90)*PI)/180)*(scheitel/2);
         pos1y=start_y+sin(((start_ausrichtung-90)*PI)/180)*(scheitel/2);
-        qDebug() << "Position1: x: "<<pos1x<<" y: "<<pos1y;
+        //qDebug() << "Position1: x: "<<pos1x<<" y: "<<pos1y;
         pos2x=start_x+cos(((start_ausrichtung+90)*PI)/180)*(scheitel/2);
         pos2y=start_y+sin(((start_ausrichtung+90)*PI)/180)*(scheitel/2);
-        qDebug() << "Position2: x: "<<pos2x<<" y: "<<pos2y;
+        //qDebug() << "Position2: x: "<<pos2x<<" y: "<<pos2y;
         //start_z = 0;
     }
 
@@ -52,23 +52,8 @@ void simulation::sim(bool modus)
         //qDebug() << "Position1: x: "<<pos1x<<" y: "<<pos1y;
         posx=pos1x+0.5*(pos2x-pos1x);
         posy=pos1y+0.5*(pos2y-pos1y);
-//   }
-//    else{
-//        rechteDistanz=(schub[0]*SIMULATIONMAX)/100;
-//        linkeDistanz=(schub[1]*SIMULATIONMAX)/100;
-//        posx=rechteDistanz-linkeDistanz;
-//        alpha = atan(posx/spannweite)*180/PI;
-//        beta = 90 - alpha;
-//        start_ausrichtung+=beta;
-//        pos1x += cos((start_ausrichtung*PI)/180)*rechteDistanz;
-//        pos1y += sin((start_ausrichtung*PI)/180)*rechteDistanz;
-//        pos2x += cos((start_ausrichtung*PI)/180)*linkeDistanz;
-//        pos2y += sin((start_ausrichtung*PI)/180)*linkeDistanz;
-//        posx=pos1x+0.5*(pos2x-pos1x);
-//        posy=pos1y+0.5*(pos2y-pos1y);
 
-//    }
-qDebug() << "Position1: x: "<<posx<<" y: "<<posy;
+qDebug() << "Position_Zeppelin: x: "<<posx<<" y: "<<posy;
     xList.prepend(posx);
     yList.prepend(posy);
 }

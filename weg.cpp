@@ -88,7 +88,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
                 if (x>0)
                     {b=0;}
                 alpha = GetWinkel(x, y, b);
-                qDebug()<<"alpha"<<alpha;
+                //qDebug()<<"alpha"<<alpha;
                 distance = punktabweichung(AP[0],AP[1],EP[0],EP[1]);
                 notfallziel[0]=x/distance;
                 notfallziel[1]=y/distance;
@@ -98,7 +98,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 
                 beta = GetWinkel(x, y, b);
                 gamma = beta-alpha;
-                qDebug()<<"gamma"<<gamma;
+                //qDebug()<<"gamma"<<gamma;
             //    if (gamma >= 0)
             //    {h = 0;}
             //    gamma = Abs(gamma);
@@ -328,7 +328,7 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
         ziel_y = AP[1];
     }
     //Entscheidung Ende
-
+    qDebug()<<"Zielpunkte Hindernis"<<ziel_x<<ziel_y;
 
 }
 //Ende Tangentenberechnung
