@@ -74,7 +74,7 @@ public:
     void berechneRadien();
     double GetWinkel(double x, double y, int i);
     void GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, double r1, double r2, double *res1, double *res2, double *res3, double *res4);
-    void Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt_x, double Bezugspunkt_y, double rad);
+    void Tangentenberechnung(double mittelx, double mittely, double bezugspunktx, double bezugspunkty, double rad);
     //int Abweichung(int Radius, int Hindernisnummer); //Abweichung vom Radius um das Hindernis
 
     //Allgemeine Funktionen

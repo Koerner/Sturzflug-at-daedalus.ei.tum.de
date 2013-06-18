@@ -103,7 +103,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 //                }
                 x = EP[0] - AP[0];
                 y = EP[1] - AP[1];
-                if (x>0)
+                if (x>=0)
                     {b=0;}
                 alpha = GetWinkel(x, y, b);
                 //qDebug()<<"alpha"<<alpha;
@@ -113,8 +113,12 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 
                 x = xList.at(0) - AP[0];
                 y = yList.at(0) - AP[1];
-
+                if (x==0&&y==0){
+                    beta = alpha;
+                }
+                else{
                 beta = GetWinkel(x, y, b);
+                }
                 gamma = beta-alpha;
                 //qDebug()<<"gamma"<<gamma;
             //    if (gamma >= 0)
@@ -130,11 +134,13 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
                 notfallziel[0]=cos(gamma)*notfallziel[0]+AP[0];
                 notfallziel[1]=cos(gamma)*notfallziel[1]+AP[1];
                 GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1],0);
+                break;
              }
     case false :{
         //distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]);
         //distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]) - kreisradius[hinnummer];
         //abweichung = (distance/kreisradius[hinnummer])*100;
+        break;
     }
     }
 
@@ -189,7 +195,8 @@ void weg::berechneWeg()
             Radius = sqrt(buf3*buf3+buf4*buf4);
             buf1 = AP[0] + buf3;
             buf2 = AP[1] + buf4;
-            Tangentenberechnung(buf1,buf2, AP[0], AP[1], Radius); //Eintrittspunkt in Kreis
+            Tangentenberechnung(buf1,buf2,AP[0],AP[1], Radius); //Eintrittspunkt in Kreis
+            break;
             }
 
         }
@@ -201,7 +208,7 @@ void weg::berechneWeg()
                 Radius = sqrt(buf3*buf3+buf4*buf4);
                 buf1 = hin[hinnummer][0] + buf3;
                 buf2 = hin[hinnummer][1] + buf4;
-                Tangentenberechnung(buf1,buf2, zielkoordinaten[0], zielkoordinaten[1], Radius); //Eintrittspunkt in Kreis
+                Tangentenberechnung(buf1,buf2,buf1,buf2, Radius); //Eintrittspunkt in Kreis
             }
             else{
             verhaeltnis = kreisradius[hinnummer]/(kreisradius[hinnummer]+kreisradius[hinnummer+1]);
@@ -211,7 +218,8 @@ void weg::berechneWeg()
             buf1 = hin[hinnummer][0] + buf1;
             buf2 = hin[hinnummer][1] + buf2;
 
-            Tangentenberechnung(buf1,buf2, buf1, buf2, Radius); //Austrittspunkt
+            Tangentenberechnung(buf1,buf2,buf1,buf2, Radius); //Austrittspunkt
+            break;
             }
 
 
@@ -288,7 +296,7 @@ void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, doub
 
 
 //Beginn Tangentenberechnung
-void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt_x, double Bezugspunkt_y, double rad)
+void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunktx, double bezugspunkty, double rad)
 {
     double x,y,x1,x2,y1,y2;//, r1, r2;
     double alpha, beta;// gamma;
@@ -298,14 +306,14 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double Bezugspunkt
     qDebug()<<"Punkt2"<<x2<<y2;
     //Entscheidung, welcher Punkt der richtige ist, abhängig davon, ob der zeppelin rechts oder links herum fliegen soll
     int b=1;
-    x= (hin[hinnummer][0] - mittelx);
-    y= (hin[hinnummer][1] - mittely);
+    x= (hin[hinnummer][0] - bezugspunktx);
+    y= (hin[hinnummer][1] - bezugspunkty);
     if (x>=0)
     {b=0;}
     alpha = GetWinkel(x,y,b);
     qDebug()<<"alpha"<<alpha;
-    x=x1-mittelx;
-    y=y1-mittely;
+    x=x1-bezugspunktx;
+    y=y1-bezugspunkty;
     qDebug()<<x<<y;
     beta = GetWinkel(x,y,b);
     qDebug()<<"beta"<<beta;
@@ -532,7 +540,7 @@ void weg::hoehensteuerung()
 
 void weg::geradeaus(int streckenlaenge)
 {
-    qDebug()<<"ohne Regelung";
+    qDebug()<<"Gerade ohne Regelung";
     if(streckenlaenge>1000)
     {
         schub[0]=SCHNELL;
@@ -552,7 +560,7 @@ void weg::geradeaus(int streckenlaenge)
 
 void weg::geradeaus(int streckenlaenge, int abweichung)
 {
-qDebug()<<"mit Regelung";
+qDebug()<<"Gerade mit Regelung";
     if(streckenlaenge>1000)
     {
         schub[0]=SCHNELL;

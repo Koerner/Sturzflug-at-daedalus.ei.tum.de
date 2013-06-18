@@ -21,9 +21,9 @@ void simulation::sim()
     }
     else {
         scheitel=100;
-        start_ausrichtung=0;
+        start_ausrichtung=71.79;
         //qDebug() << "else";
-        start_x = 0;
+        start_x = 1000;
         start_y = -800;
         //start_ausrichtung = (start_ausrichtung*PI)/180;
         pos1x=start_x+cos(((start_ausrichtung-90)*PI)/180)*(scheitel/2);

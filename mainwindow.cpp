@@ -739,15 +739,14 @@ void MainWindow::onTestButtonClicked()
 void MainWindow::refresh()
 {
     DrawMap();
-    //schubsenden();
+
     if(ui->refresh->isChecked())
     {
     qDebug()<<"Koordinaterefresh";
-
+    schubsenden();
 
     //z.spannweite=y.spannweite;
     qDebug() << "start sim";
-
     z.sim();
     qDebug()<< "ende sim";
    x.xList.prepend(z.xList.at(0));
