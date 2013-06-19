@@ -680,7 +680,7 @@ void MainWindow::schubsenden()
     }
     else
     {
-        var+=y.schub[0]*1000000;
+        var+=schuboffset[0]*1000000;
         ui->motorlinkminus->setValue(0);
         ui->motorlinksplus->setValue(schuboffset[0]);}
 
@@ -774,7 +774,7 @@ void MainWindow::keyPressEvent(QKeyEvent *qkeyevent)
     switch(qkeyevent->key())
     {
     case Qt::Key_Up:
-        if(y.schub[0]<95&&y.schub[1]<90)
+        if(y.schub[0]<95&&y.schub[1]<95)
         {
         y.schub[0]+=2;
         y.schub[1]+=2;
@@ -782,7 +782,7 @@ void MainWindow::keyPressEvent(QKeyEvent *qkeyevent)
         qDebug() << "Key_Up:" << y.schub[0];
         break;
     case Qt::Key_Down:
-        if(y.schub[0]>-95&&y.schub[1]>-90)
+        if(y.schub[0]>-95&&y.schub[1]>-95)
         {
         y.schub[0]-=2;
         y.schub[1]-=2;
@@ -807,14 +807,14 @@ void MainWindow::keyPressEvent(QKeyEvent *qkeyevent)
         qDebug() << "Key_Space: Abweichung:" << geradeabweichung << "Schub: " << y.schub[0];
         break;
     case Qt::Key_X:
-        if(hoehenschubHand<95)
-        {hoehenschubHand+=5;}
+        if(hoehenschubHand<98)
+        {hoehenschubHand+=2;}
         y.schub[2]=hoehenschubHand;
         qDebug() << "Key_X:" << y.schub[2];
         break;
     case Qt::Key_Y:
-        if(hoehenschubHand>-95)
-        {hoehenschubHand-=5;}
+        if(hoehenschubHand>-98)
+        {hoehenschubHand-=2;}
         y.schub[2]=hoehenschubHand;
         qDebug() << "Key_Y:" << y.schub[2];
         break;
