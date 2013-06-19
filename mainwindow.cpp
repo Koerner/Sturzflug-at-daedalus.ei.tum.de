@@ -579,6 +579,12 @@ void MainWindow::DrawMap()
     map->clear();  //löschen der gesamten Karte  --OPTIMIERUNGSPOTENTIAL
     QPen normal;
     normal.setWidth(20); // hängt vom scaling ab
+    QPen penhindernisse;
+    penhindernisse.setWidth(20);
+    penhindernisse.setColor(Qt::red);
+    QPen penziel;
+    penziel.setWidth(20);
+    penziel.setColor(Qt::green);
 
     int i=0;
     if(ui->printzeppelin->isChecked())
@@ -594,6 +600,12 @@ void MainWindow::DrawMap()
     {
         map->addRect(x.posStation[i][0],x.posStation[i][1],100,100)->setPen(normal);  // Zeichnen der Stationen
     }
+    for(i=0;i<y.hinanz;i++)
+    {
+
+        map->addRect(y.hin[i][0],y.hin[i][1],50,50)->setPen(penhindernisse);  // Zeichnen der Hindernisse
+    }
+    map->addEllipse(y.zielkoordinaten[0],y.zielkoordinaten[1],y.zieltol,y.zieltol)->setPen(penziel);
 
     //map->addLine(x.posStation[0][0],x.posStation[0][1],x.posStation[1][0],x.posStation[1][1])->setPen(normal);  // Test Strich zwischen Station 0 und 1
 
