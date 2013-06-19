@@ -15,10 +15,12 @@ public:
     QList<int> xList;
     QList<int> yList;
     double spannweite;
+    int Runden(double Zahl);
 
 private:
     double posx;
     double posy;
+    double Radius;
     int pos1x;
     int pos1y;
     int pos2x;

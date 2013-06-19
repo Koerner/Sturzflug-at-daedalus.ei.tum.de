@@ -27,62 +27,60 @@ void weg::start()
     {stop();}
     else
     {
-    if(notfallmodus==1)
-    {notfallplan();}
-    else
-    {
-
-    if (punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol)
-    {
-        if (modus == false){
-            modus = true;
-            hinnummer = hinnummer + 1;
-        }
-        else{
-            modus = false;
-        }
-        //Starte neue Punktberechnung
-        berechneWeg();
-    }
-
-    if (modus){
-        //streckenlange = punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y);
-        if(abs(GetAbweichung())<10)
+        if(notfallmodus==1)
+        {notfallplan();}
+        else
+        {
+            if ((modus == false)&&(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y)<(zieltol*(hinnummer+1))))
             {
-            geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y));
+                modus = true;
+                hinnummer = hinnummer + 1;
+                berechneWeg();
             }
-            else
+            else if((modus==true)&&(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
             {
-                //if(GetAbweichung()>30)
-                //{
-                //    //Notfallmodus
-               // }
-                //else
-                //{
-                    qDebug()<<"Regeln";
+                modus = false;
+                berechneWeg();
+            }
+            //Starte neue Punktberechnung
+            if (modus){
+                //streckenlange = punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y);
+                if(abs(GetAbweichung())<1)
+                {
+                    geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y));
+                }
+                else
+                {
+                    //if(GetAbweichung()>30)
+                    //{
+                    //    //Notfallmodus
+                    // }
+                    //else
+                    //{
                     geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),GetAbweichung());
-                //}
-            }
-    }
-    else{
-        if(abs(GetAbweichung())<10)
-            {
-            kurve(hin[hinnummer][2],kreisradius[hinnummer]);
+                    //}
+                }
             }
             else
             {
-                //if(GetAbweichung()>30)
-                //{
-                //    //Notfallmodus
-               // }
-                //else
-                //{
+                if(abs(GetAbweichung())<10)
+                {
+                    kurve(hin[hinnummer][2],kreisradius[hinnummer]);
+                }
+                else
+                {
+                    //if(GetAbweichung()>30)
+                    //{
+                    //    //Notfallmodus
+                    // }
+                    //else
+                    //{
                     qDebug()<<"Regeln";
                     kurve(hin[hinnummer][2],kreisradius[hinnummer],GetAbweichung());
-                //}
+                    //}
+                }
             }
-    }
-    }
+        }
     }
 }
 //Ende Aufruf
@@ -103,6 +101,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
 //                }
                 x = EP[0] - AP[0];
                 y = EP[1] - AP[1];
+                qDebug()<<"Gerade"<<x<<y;
                 if (x>=0)
                     {b=0;}
                 alpha = GetWinkel(x, y, b);
@@ -140,6 +139,7 @@ int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vekto
         //distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]);
         //distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]) - kreisradius[hinnummer];
         //abweichung = (distance/kreisradius[hinnummer])*100;
+        abweichung = 0;
         break;
     }
     }
@@ -162,69 +162,75 @@ void weg::berechneWeg()
     qDebug()<<"hStart_Berechne";
     qDebug()<<"hindernisse"<<hinnummer<<"Modus"<<modus;
 
-    double verhaeltnis=0;
-    double buf3, buf4, buf1, buf2;
+    float verhaeltnis;
+    double buf1, buf2;
     double Radius;
 
 
-        switch(modus)
+    switch(modus)
+    {
+    case true:
+    {
+
+        if ((hinanz == 0)||(hinnummer==hinanz))
         {
-        case true:{
-
-            if (hinanz == 0)//||hinnummer-1>hinanz)
-            {
-                AP[0]=xList.at(0);//Startpunkt festsetzen
-                AP[1]=yList.at(0);//Startpunkt festsetzen
-                EP[0]= zielkoordinaten[0];
-                EP[1]= zielkoordinaten[1];
-                ziel_x=EP[0];
-                ziel_y=EP[1];
-                qDebug()<<"Ziel"<<ziel_x<<ziel_y;
-            }
-            else
-            {
-
-            if (hinnummer == 0)
-            {
-                AP[0]=xList.at(0);//Startpunkt festsetzen
-                AP[1]=yList.at(0);//Startpunkt festsetzen
-            }
-
-            buf3 =  (hin[hinnummer][0] - AP[0])/2;
-            buf4 =  (hin[hinnummer][1] - AP[1])/2;
-            Radius = sqrt(buf3*buf3+buf4*buf4);
-            buf1 = AP[0] + buf3;
-            buf2 = AP[1] + buf4;
-            Tangentenberechnung(buf1,buf2,AP[0],AP[1], Radius); //Eintrittspunkt in Kreis
-            break;
-            }
-
+            AP[0]=xList.at(0);//Startpunkt festsetzen
+            AP[1]=yList.at(0);//Startpunkt festsetzen
+            EP[0]= zielkoordinaten[0];
+            EP[1]= zielkoordinaten[1];
+            ziel_x=EP[0];
+            ziel_y=EP[1];
+            qDebug()<<"Ziel"<<ziel_x<<ziel_y;
         }
-        case false:
+        else
         {
-            if (hinnummer==hinanz){
-                buf3 =  (zielkoordinaten[0] - hin[hinnummer][0])/2;
-                buf4 =  (zielkoordinaten[1] - hin[hinnummer][1])/2;
-                Radius = sqrt(buf3*buf3+buf4*buf4);
-                buf1 = hin[hinnummer][0] + buf3;
-                buf2 = hin[hinnummer][1] + buf4;
-                Tangentenberechnung(buf1,buf2,buf1,buf2, Radius); //Eintrittspunkt in Kreis
-            }
-            else{
-            verhaeltnis = kreisradius[hinnummer]/(kreisradius[hinnummer]+kreisradius[hinnummer+1]);
-            buf1 =  (hin[hinnummer+1][0] - hin[hinnummer][0])*verhaeltnis;
-            buf2 =  (hin[hinnummer+1][1] - hin[hinnummer][1])*verhaeltnis;
+
+            //if (hinnummer == 0)
+            //{
+                AP[0]=xList.at(0);//Startpunkt festsetzen
+                AP[1]=yList.at(0);//Startpunkt festsetzen
+            //}
+
+            buf1 =  (hin[hinnummer][0] - AP[0])/2;
+            buf2 =  (hin[hinnummer][1] - AP[1])/2;
+            Radius = sqrt(buf1*buf1+buf2*buf2);
+            buf1 = AP[0] + buf1;
+            buf2 = AP[1] + buf2;
+            Tangentenberechnung(buf1,buf2,AP[0],AP[1], Radius); //Eintrittspunkt in Kreis
+        }
+    break;
+    }
+
+    case false:
+    {
+        if (hinnummer+1==hinanz){
+            buf1 =  (zielkoordinaten[0] - hin[hinnummer][0])/2;
+            buf2 =  (zielkoordinaten[1] - hin[hinnummer][1])/2;
+            Radius = sqrt(buf1*buf1+buf2*buf2);
+            buf1 = hin[hinnummer][0] + buf1;
+            buf2 = hin[hinnummer][1] + buf2;
+            Tangentenberechnung(buf1,buf2,zielkoordinaten[0],zielkoordinaten[1], Radius); //Austrittspunkt aus Kreis
+        }
+        else{
+            verhaeltnis = (kreisradius[hinnummer]+kreisradius[hinnummer+1]);
+            verhaeltnis = kreisradius[hinnummer]/verhaeltnis;
+            qDebug()<<"Verhaeltnis"<<verhaeltnis;
+
+            buf1 =  ((hin[hinnummer+1][0] - hin[hinnummer][0])*verhaeltnis);
+            buf2 =  ((hin[hinnummer+1][1] - hin[hinnummer][1])*verhaeltnis);
+            buf1 = buf1/2;
+            buf2 = buf2/2;
             Radius = sqrt(buf1*buf1+buf2*buf2);
             buf1 = hin[hinnummer][0] + buf1;
             buf2 = hin[hinnummer][1] + buf2;
 
             Tangentenberechnung(buf1,buf2,buf1,buf2, Radius); //Austrittspunkt
-            break;
-            }
-
-
 
         }
+
+
+        break;
+    }
 
     }
  //Für den Notfallplan brauche ich das notfallziel array ausgefüllt, also die Daten wo das Zeppelin im Notfall hinsteuern soll (x und y) und den Ausrichtungswinkel, zum Schluss
@@ -320,7 +326,8 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunkt
 //    x=x2-xList.at(0);
 //    y=y2-yList.at(0);
 //    gamma = GetWinkel(x,y,b);
-
+    if (modus == true)
+    {
         if (hin[hinnummer][2]==1) //falls linksrum
         {
             if ((alpha-beta)<0)
@@ -349,25 +356,39 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunkt
         }
         ziel_x = EP[0];
         ziel_y = EP[1];
+    }
 
-//    else
-//    {
-//        if (hin[hinnummer][2]==1) //falls linksrum
-//        {
-//            if ((beta-alpha)<0)
-//            {
-//                AP[0]=x2;
-//                AP[1]=y2;
-//            }
-//            else
-//            {
-//                AP[0]=x1;
-//                AP[1]=y1;
-//            }
-//        }
-//        ziel_x = AP[0];
-//        ziel_y = AP[1];
-//     }
+    else
+    {
+        if (hin[hinnummer][2]==1) //falls linksrum
+        {
+            if ((alpha-beta)>0)
+            {
+                AP[0]=x1;
+                AP[1]=y1;
+            }
+            else
+            {
+                AP[0]=x2;
+                AP[1]=y2;
+            }
+        }
+        else
+        {
+            if ((alpha-beta)<0)
+            {
+                AP[0]=x1;
+                AP[1]=y1;
+            }
+            else
+            {
+                AP[0]=x2;
+                AP[1]=y2;
+            }
+        }
+        ziel_x = AP[0];
+        ziel_y = AP[1];
+     }
 
     //Entscheidung Ende
     qDebug()<<"Zielpunkte Hindernis"<<ziel_x<<ziel_y;
@@ -424,6 +445,14 @@ double weg::GetWinkel (double x, double y, int i)
     return result;
 }
 //Ende Winkel
+
+//Runden
+int weg::Runden(double Zahl)
+{
+    if (Zahl>=0){Zahl += 0.5;}
+    else {Zahl -= 0.5;}
+    return Zahl;
+}
 
 //Radien um die Stangen berechnen
 void weg::berechneRadien()
@@ -540,27 +569,27 @@ void weg::hoehensteuerung()
 
 void weg::geradeaus(int streckenlaenge)
 {
-    qDebug()<<"Gerade ohne Regelung";
-    if(streckenlaenge>1000)
+
+    if(streckenlaenge>400)
     {
         schub[0]=SCHNELL;
         schub[1]=SCHNELL;
     }
-    else if (streckenlaenge>500)
+    else if (streckenlaenge>=200)
     {
         schub[0]=LANGSAM;
         schub[1]=LANGSAM;
     }
-    else if (streckenlaenge<500)
+    else if (streckenlaenge<200)
     {
         schub[0]=SUPERLANGSAM;
         schub[1]=SUPERLANGSAM;
     }
+    qDebug()<<"Gerade ohne Regelung:"<<schub[0]<<schub[1];
 }
 
 void weg::geradeaus(int streckenlaenge, int abweichung)
 {
-qDebug()<<"Gerade mit Regelung";
     if(streckenlaenge>1000)
     {
         schub[0]=SCHNELL;
@@ -568,48 +597,54 @@ qDebug()<<"Gerade mit Regelung";
         schub[0]=(schub[0]*(100-abweichung/3))/100;
         schub[1]=(schub[1]*(100+abweichung/3))/100;
     }
-    else
+    else if (streckenlaenge>=200)
     {
         schub[0]=LANGSAM;
         schub[1]=LANGSAM;
-        qDebug() << "schub ohne abweichung:" << schub[0];
+        schub[0]=(schub[0]*(100-abweichung))/100;
+        schub[1]=(schub[1]*(100+abweichung))/100;        
+    }
+    else if (streckenlaenge<200)
+    {
+        schub[0]=SUPERLANGSAM;
+        schub[1]=SUPERLANGSAM;
         schub[0]=(schub[0]*(100-abweichung))/100;
         schub[1]=(schub[1]*(100+abweichung))/100;
-        qDebug() << "schub mit abweichung:" << schub[0];
     }
+    qDebug()<<"Gerade mit Regelung:"<<schub[0]<<schub[1];
 }
 
 
-void weg::kurve(bool linksrechts, int radius)
+void weg::kurve(int linksrechts, double radius)
 {
     //Kurvenflugmodus
     if (linksrechts == 0){
-        schub[0]=LANGSAM;
-        schub[1]=schub[0]*((radius+spannweite)/(radius-spannweite));
+        schub[1]=SUPERLANGSAM;
+        schub[0]=schub[1]*((radius+spannweite)/(radius-spannweite));
         qDebug() << "Rechtskurve:" << schub[0]<< schub[1];
     }
     else{
-        schub[1]=LANGSAM;
-        schub[0]=schub[1]*((radius+spannweite)/(radius-spannweite));
+        schub[0]=SUPERLANGSAM;
+        schub[1]=schub[0]*((radius+spannweite)/(radius-spannweite));
         qDebug() << "Linkskurve:" << schub[0]<< schub[1];
     }
 }
 
-void weg::kurve(bool linksrechts, int radius, int abweichung)
+void weg::kurve(int linksrechts, int radius, int abweichung)
 {
     //Kurvenflugmodus
     if (linksrechts == 0){
-        schub[0]=LANGSAM;
-        schub[1]=schub[0]*((radius+spannweite)/(radius-spannweite));
-        schub[0]=(schub[0]*(100-abweichung))/100;
-        schub[1]=(schub[1]*(100+abweichung))/100;
+        schub[1]=SUPERLANGSAM;
+        schub[0]=schub[1]*((radius+spannweite)/(radius-spannweite));
+        schub[1]=(schub[1]*(100-abweichung))/100;
+        schub[0]=(schub[0]*(100+abweichung))/100;
         qDebug() << "Rechtskurve mit Regelung:" << schub[0]<< schub[1];
     }
     else{
-        schub[1]=LANGSAM;
-        schub[0]=schub[1]*((radius+spannweite)/(radius-spannweite));
-        schub[0]=(schub[0]*(100-abweichung))/100;
-        schub[1]=(schub[1]*(100+abweichung))/100;
+        schub[0]=LANGSAM;
+        schub[1]=schub[0]*((radius+spannweite)/(radius-spannweite));
+        schub[1]=(schub[1]*(100-abweichung))/100;
+        schub[0]=(schub[0]*(100+abweichung))/100;
         qDebug() << "Linkskurve mit Regelung:" << schub[0]<< schub[1];
     }
 }
