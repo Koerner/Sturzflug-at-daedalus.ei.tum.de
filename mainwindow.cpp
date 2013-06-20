@@ -113,7 +113,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->setZiel, SIGNAL(clicked()), SLOT(setZiel()));
     connect(ui->setZieltolleranz, SIGNAL(clicked()), SLOT(setZieltolleranz()));
     //connect(ui->A, SIGNAL(clicked()), SLOT(setAbwurfkoordinaten()));
-    connect(ui->setHoehe, SIGNAL(stateChanged(int)), SLOT(setHoehe()));
+    connect(ui->setHoehe, SIGNAL(clicked()), SLOT(setHoehe()));
 
     connect(ui->Handsteuerung, SIGNAL(stateChanged(int)), SLOT(setHandsteuerung()));
 
@@ -715,29 +715,12 @@ void MainWindow::schubsenden()
 //TestButton
 void MainWindow::onTestButtonClicked()
 {
-
-
-
-//   QString str;
-//   int ergebnis;
-//   int i=0;
-//   for(i=0;i<9;i++)
-//   {str.append(QString("%1").arg(x.gettime(1,i)));}
-//   str.append(QString("%1").arg(x.gettimef(1)));
-
-//   str.append(QString("%1").arg(x.posStation[0][0]));
-//   str.append(QString("%1").arg(getposStation(0,0)));
-//   ergebnis = x.wrapper();
-//   str.append(QString("%1").arg(ergebnis));
-
-//   //qDebug() << x.xList;
    z.sim();
    y.xList.prepend(z.xList.at(0));
    y.yList.prepend(z.yList.at(0));
    y.berechneRadien();//alle Kurvenradien berechnen
    y.berechneWeg();//erste Zielkoordinate berechnen
 
-//   IPSwriteComText(str);
 }
 //TestButton STOP
 
