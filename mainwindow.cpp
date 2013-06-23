@@ -745,34 +745,35 @@ void MainWindow::onTestButtonClicked()
 
 void MainWindow::refresh()
 {
-    DrawMap();
+    qDebug()<<"REFRESH";
+
+    DrawMap();  //KARTE loeschen und neu zeichnen
+
     if(ui->schubsenden->isChecked())
     {
-    schubsenden();
+        schubsenden();  //Aktuelle Schubwerte über XbeeCom senden
     }
 
-    if(ui->refresh->isChecked())
+    if(ui->sim->isChecked())
     {
-    qDebug()<<"Koordinaterefresh";
-
-    //z.spannweite=y.spannweite;
-    qDebug() << "start sim";
-    z.sim();
-    qDebug()<< "ende sim";
-   x.xList.prepend(z.xList.at(0));
-    x.yList.prepend(z.yList.at(0));
-//   x.wrapper();
-    y.xList.prepend(x.xList.at(0));
-    y.yList.prepend(x.yList.at(0));
-    qDebug()<< "Posx: "<<y.xList.at(0);
-    qDebug()<< "Posy: "<<y.yList.at(0);
-    qDebug() << "start start";
-    y.start();
-    qDebug()<<"Schub:"<<y.schub[0];
+        qDebug() << "start sim";
+        z.sim();
+        qDebug()<< "ende sim";
+        x.xList.prepend(z.xList.at(0));
+        x.yList.prepend(z.yList.at(0));
+        y.xList.prepend(x.xList.at(0));
+        y.yList.prepend(x.yList.at(0));
+        qDebug()<< "Posx: "<<y.xList.at(0);
+        qDebug()<< "Posy: "<<y.yList.at(0);
+        qDebug() << "start start";
+        y.start();
+        qDebug()<<"Schub:"<<y.schub[0];
     }
 
-
-
+    if(ui->flug->isChecked())
+    {
+        x.wrapper();  //Wegberechnung
+    }
 }
 
 // STOP refreshaktion
