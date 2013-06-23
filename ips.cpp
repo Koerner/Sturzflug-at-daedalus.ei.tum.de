@@ -64,7 +64,7 @@ void ips::setdata(QString comdata)
         }
     }
 }
-//STOP Extrahiert die Laufzeit aller Stationen
+//ENDE Extrahiert die Laufzeit aller Stationen
 
 //Speichert die letzten 10 Laufzeiten aller Stationen / 0 ist aktuell
 void ips::setstationtime (int nr, int rawtime)

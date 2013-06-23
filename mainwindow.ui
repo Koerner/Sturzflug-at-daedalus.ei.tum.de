@@ -190,7 +190,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -244,13 +244,22 @@
        </item>
        <item>
         <widget class="QCheckBox" name="printzeppelin">
+         <property name="toolTip">
+          <string>Ist das Häkchen gesetzt, werden auf der Karte alle alten Positionen des Zeppelins angezeigt</string>
+         </property>
          <property name="text">
           <string>Zeppelin Position zeigen</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="deletkoordinaten">
+         <property name="toolTip">
+          <string>Löscht alle alten Positionsdaten des Zeppelins</string>
+         </property>
          <property name="text">
           <string>alle Positionen löschen</string>
          </property>
@@ -276,6 +285,12 @@
            <height>50</height>
           </size>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="text">
           <string>&lt;&lt;</string>
          </property>
@@ -286,6 +301,12 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
            <height>50</height>
           </size>
          </property>
@@ -302,6 +323,12 @@
            <height>50</height>
           </size>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
          <property name="text">
           <string>RUNTER</string>
          </property>
@@ -312,6 +339,12 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
            <height>50</height>
           </size>
          </property>
@@ -328,6 +361,15 @@
            <height>70</height>
           </size>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>170</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Stopt alle Motoren</string>
+         </property>
          <property name="text">
           <string>STOP</string>
          </property>
@@ -339,6 +381,12 @@
           <size>
            <width>0</width>
            <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16777215</height>
           </size>
          </property>
          <property name="text">
@@ -354,6 +402,12 @@
            <height>50</height>
           </size>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
          <property name="text">
           <string>&gt;&gt;</string>
          </property>
@@ -361,6 +415,15 @@
        </item>
        <item row="5" column="0" colspan="3">
         <widget class="QCheckBox" name="Handsteuerung">
+         <property name="maximumSize">
+          <size>
+           <width>170</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Ist das Häkchen gesetzt, kann das Flugobjekt mit den Pfeiltasten (+x,y,Leertaste) gesteuert werden, dafür können keine Zahlenwerte mehr in der GUI eingegeben werden.</string>
+         </property>
          <property name="text">
           <string>Steuerung mit der Tastertur</string>
          </property>
@@ -1350,7 +1413,7 @@
        <item row="1" column="2">
         <widget class="QSpinBox" name="zieltolleranz">
          <property name="toolTip">
-          <string extracomment="Tolleranz der Zielabweichung in mm"/>
+          <string extracomment="Tolleranz der Zielabweichung in mm">Die Zielkkordinaten werden nie perfekt erreicht, daher wird hier der Radius definiert innerhalb dessen das Ziel als  erreicht gilt.</string>
          </property>
          <property name="maximum">
           <number>10000</number>
@@ -1365,6 +1428,9 @@
        </item>
        <item row="0" column="2">
         <widget class="QSpinBox" name="refreshTime">
+         <property name="toolTip">
+          <string>Setzt die Aktuallisierungsrate, des gesamten Systems. Wichtig: Die Schubdaten werden nur in diesem Zeitabstand gesetzt, daher ist bei einem manuellen Flug 250ms empfehlenswert. Bei autonomen Flug hängt es von der Senderaten des IPS und der Computerleistung ab.</string>
+         </property>
          <property name="minimum">
           <number>100</number>
          </property>
@@ -1372,7 +1438,7 @@
           <number>1000</number>
          </property>
          <property name="value">
-          <number>1000</number>
+          <number>500</number>
          </property>
         </widget>
        </item>
@@ -1391,6 +1457,9 @@
        </item>
        <item row="3" column="2">
         <widget class="QSpinBox" name="HoeheTol">
+         <property name="toolTip">
+          <string>Stellt die Tolleranz für abweichungen in der Höhe ein, bevor gegegengesteuert wird.</string>
+         </property>
          <property name="maximum">
           <number>99999</number>
          </property>
@@ -1427,6 +1496,83 @@
         <widget class="QPushButton" name="setAbweichung">
          <property name="text">
           <string>&gt;&gt; speichern</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="gridLayoutWidget_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>320</y>
+        <width>431</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Anzahl der gemittelten Werte</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Anzahl der kleinsten Werte die gestrichen werden</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>Anzahl der größten Werte die gestrichen werden</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="filterunten">
+         <property name="maximum">
+          <number>2</number>
+         </property>
+         <property name="value">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="filteroben">
+         <property name="value">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QLabel" name="label_22">
+         <property name="text">
+          <string>Wichtig: NULL Werte werden immer getrichen, unabhängig von den Einstellunegn oben.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QPushButton" name="setFilter">
+         <property name="text">
+          <string>Filterwerte speichern</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="filtergemittelt">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>6</number>
+         </property>
+         <property name="value">
+          <number>3</number>
          </property>
         </widget>
        </item>
@@ -1563,6 +1709,9 @@
      </item>
      <item row="0" column="0" colspan="2">
       <widget class="QCheckBox" name="schubsenden">
+       <property name="toolTip">
+        <string>Ist das Häkchen gesetzt werden die Schubdaten über den COM-Port verschickt</string>
+       </property>
        <property name="text">
         <string>Schub senden</string>
        </property>

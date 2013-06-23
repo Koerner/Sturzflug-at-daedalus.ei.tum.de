@@ -72,7 +72,7 @@ private:
     Ui::MainWindow *ui;
     QTimer *Xbeetimer;
     QTimer *IPStimer;
-    QTimer *Filtertimer;
+    QTimer *Refreshtimer;
     QextSerialPort *Xbeeport;
     QextSerialPort *IPSport;
     QextSerialEnumerator *enumerator;
@@ -82,6 +82,7 @@ private:
     int geradeabweichung;
     int hoehenschubHand;
     void keyPressEvent(QKeyEvent *qkeyevent);
+    void setup();
 
 
 
@@ -115,6 +116,7 @@ private Q_SLOTS:
     void setZieltolleranz();
     void setHoehe();
     void setHandsteuerung();
+    void setFilter();
 
     //Handsteuerung Buttons
     void vor();

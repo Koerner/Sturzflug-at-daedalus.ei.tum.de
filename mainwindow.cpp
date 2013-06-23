@@ -18,30 +18,24 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->s9x->setValue(2000);ui->s9y->setValue(2000);ui->s9z->setValue(1000);
     //Ende default;
 
-    setPosStation();
-    setHindernisse();
-
+    //Karte erstellen
     map = new QGraphicsScene(this);
     ui->graphicsView->setScene(map);
     ui->graphicsView->scale(0.1,0.1);  //zoomen der Karte so ist platz für 7,5 meter
-    //ui->graphicsView->setSceneRect(0, 0, 1000, 1000);
-    //Use ScrollHand Drag Mode to enable Panning
-    //ui->graphicsView->setDragMode(ScrollHandDrag);
 
     // GUI Einstellunegn
-
     setWindowTitle(tr("Zentrale - Sturzflug@daedalus"));
 
     //PortBox ComPort Einstellungen
-        //COM Ports suchen
-        foreach (QextPortInfo info, QextSerialEnumerator::getPorts())
+    //COM Ports suchen
+    foreach (QextPortInfo info, QextSerialEnumerator::getPorts())
         ui->XbeeportBox->addItem(info.portName);
-        foreach (QextPortInfo info, QextSerialEnumerator::getPorts())
+    foreach (QextPortInfo info, QextSerialEnumerator::getPorts())
         ui->IPSportBox->addItem(info.portName);
 
-        //selber eintargen Möglich machen
-        ui->XbeeportBox->setEditable(true);
-        ui->IPSportBox->setEditable(true);
+    //selber eintargen Möglich machen
+    ui->XbeeportBox->setEditable(true);
+    ui->IPSportBox->setEditable(true);
     //Port Box STOP
 
     //BaudRateBox kompatible Werte mit Win und Linux
@@ -66,8 +60,8 @@ MainWindow::MainWindow(QWidget *parent) :
     IPStimer = new QTimer(this);
     IPStimer->setInterval(40); //könnte probleme lösen
 
-    Filtertimer = new QTimer(this);
-    Filtertimer->setInterval(ui->refreshTime->value()); //Aktuallisierungsrate aus der GUI in ms
+    Refreshtimer = new QTimer(this);
+    Refreshtimer->setInterval(ui->refreshTime->value()); //Aktuallisierungsrate aus der GUI in ms
 
     //Vordefinierte Einstelluneg
     PortSettings Xbeesettings = {BAUD9600, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10};
@@ -76,10 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     IPSport = new QextSerialPort(ui->IPSportBox->currentText(), IPSsettings, QextSerialPort::Polling);
     //Vordefinierte Einstellungen STOP
 
-    //enumerator = new QextSerialEnumerator(this);
-    //enumerator->setUpNotifications();
-
-    //Connectoren
+    //Connectoren -----------------------------------------------------------------------------------------------------
 
     //globale Connectoren
     connect(ui->TestButton, SIGNAL(clicked()), SLOT(onTestButtonClicked()));
@@ -98,26 +89,24 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(IPSport, SIGNAL(readyRead()), SLOT(IPSonReadyRead()));
     connect(ui->posStationSetzen, SIGNAL(clicked()), SLOT(setPosStation()));
 
-
     //refresh connector ZENTRALES Takt-Element
-    connect(Filtertimer, SIGNAL(timeout()), SLOT(refresh()));
+    connect(Refreshtimer, SIGNAL(timeout()), SLOT(refresh()));
     connect(ui->setRefresh, SIGNAL(clicked()), SLOT(setrefreshrate()));
-
 
     // Karte
     connect(ui->deletkoordinaten, SIGNAL(clicked()), SLOT(deletekoordinaten()));
-    connect(ui->setHindernisse, SIGNAL(clicked()), SLOT(setHindernisse()));
 
     //Einstellungen
     connect(ui->setAbweichung, SIGNAL(clicked()), SLOT(setAbweichung()));
     connect(ui->setZiel, SIGNAL(clicked()), SLOT(setZiel()));
     connect(ui->setZieltolleranz, SIGNAL(clicked()), SLOT(setZieltolleranz()));
-    //connect(ui->A, SIGNAL(clicked()), SLOT(setAbwurfkoordinaten()));
     connect(ui->setHoehe, SIGNAL(clicked()), SLOT(setHoehe()));
+    connect(ui->setFilter, SIGNAL(clicked()), SLOT(setFilter()));
+    connect(ui->setHindernisse, SIGNAL(clicked()), SLOT(setHindernisse()));
+
+    //Hansteuerung
 
     connect(ui->Handsteuerung, SIGNAL(stateChanged(int)), SLOT(setHandsteuerung()));
-
-    //Hansteuerung mit Buttons
 
     connect(ui->vor, SIGNAL(clicked()), SLOT(vor()));
     connect(ui->back, SIGNAL(clicked()), SLOT(back()));
@@ -127,30 +116,51 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->hoch, SIGNAL(clicked()), SLOT(hoch()));
     connect(ui->runter, SIGNAL(clicked()), SLOT(runter()));
 
-    //ENDE Handsteuerung mit Buttons
+    //ENDE Connectoren ------------------------------------------------------------------------------------------------
 
 
-    //ConnectorenSTOP
 
-    //Handsteuerung
-    geradeabweichung=0;
-    hoehenschubHand=0;
-    //ENDE Handsteuerung
+}
 
-    setrefreshrate();
-    Filtertimer->start();
+void MainWindow::setup()
+{
+    //SETUP: setzt wichtige Werte am Anfang. Unter anderem damit die Werte in der GUI zu den Tatsächlichen übereinstimmen.
+
+    //GUI: Es wird sozusagen auf jeden "speichern"-Button einmal gedrückt
+    setFilter();
     setZiel();
     setZieltolleranz();
     setAbweichung();
     setHoehe();
+    setrefreshrate();
+    setPosStation();
+    setHindernisse();
 
-    //IPS und Wegklasse erstellen
+    Refreshtimer->start();  //Starten den Refresher, sonst geht garnix ;)
+
+    //Wegberechnung
+
     y.hinnummer = 0;
     y.modus = true;
 
+    //Handsteuerung initialisieren
+
+    geradeabweichung=0;
+    hoehenschubHand=0;
+
 }
 
- //Funktionen GUI
+// Einstellunegn für COM Ports ----------------------------------------------------------------------------------------
+
+// Grundlage für alle Funktionen im COM-Port Block ist die qExtSerialPort Biblothek, die Doku dazu gibts im Internet auf der Entwicklerseite
+// Fast alle Funktionen sind doppelt angelegt, da es ja zwei COM-Ports zur Kommunikation gibt
+
+//Kurz zusammengafasst, wie geht die Serielle Kommunikation:
+// Ein Port wird erst festgelegt und dann geöffnet (Funktion hier: ...PortNameChanged), dadurch ist erst ein schreiben und lesen möglich
+//geschrieben wird mit write() (Funktion hier: ...sendCOM
+//Empfängt ein Com-Port etwas, wir das Empfangene solange gespeichert, bis die Daten abgefragt werden (Funktion hier: ...onReadyRead)
+
+
 
 
 //Baud Rate
@@ -162,8 +172,7 @@ void MainWindow::IPSonBaudRateChanged(int idx)
 {
     IPSport->setBaudRate((BaudRateType)ui->IPSBaudRateBox->itemData(idx).toInt());
 }
-//Baus Rate STOP
-
+//ENDE Baus Rate
 
 
 // Port Änderung
@@ -191,7 +200,7 @@ void MainWindow::IPSonPortAddedOrRemoved()
     ui->IPSportBox->setCurrentIndex(ui->IPSportBox->findText(current));
     ui->IPSportBox->blockSignals(false);
 }
-//Port Änderung STOP
+//ENDE Port Änderung
 
 
 //Senden an ComPort
@@ -207,11 +216,11 @@ void MainWindow::IPSwriteComText(QString writeComText)
     ui->IPSComText->insertPlainText(writeComText);
     ui->IPSComText->moveCursor(QTextCursor::End);
 }
-// Senden an ComPort STOP
+//ENDE Senden an ComPort
 
 
 
-// Ändern des ComPorts und öffnen
+// Ändern des ComPorts und öffnen ............................................
 void MainWindow::XbeeonPortNameChanged(const QString & /*name*/)
 {
     // ggf. offenen Comport schließen
@@ -225,29 +234,29 @@ void MainWindow::XbeeonPortNameChanged(const QString & /*name*/)
     // STOP
 
     // Com Port setzen und öffnen
-     Xbeeport->setPortName(ui->XbeeportBox->currentText());  //Com setzen
-     Xbeeport->setQueryMode(QextSerialPort::Polling); //Polling Mode einstellen
-     Xbeeport->open(QIODevice::ReadWrite);
+    Xbeeport->setPortName(ui->XbeeportBox->currentText());  //Com setzen
+    Xbeeport->setQueryMode(QextSerialPort::Polling); //Polling Mode einstellen
+    Xbeeport->open(QIODevice::ReadWrite);
 
-     if (Xbeeport->isOpen()) { //Abfrage ob's geklappt hat
-         XbeewriteComText("---\nCom Port offen\n---\n");
-        }
-        else {
-         XbeewriteComText("---\nFehler - konnte Com Port nicht oeffnen \n---\n");
-              }
-     //STOP
-        //Da polling mode, Ein QTimer
-        if (Xbeeport->isOpen() && Xbeeport->queryMode() == QextSerialPort::Polling)
-        {
-            qDebug() << "Polling";
-            Xbeetimer->start();
-        }
-        else
-        {
-            qDebug()<< "EventDriven";
-            Xbeetimer->stop();
-        }
-     }
+    if (Xbeeport->isOpen()) { //Abfrage ob's geklappt hat
+        XbeewriteComText("---\nCom Port offen\n---\n");
+    }
+    else {
+        XbeewriteComText("---\nFehler - konnte Com Port nicht oeffnen \n---\n");
+    }
+    //STOP
+    //Da polling mode, Ein QTimer
+    if (Xbeeport->isOpen() && Xbeeport->queryMode() == QextSerialPort::Polling)
+    {
+        qDebug() << "Polling";
+        Xbeetimer->start();
+    }
+    else
+    {
+        qDebug()<< "EventDriven";
+        Xbeetimer->stop();
+    }
+}
 void MainWindow::IPSonPortNameChanged(const QString & /*name*/)
 {
     // ggf. offenen Comport schließen
@@ -261,24 +270,24 @@ void MainWindow::IPSonPortNameChanged(const QString & /*name*/)
     // STOP
 
     // Com Port setzen und öffnen
-     IPSport->setPortName(ui->IPSportBox->currentText());  //Com setzen
-     IPSport->setQueryMode(QextSerialPort::Polling); //Pollin Mode einstellen
-     IPSport->open(QIODevice::ReadWrite);
+    IPSport->setPortName(ui->IPSportBox->currentText());  //Com setzen
+    IPSport->setQueryMode(QextSerialPort::Polling); //Pollin Mode einstellen
+    IPSport->open(QIODevice::ReadWrite);
 
-     if (IPSport->isOpen()) { //Abfrage ob's geklappt hat
-         IPSwriteComText("---\nCom Port offen\n---\n");
-        }
-        else {
-         IPSwriteComText("---\nFehler - konnte Com Port nicht oeffnen \n---\n");
-              }
-     //STOP
-        //Da polling mode, Ein QTimer
-        if (IPSport->isOpen() && IPSport->queryMode() == QextSerialPort::Polling)
+    if (IPSport->isOpen()) { //Abfrage ob's geklappt hat
+        IPSwriteComText("---\nCom Port offen\n---\n");
+    }
+    else {
+        IPSwriteComText("---\nFehler - konnte Com Port nicht oeffnen \n---\n");
+    }
+    //STOP
+    //Da polling mode, Ein QTimer
+    if (IPSport->isOpen() && IPSport->queryMode() == QextSerialPort::Polling)
         IPStimer->start();
-        else
+    else
         IPStimer->stop();
-     }
-//Ädern des Com Ports und öffnen STOP
+}
+//ENDE Ändern des Com Ports und öffnen ........................................
 
 
 
@@ -289,11 +298,11 @@ void MainWindow::XbeeonReadyRead()
     if (Xbeeport->bytesAvailable()) {
         qDebug()<<"Daten..";
         QString comdata = QString::fromLatin1(Xbeeport->readAll());
-        XbeewriteComText ("->");
-        XbeewriteComText(comdata);
-        XbeewriteComText ("\n");
+        XbeewriteComText ("->");    //
+        XbeewriteComText(comdata);  // Grafische Ausgabe
+        XbeewriteComText ("\n");    //
         bool *ok;
-        y.Ausrichtung.prepend(comdata.toInt(ok,10));
+        y.Ausrichtung.prepend(comdata.toInt(ok,10));  //konvertiert die Daten in eine Integer
         qDebug() << y.Ausrichtung.at(0);
     }
 }
@@ -301,9 +310,9 @@ void MainWindow::IPSonReadyRead()
 {
     if (IPSport->bytesAvailable()) {
         QString comdata = QString::fromLatin1(IPSport->readAll());
-        IPSwriteComText ("->");
-        IPSwriteComText(comdata);
-        IPSwriteComText ("\n");
+        IPSwriteComText ("->");     //
+        IPSwriteComText(comdata);   // Grafische Ausgabe
+        IPSwriteComText ("\n");     //
 
         x.setdata(comdata);
     }
@@ -312,7 +321,7 @@ void MainWindow::IPSonReadyRead()
 
 
 
-//ComPort schreiben
+//ComPort schreiben ...............................................
 void MainWindow::XbeesendCOM(unsigned long sendCOM)
 {
     if (Xbeeport->isOpen() )
@@ -355,12 +364,18 @@ void MainWindow::IPSsendCOM(int sendCOM)
 
 }
 
-//ComPort schreiben STOP
+//ENDE ComPort schreiben ......................................................
+
+//ENDE Com Port Einstellunegn -----------------------------------------------------------------------------------------
 
 
 
 
-//Positionen der Bodenstationen speichern
+//GUI Funktionen, hauptsächlich zum Abspeichern von Werten ------------------------------------------------------------
+
+
+
+//Positionen der Bodenstationen speichern .....................................
 void MainWindow::setPosStation()
 {
     x.posStation[0][0]=ui->s1x->value(); //x
@@ -399,10 +414,10 @@ void MainWindow::setPosStation()
     x.posStation[8][1]=ui->s9y->value(); //y
     x.posStation[8][2]=ui->s9z->value(); //z
 }
-//STOP Positionen der Bodenstationen speichern
+//STOP Positionen der Bodenstationen speichern ................................
 
 
-// Hindernisse speichern
+// Hindernisse speichern ......................................................
 
 void MainWindow::setHindernisse()
 {
@@ -498,46 +513,13 @@ void MainWindow::setHindernisse()
     }
     qDebug() << "Anzahl der Hindernisse: " << y.hinanz;
 
-
-
 }
-// ENDE Hindernisse speichern
-
-//array Daten übergebenen PosStation
-int MainWindow::getposStation(int station, int xyz)
-{
-    return x.posStation[station][xyz];
-}
-
-void MainWindow::wheelEvent(QWheelEvent* event) {
-
-    ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-
-    // Scale the view / do the zoom
-    double scaleFactor = 1.15;
-    if(event->delta() > 0) {
-        // Zoom in
-        ui->graphicsView->scale(scaleFactor, scaleFactor);
-    } else {
-        // Zooming out
-        ui->graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
-    }
-
-    // Don't call superclass handler here
-    // as wheel is normally used for moving scrollbars
-}
-
-void MainWindow::deletekoordinaten()
-{
-    x.xList.clear();
-    x.yList.clear();
-    x.zList.clear();
-}
+// ENDE Hindernisse speichern .................................................
 
 void MainWindow::setrefreshrate()
 {
 
-    Filtertimer->setInterval(ui->refreshTime->value());
+    Refreshtimer->setInterval(ui->refreshTime->value());
     qDebug() << "Refreshrate geändert:" << ui->refreshTime->value();
 }
 
@@ -584,7 +566,44 @@ void MainWindow::setHandsteuerung()
     }
 }
 
-// Zentrale Erzeugung der Karte
+void MainWindow::setFilter()
+{
+    x.filterOben=ui->filteroben->value();
+    x.filterUnten=ui->filterunten->value();
+    x.filterAnzahlMittel=ui->filtergemittelt->value();
+}
+
+//ENDE Abspeichern von Werten -----------------------------------------------------------------------------------------
+
+
+int MainWindow::getposStation(int station, int xyz)
+{
+    return x.posStation[station][xyz];
+}
+
+//Funktion die das Zoomen der Karte ermöglicht ................................
+void MainWindow::wheelEvent(QWheelEvent* event) {
+
+    ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    double scaleFactor = 1.15;
+    if(event->delta() > 0) {
+        // Zoom rein
+        ui->graphicsView->scale(scaleFactor, scaleFactor);
+    } else {
+        // Zoom raus
+        ui->graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+    }
+}
+//Ende Kartenzoom .............................................................
+
+void MainWindow::deletekoordinaten()
+{
+    x.xList.clear();
+    x.yList.clear();
+    x.zList.clear();
+}
+
+// Zeichnet die Karte -------------------------------------------------------------------------------------------------
 void MainWindow::DrawMap()
 {
 
@@ -603,7 +622,6 @@ void MainWindow::DrawMap()
     {
     for(i=0;i<(x.xList.size()-1);i++)
     {
-        //map->addLine(x.xList.at(i),x.yList.at(i),x.xList.at(i+1),x.yList.at(i+1))->setPen(normal);  //Positionsdarstellung des Zeppelins
         map->addRect(x.xList.at(i),x.yList.at(i),20,20)->setPen(normal);  // Positionsdarstellung Zeppelin - Rechtecke
     }
     }
@@ -617,16 +635,13 @@ void MainWindow::DrawMap()
 
         map->addRect(y.hin[i][0],y.hin[i][1],50,50)->setPen(penhindernisse);  // Zeichnen der Hindernisse
     }
-    map->addEllipse(y.zielkoordinaten[0],y.zielkoordinaten[1],y.zieltol,y.zieltol)->setPen(penziel);
-
-    //map->addLine(x.posStation[0][0],x.posStation[0][1],x.posStation[1][0],x.posStation[1][1])->setPen(normal);  // Test Strich zwischen Station 0 und 1
-
-
+    map->addEllipse(y.zielkoordinaten[0],y.zielkoordinaten[1],y.zieltol,y.zieltol)->setPen(penziel);  //Zeichnet Zielkreis
 }
+// ENDE Zeichnen der Karte --------------------------------------------------------------------------------------------
 
-// STOP Zentrale erzeugung der Karte
+// Technische Funktionen zur Steuerung --------------------------------------------------------------------------------
 
-// Offset zu den Schubdaten hinzufügen
+// Offset zu den Schubdaten hinzufügen.........................................
 void MainWindow::offset()
 {
     qDebug() << "offset hinzufühen";
@@ -643,9 +658,9 @@ void MainWindow::offset()
     schuboffset[1]=y.schub[1];
     schuboffset[2]=y.schub[2];
 }
-//ENDE Offset
+//ENDE Offset .................................................................
 
-//Schubumwandlung fürs Senden
+//Schubumwandlung fürs Senden .................................................
 void MainWindow::schubsenden()
 {
     unsigned long var;
@@ -718,36 +733,18 @@ void MainWindow::schubsenden()
     z.schub[1]=y.schub[1];
 }
 
-//ENDE Schubumwandlung
+//ENDE Schubumwandlung ........................................................
 
+// Refreshfunktion wird durch timer ausgelöst ------------------- refresh -------------------------- refresh ----------
 
-
-
-
-//TestButton
-void MainWindow::onTestButtonClicked()
-{
-   z.sim();
-   y.xList.prepend(z.xList.at(0));
-   y.yList.prepend(z.yList.at(0));
-   y.berechneRadien();//alle Kurvenradien berechnen
-   y.berechneWeg();//erste Zielkoordinate berechnen
-
-}
-//TestButton STOP
-
-
-
-//Funktionen GUI STOP
-
-
-// refreshfunktion wird durch timer ausgelöst
+//Wichtig: Die Refreshfunktion ist der zentrale Taktgeber
+//alle Funktionen die in einem festen Zeittackt ausgelöst werden, stehen hier drin:
 
 void MainWindow::refresh()
 {
     qDebug()<<"REFRESH";
 
-    DrawMap();  //KARTE loeschen und neu zeichnen
+    DrawMap();      //KARTE loeschen und neu zeichnen
 
     if(ui->schubsenden->isChecked())
     {
@@ -775,38 +772,9 @@ void MainWindow::refresh()
         x.wrapper();  //Wegberechnung
     }
 }
+// ENDE Refreshfunktion ------------------- ENDE refresh -------------------------- ENDE refresh ----------------------
 
-// STOP refreshaktion
-
-//Handsteuerung
-
-void MainWindow::keyPressEvent(QKeyEvent *qkeyevent)
-{
-    switch(qkeyevent->key())
-    {
-    case Qt::Key_Up:
-        vor();
-        break;
-    case Qt::Key_Down:
-        back();
-        break;
-    case Qt::Key_Right:
-        rechts();
-        break;
-    case Qt::Key_Left:
-        links();
-        break;
-    case Qt::Key_Space:
-        stop();
-        break;
-    case Qt::Key_X:
-        hoch();
-        break;
-    case Qt::Key_Y:
-        runter();
-        break;
-    }
-}
+//Handsteuerung -------------------------------------------------------------------------------------------------------
 
 void MainWindow::vor()
 {
@@ -867,14 +835,49 @@ void MainWindow::stop()
     qDebug() << "Key_Space: Abweichung:" << geradeabweichung << "Schub: " << y.schub[0];
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *qkeyevent) //Tatstertur .............
+{
+    switch(qkeyevent->key())
+    {
+    case Qt::Key_Up:
+        vor();
+        break;
+    case Qt::Key_Down:
+        back();
+        break;
+    case Qt::Key_Right:
+        rechts();
+        break;
+    case Qt::Key_Left:
+        links();
+        break;
+    case Qt::Key_Space:
+        stop();
+        break;
+    case Qt::Key_X:
+        hoch();
+        break;
+    case Qt::Key_Y:
+        runter();
+        break;
+    }
+}
+//ENDE Tastertur ..............................................................
 
+// Test Button ---------------- Test ------------------- Test ---------------------------------------------------------
+void MainWindow::onTestButtonClicked()
+{
+   z.sim();
+   y.xList.prepend(z.xList.at(0));
+   y.yList.prepend(z.yList.at(0));
+   y.berechneRadien();//alle Kurvenradien berechnen
+   y.berechneWeg();//erste Zielkoordinate berechnen
 
-
-
+}
+// ENDE Test Button ---------------------------------------------------------------------------------------------------
 
 MainWindow::~MainWindow()
 {
-
     delete ui;
     delete Xbeeport;
     delete IPSport;

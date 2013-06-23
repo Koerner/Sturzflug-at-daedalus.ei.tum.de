@@ -15,6 +15,10 @@ public:
     int gettimef(int station);
     int wrapper();
 
+    int filterAnzahlMittel;     //Zahl der Werte die gemittelt werden sollen
+    int filterUnten;            //Zahl der niedrigsten Werte die gestrichen werden
+    int filterOben;             //Zahl der höchsten Werte die gestrichen werden
+
     int stationtime[10][10];//={{0}};
     int posStation[10][3];
     QList<int> xList;
