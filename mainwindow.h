@@ -85,6 +85,10 @@ private:
 
 
 
+
+
+
+
 //GUI Funktionen
 private Q_SLOTS:
     void XbeeonBaudRateChanged(int idx);
@@ -111,6 +115,15 @@ private Q_SLOTS:
     void setZieltolleranz();
     void setHoehe();
     void setHandsteuerung();
+
+    //Handsteuerung Buttons
+    void vor();
+    void back();
+    void links();
+    void rechts ();
+    void hoch();
+    void runter();
+    void stop();
 
 
 

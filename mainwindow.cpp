@@ -117,6 +117,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->Handsteuerung, SIGNAL(stateChanged(int)), SLOT(setHandsteuerung()));
 
+    //Hansteuerung mit Buttons
+
+    connect(ui->vor, SIGNAL(clicked()), SLOT(vor()));
+    connect(ui->back, SIGNAL(clicked()), SLOT(back()));
+    connect(ui->links, SIGNAL(clicked()), SLOT(links()));
+    connect(ui->rechts, SIGNAL(clicked()), SLOT(rechts()));
+    connect(ui->stop, SIGNAL(clicked()), SLOT(stop()));
+    connect(ui->hoch, SIGNAL(clicked()), SLOT(hoch()));
+    connect(ui->runter, SIGNAL(clicked()), SLOT(runter()));
+
+    //ENDE Handsteuerung mit Buttons
+
 
     //ConnectorenSTOP
 
@@ -734,11 +746,14 @@ void MainWindow::onTestButtonClicked()
 void MainWindow::refresh()
 {
     DrawMap();
+    if(ui->schubsenden->isChecked())
+    {
+    schubsenden();
+    }
 
     if(ui->refresh->isChecked())
     {
     qDebug()<<"Koordinaterefresh";
-    schubsenden();
 
     //z.spannweite=y.spannweite;
     qDebug() << "start sim";
@@ -769,53 +784,87 @@ void MainWindow::keyPressEvent(QKeyEvent *qkeyevent)
     switch(qkeyevent->key())
     {
     case Qt::Key_Up:
-        if(y.schub[0]<95&&y.schub[1]<95)
-        {
-        y.schub[0]+=2;
-        y.schub[1]+=2;
-        }
-        qDebug() << "Key_Up:" << y.schub[0];
+        vor();
         break;
     case Qt::Key_Down:
-        if(y.schub[0]>-95&&y.schub[1]>-95)
-        {
-        y.schub[0]-=2;
-        y.schub[1]-=2;
-        }
-        qDebug() << "Key_Down:" << y.schub[0];
+        back();
         break;
     case Qt::Key_Right:
-        geradeabweichung-=5;
-        y.geradeaus(500, geradeabweichung);
-        qDebug() << "Key_Right:" << geradeabweichung;
+        rechts();
         break;
     case Qt::Key_Left:
-        geradeabweichung+=5;
-        y.geradeaus(500, geradeabweichung);
-        qDebug() << "Key_Left:" << geradeabweichung;
+        links();
         break;
     case Qt::Key_Space:
-        y.stop();
-        y.schub[2]=0;
-        geradeabweichung=0;
-        hoehenschubHand=0;
-        qDebug() << "Key_Space: Abweichung:" << geradeabweichung << "Schub: " << y.schub[0];
+        stop();
         break;
     case Qt::Key_X:
-        if(hoehenschubHand<98)
-        {hoehenschubHand+=2;}
-        y.schub[2]=hoehenschubHand;
-        qDebug() << "Key_X:" << y.schub[2];
+        hoch();
         break;
     case Qt::Key_Y:
-        if(hoehenschubHand>-98)
-        {hoehenschubHand-=2;}
-        y.schub[2]=hoehenschubHand;
-        qDebug() << "Key_Y:" << y.schub[2];
+        runter();
         break;
-       }
+    }
 }
 
+void MainWindow::vor()
+{
+    if(y.schub[0]<95&&y.schub[1]<95)
+    {
+    y.schub[0]+=2;
+    y.schub[1]+=2;
+    }
+    qDebug() << "Key_Up:" << y.schub[0];
+}
+
+void MainWindow::back()
+{
+    if(y.schub[0]>-95&&y.schub[1]>-95)
+    {
+    y.schub[0]-=2;
+    y.schub[1]-=2;
+    }
+    qDebug() << "Key_Down:" << y.schub[0];
+}
+
+void MainWindow::links()
+{
+    geradeabweichung+=5;
+    y.geradeaus(500, geradeabweichung);
+    qDebug() << "Key_Left:" << geradeabweichung;
+}
+
+void MainWindow::rechts()
+{
+    geradeabweichung-=5;
+    y.geradeaus(500, geradeabweichung);
+    qDebug() << "Key_Right:" << geradeabweichung;
+}
+
+void MainWindow::hoch()
+{
+    if(hoehenschubHand<98)
+    {hoehenschubHand+=2;}
+    y.schub[2]=hoehenschubHand;
+    qDebug() << "Key_X:" << y.schub[2];
+}
+
+void MainWindow::runter()
+{
+    if(hoehenschubHand>-98)
+    {hoehenschubHand-=2;}
+    y.schub[2]=hoehenschubHand;
+    qDebug() << "Key_Y:" << y.schub[2];
+}
+
+void MainWindow::stop()
+{
+    y.stop();
+    y.schub[2]=0;
+    geradeabweichung=0;
+    hoehenschubHand=0;
+    qDebug() << "Key_Space: Abweichung:" << geradeabweichung << "Schub: " << y.schub[0];
+}
 
 
 
@@ -829,3 +878,6 @@ MainWindow::~MainWindow()
     delete Xbeeport;
     delete IPSport;
 }
+
+
+
