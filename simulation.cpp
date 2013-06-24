@@ -28,12 +28,10 @@ void simulation::sim()
     }
     else {
         scheitel=100;
-        start_ausrichtung=180;
+        start_ausrichtung=0;
         qDebug() << "else";
-        start_x = 2000;
-        start_y = 2000;
-        //start_ausrichtung = (start_ausrichtung*PI)/180;
-
+        start_x = 0;
+        start_y = 0;
         //start_z = 0;
     }
 
@@ -70,7 +68,6 @@ void simulation::sim()
         posy=Runden(start_y+b*sin(tau));
     }
 
-qDebug() << "Position_Zeppelin: x: "<<posx<<" y: "<<posy;
     xList.prepend(posx);
     yList.prepend(posy);
 }

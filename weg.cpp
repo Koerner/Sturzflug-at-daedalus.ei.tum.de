@@ -44,10 +44,9 @@ void weg::start()
             }
             //Starte neue Punktberechnung
             if (modus){
-                //streckenlange = punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y);
-                if(abs(GetAbweichung())<1)
+                if(abs(GetAbweichung())<100)
                 {
-                    geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y));
+                    geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),Ausrichtung.at(0)-GetWinkel(ziel_x-xList.at(0),ziel_y-yList.at(0),ziel_x-xList.at(0)));
                 }
                 else
                 {
@@ -85,68 +84,51 @@ void weg::start()
 }
 //Ende Aufruf
 
-// Beginn Abweichung von idealer Flugbahn berechnen
-int weg::GetAbweichung(/**int Vektor2_x, int Vektor2_y, int Vektor1_x, int Vektor1_y, int i*/)
+// Beginn Abweichung von idealer Flugbahn berechnen (negative Abweichung ist links von der Geraden)
+int weg::GetAbweichung()
 {
-    int x,y,abweichung;
+    int abweichung;
+    double alpha, beta, gamma, distance;
 
     switch (modus){
          case true:{
-                double alpha, beta, gamma,distance;
-                int b = 1;
+                //double alpha, beta, gamma,distance;
 //                if (hinnummer == 0)
 //                {
 //                        AP[0]=startpunkt;  //Startpunkt festsetzen
 //                        AP[1]=startpunkt;  //Startpunkt festsetzen
 //                }
-                x = EP[0] - AP[0];
-                y = EP[1] - AP[1];
-                qDebug()<<"Gerade"<<x<<y;
-                if (x>=0)
-                    {b=0;}
-                alpha = GetWinkel(x, y, b);
-                //qDebug()<<"alpha"<<alpha;
+                alpha = GetWinkel(EP[0] - AP[0], EP[1] - AP[1], EP[0] - AP[0]);
                 distance = punktabweichung(AP[0],AP[1],EP[0],EP[1]);
-                notfallziel[0]=x/distance;
-                notfallziel[1]=y/distance;
+                notfallziel[0]=(EP[0] - AP[0])/distance;
+                notfallziel[1]=(EP[1] - AP[1])/distance;
 
-                x = xList.at(0) - AP[0];
-                y = yList.at(0) - AP[1];
-                if (x==0&&y==0){
+                if ((xList.at(0) - AP[0])==0&&(yList.at(0) - AP[1])==0){
                     beta = alpha;
                 }
                 else{
-                beta = GetWinkel(x, y, b);
+                beta = GetWinkel(xList.at(0) - AP[0], yList.at(0) - AP[1], EP[0] - AP[0]);
                 }
-                gamma = beta-alpha;
-                //qDebug()<<"gamma"<<gamma;
-            //    if (gamma >= 0)
-            //    {h = 0;}
-            //    gamma = Abs(gamma);
-                gamma = (gamma * PI)/180;
-
+                gamma = ((beta-alpha)* PI)/180;
 
                 distance = sin(gamma)*distance;
-                qDebug()<<"Distanz"<<distance;
-                //abweichung = (distance/kreisradius[hinnummer])*100;
+
                 abweichung = (distance/500)*100;
                 notfallziel[0]=cos(gamma)*notfallziel[0]+AP[0];
                 notfallziel[1]=cos(gamma)*notfallziel[1]+AP[1];
-                GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1],0);
+                GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1],xList.at(0)-notfallziel[0]);
                 break;
              }
-    case false :{
-        //distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]);
-        //distance = punktabweichung(xList.at(0),hin[hinnummer][0],yList.at(0),hin[hinnummer][1]) - kreisradius[hinnummer];
-        //abweichung = (distance/kreisradius[hinnummer])*100;
+    case false :
+    {
+        distance = punktabweichung(xList.at(0),yList.at(0),hin[hinnummer][0],hin[hinnummer][1]) - kreisradius[hinnummer];
+        if (hin[hinnummer][2]==0)
+        { distance = distance*(-1);}
+        abweichung = Runden((distance/kreisradius[hinnummer])*100);
         abweichung = 0;
         break;
     }
     }
-
-    //modus, demnach auswählen
-
-    //ngative abweichung ist links, positive ist rechts!!!
 
     // Differenz Soll Ist Abwichung von der gerade (parallele!) in%
 
@@ -304,28 +286,21 @@ void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, doub
 //Beginn Tangentenberechnung
 void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunktx, double bezugspunkty, double rad)
 {
-    double x,y,x1,x2,y1,y2;//, r1, r2;
+    double x1,x2,y1,y2;//, r1, r2;
     double alpha, beta;// gamma;
 
     GetCollisionPoint(mittelx, mittely, hin[hinnummer][0], hin[hinnummer][1], rad, kreisradius[hinnummer],&x1,&y1,&x2,&y2); //Schnittpunkte der zwei Kreise berechnen
     qDebug()<<"Punkt1"<<x1<<y1;
     qDebug()<<"Punkt2"<<x2<<y2;
+
     //Entscheidung, welcher Punkt der richtige ist, abhängig davon, ob der zeppelin rechts oder links herum fliegen soll
-    int b=1;
-    x= (hin[hinnummer][0] - bezugspunktx);
-    y= (hin[hinnummer][1] - bezugspunkty);
-    if (x>=0)
-    {b=0;}
-    alpha = GetWinkel(x,y,b);
+    alpha = GetWinkel(hin[hinnummer][0] - bezugspunktx,hin[hinnummer][1] - bezugspunkty,hin[hinnummer][0] - bezugspunktx);
     qDebug()<<"alpha"<<alpha;
-    x=x1-bezugspunktx;
-    y=y1-bezugspunkty;
-    qDebug()<<x<<y;
-    beta = GetWinkel(x,y,b);
+    beta = GetWinkel(x1-bezugspunktx,y1-bezugspunkty,hin[hinnummer][0] - bezugspunktx);
     qDebug()<<"beta"<<beta;
 //    x=x2-xList.at(0);
 //    y=y2-yList.at(0);
-//    gamma = GetWinkel(x,y,b);
+//    gamma = GetWinkel(x,y,,hin[hinnummer][0] - bezugspunktx);
     if (modus == true)
     {
         if (hin[hinnummer][2]==1) //falls linksrum
@@ -413,7 +388,7 @@ double weg::GetWinkel (double x, double y, int i)
     //V[1]=0.5;
     param = x/sqrt(x*x+y*y);
 
-    if (i == 0)
+    if (i >= 0)
     {
         if (y<0)
         {
@@ -460,7 +435,7 @@ void weg::berechneRadien()
     int i;
     int j;
     int d;
-    int Abstand;
+    double Abstand;
 
     for (i=0;i<hinanz;i++)
     {
@@ -473,7 +448,7 @@ void weg::berechneRadien()
 
                 if (Abstand<d)
                 {
-                    d=Abstand;
+                    d=Runden(Abstand);
                     naechsterNachbar[i] = j;
                 }
             }
@@ -505,7 +480,7 @@ void weg::notfallplan()
     else
     {
         int winkelzumziel=0;
-        winkelzumziel=GetWinkel(notfallziel[0]-xList.at(0), notfallziel[1]-yList.at(0),0); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        winkelzumziel=GetWinkel(notfallziel[0]-xList.at(0), notfallziel[1]-yList.at(0),notfallziel[0]-xList.at(0)); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         if(abs(winkelzumziel-Ausrichtung.at(0))<notfalltolwinkel)
         {
             geradeaus(punktabweichung(xList.at(0),yList.at(0),notfallziel[0],notfallziel[1]));
@@ -590,25 +565,33 @@ void weg::geradeaus(int streckenlaenge)
 
 void weg::geradeaus(int streckenlaenge, int abweichung)
 {
-    if(streckenlaenge>1000)
-    {
-        schub[0]=SCHNELL;
-        schub[1]=SCHNELL;
-        schub[0]=(schub[0]*(100-abweichung/3))/100;
-        schub[1]=(schub[1]*(100+abweichung/3))/100;
-    }
-    else if (streckenlaenge>=200)
+//    if(streckenlaenge>1000)
+//    {
+//        schub[0]=SCHNELL;
+//        schub[1]=SCHNELL;
+//        //schub[0]=(schub[0]*(100-abweichung/3))/100;
+//        //schub[1]=(schub[1]*(100+abweichung/3))/100;
+//    }
+    if (streckenlaenge>=200)
     {
         schub[0]=LANGSAM;
         schub[1]=LANGSAM;
-        schub[0]=(schub[0]*(100-abweichung))/100;
-        schub[1]=(schub[1]*(100+abweichung))/100;        
+        //schub[0]=(schub[0]*(100-abweichung))/100;
+        //schub[1]=(schub[1]*(100+abweichung))/100;
     }
     else if (streckenlaenge<200)
     {
         schub[0]=SUPERLANGSAM;
         schub[1]=SUPERLANGSAM;
+        //schub[0]=(schub[0]*(100-abweichung))/100;
+        //schub[1]=(schub[1]*(100+abweichung))/100;
+    }
+    if (abweichung<0)
+    {
         schub[0]=(schub[0]*(100-abweichung))/100;
+    }
+    else
+    {
         schub[1]=(schub[1]*(100+abweichung))/100;
     }
     qDebug()<<"Gerade mit Regelung:"<<schub[0]<<schub[1];
@@ -641,7 +624,7 @@ void weg::kurve(int linksrechts, int radius, int abweichung)
         qDebug() << "Rechtskurve mit Regelung:" << schub[0]<< schub[1];
     }
     else{
-        schub[0]=LANGSAM;
+        schub[0]=SUPERLANGSAM;
         schub[1]=schub[0]*((radius+spannweite)/(radius-spannweite));
         schub[1]=(schub[1]*(100-abweichung))/100;
         schub[0]=(schub[0]*(100+abweichung))/100;

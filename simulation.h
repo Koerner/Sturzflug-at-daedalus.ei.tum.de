@@ -16,6 +16,7 @@ public:
     QList<int> yList;
     double spannweite;
     int Runden(double Zahl);
+    double start_ausrichtung;
 
 private:
     double posx;
@@ -29,7 +30,6 @@ private:
     //double buf2;
     double start_x;
     double start_y;
-    double start_ausrichtung;
     double rechteDistanz;
     double linkeDistanz;
     double scheitel;

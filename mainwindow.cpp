@@ -118,6 +118,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //ENDE Connectoren ------------------------------------------------------------------------------------------------
 
+    setup();
 
 
 }
@@ -754,17 +755,16 @@ void MainWindow::refresh()
     if(ui->sim->isChecked())
     {
         qDebug() << "start sim";
+        z.schub[0]=y.schub[0];
+        z.schub[1]=y.schub[1];
         z.sim();
-        qDebug()<< "ende sim";
         x.xList.prepend(z.xList.at(0));
         x.yList.prepend(z.yList.at(0));
         y.xList.prepend(x.xList.at(0));
         y.yList.prepend(x.yList.at(0));
-        qDebug()<< "Posx: "<<y.xList.at(0);
-        qDebug()<< "Posy: "<<y.yList.at(0);
-        qDebug() << "start start";
+        y.Ausrichtung.prepend(z.start_ausrichtung);
+        qDebug()<< "Position Zeppelin: "<<y.xList.at(0)<<"(x),"<<y.yList.at(0)<<"(y)";
         y.start();
-        qDebug()<<"Schub:"<<y.schub[0];
     }
 
     if(ui->flug->isChecked())
