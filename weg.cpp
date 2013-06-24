@@ -46,7 +46,7 @@ void weg::start()
             int Abweichung_Ausrichtung;
             if (modus)
             {
-                Abweichung_Ausrichtung=Ausrichtung.at(0)-Runden(GetWinkel(ziel_x-AP[0],ziel_y-AP[1],ziel_x-AP[0]));
+                Abweichung_Ausrichtung=DifferenzWinkel(Runden(GetWinkel(ziel_x-AP[0],ziel_y-AP[1])),Ausrichtung.at(0));
                 if(abs(Berechne_Abweichung())<100)
                 {
                     geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),Abweichung_Ausrichtung);
@@ -79,7 +79,7 @@ void weg::start()
                 qDebug()<<"Abweichung"<<Berechne_Abweichung();
                 if (hin[hinnummer][2]==0)
                 {
-                    Soll_Ausrichtung = Runden(GetWinkel(xList.at(0)-hin[hinnummer][0],yList.at(0)-hin[hinnummer][1],xList.at(0)-hin[hinnummer][0]))-90;
+                    Soll_Ausrichtung = Runden(GetWinkel(xList.at(0)-hin[hinnummer][0],yList.at(0)-hin[hinnummer][1])-90);
                 }
                 Abweichung_Ausrichtung=Ausrichtung.at(0)- Soll_Ausrichtung;
                 qDebug()<<"IST_Ausrichtung"<<Ausrichtung.at(0);
@@ -121,7 +121,7 @@ int weg::Berechne_Abweichung()
 //                        AP[0]=startpunkt;  //Startpunkt festsetzen
 //                        AP[1]=startpunkt;  //Startpunkt festsetzen
 //                }
-                alpha = GetWinkel(EP[0] - AP[0], EP[1] - AP[1], EP[0] - AP[0]);
+                alpha = GetWinkel(EP[0] - AP[0], EP[1] - AP[1]);
                 distance = punktabweichung(AP[0],AP[1],EP[0],EP[1]);
                 notfallziel[0]=(EP[0] - AP[0])/distance;
                 notfallziel[1]=(EP[1] - AP[1])/distance;
@@ -133,15 +133,15 @@ int weg::Berechne_Abweichung()
                 }
                 else
                 {
-                beta = GetWinkel(xList.at(0) - AP[0], yList.at(0) - AP[1], EP[0] - AP[0]);
+                beta = GetWinkel(xList.at(0) - AP[0], yList.at(0) - AP[1]);
                 }
-                gamma = ((beta-alpha)* PI)/180;
+                gamma = (DifferenzWinkel(alpha,beta)* PI)/180;
                 abweichung = sin(gamma)*distance;
 
                 //abweichung = (distance/500)*100;
                 notfallziel[0]=cos(gamma)*notfallziel[0]+AP[0];
                 notfallziel[1]=cos(gamma)*notfallziel[1]+AP[1];
-                GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1],xList.at(0)-notfallziel[0]);
+                GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1]);
                 break;
              }
     case false :
@@ -150,6 +150,7 @@ int weg::Berechne_Abweichung()
         if (hin[hinnummer][2]==0)
         { distance = distance*(-1);}
         abweichung = Runden(distance);
+        abweichung = 0;
         break;
     }
     }
@@ -313,26 +314,23 @@ void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, doub
 //Beginn Tangentenberechnung
 void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunktx, double bezugspunkty, double rad)
 {
-    double x1,x2,y1,y2;//, r1, r2;
-    double alpha, beta;// gamma;
+    double x1,x2,y1,y2,alpha, beta;
 
     GetCollisionPoint(mittelx, mittely, hin[hinnummer][0], hin[hinnummer][1], rad, kreisradius[hinnummer],&x1,&y1,&x2,&y2); //Schnittpunkte der zwei Kreise berechnen
     qDebug()<<"Punkt1"<<x1<<y1;
     qDebug()<<"Punkt2"<<x2<<y2;
 
     //Entscheidung, welcher Punkt der richtige ist, abhängig davon, ob der zeppelin rechts oder links herum fliegen soll
-    alpha = GetWinkel(hin[hinnummer][0] - bezugspunktx,hin[hinnummer][1] - bezugspunkty,hin[hinnummer][0] - bezugspunktx);
+    alpha = GetWinkel(hin[hinnummer][0] - bezugspunktx,hin[hinnummer][1] - bezugspunkty);
+    beta = GetWinkel(x1-bezugspunktx,y1-bezugspunkty);
+    //gamma = GetWinkel(x2-bezugspunktx,y2-bezugspunkty);
     qDebug()<<"alpha"<<alpha;
-    beta = GetWinkel(x1-bezugspunktx,y1-bezugspunkty,hin[hinnummer][0] - bezugspunktx);
     qDebug()<<"beta"<<beta;
-//    x=x2-xList.at(0);
-//    y=y2-yList.at(0);
-//    gamma = GetWinkel(x,y,,hin[hinnummer][0] - bezugspunktx);
-    if (modus == true)
+    if (modus == true) //Flug Geradeaus
     {
         if (hin[hinnummer][2]==1) //falls linksrum
         {
-            if ((alpha-beta)<0)
+            if (DifferenzWinkel(alpha,beta)>0)
             {
                 EP[0]=x1;
                 EP[1]=y1;
@@ -345,7 +343,7 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunkt
         }
         else
         {
-            if ((alpha-beta)>0)
+            if (DifferenzWinkel(alpha,beta)<0)
             {
                 EP[0]=x1;
                 EP[1]=y1;
@@ -364,7 +362,7 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunkt
     {
         if (hin[hinnummer][2]==1) //falls linksrum
         {
-            if ((alpha-beta)>0)
+            if (DifferenzWinkel(alpha,beta)<0)
             {
                 AP[0]=x1;
                 AP[1]=y1;
@@ -377,7 +375,7 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunkt
         }
         else
         {
-            if ((alpha-beta)<0)
+            if (DifferenzWinkel(alpha,beta)>0)
             {
                 AP[0]=x1;
                 AP[1]=y1;
@@ -406,45 +404,40 @@ int weg::punktabweichung(int x_1, int y_1, int x_2, int y_2)
 
 
 //Winkel zwischen zwei Geraden
-double weg::GetWinkel (double x, double y, int i)
+double weg::GetWinkel (double An, double Geg)
 {
     //double V[2];
-    double param;
-    double result;
-    //V[0]=0.5;
-    //V[1]=0.5;
-    param = x/sqrt(x*x+y*y);
+    double H; //Hypotenuse
+    double Winkel;
 
-    if (i >= 0)
+    H=sqrt(An*An+Geg*Geg);
+    if (Geg<0)
     {
-        if (y<0)
-        {
-            param = -param;
-            result = ((acos (param) * 180.0) / PI)-180.0;
-        }
-        else
-        {
-            result = acos (param) * (180.0 / PI);
-
-        }
+        H = -H;
+        Winkel =((acos (An/H) * 180.0)/PI)-180.0;
     }
     else
     {
-        if (y<0)
-        {
-            param = -param;
-            result = ((acos (param) * 180.0) / PI)+180.0;
-        }
-        else
-        {
-            result = acos (param) * 180.0 / PI;
-        }
-    }
+        Winkel=acos(An/H)*180/PI;
 
-    //param = -(1/sqrt(2));
-    return result;
+    }
+    return Winkel;
 }
 //Ende Winkel
+
+//Berechne Differenz von Winkeln
+double weg::DifferenzWinkel(double Winkel1, double Winkel2)
+{
+    double DifferenzWinkel1;
+    //double DifferenzWinkel2;
+    DifferenzWinkel1=Winkel2-Winkel1;
+    //DifferenzWinkel2=Winkel3-Winkel1;
+    if (DifferenzWinkel1<-180)
+ {
+    DifferenzWinkel1 = DifferenzWinkel1+360;
+ }
+    return DifferenzWinkel1;
+}
 
 //Runden
 int weg::Runden(double Zahl)
@@ -505,7 +498,7 @@ void weg::notfallplan()
     else
     {
         int winkelzumziel=0;
-        winkelzumziel=GetWinkel(notfallziel[0]-xList.at(0), notfallziel[1]-yList.at(0),notfallziel[0]-xList.at(0)); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        winkelzumziel=GetWinkel(notfallziel[0]-xList.at(0), notfallziel[1]-yList.at(0)); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         if(abs(winkelzumziel-Ausrichtung.at(0))<notfalltolwinkel)
         {
             geradeaus(punktabweichung(xList.at(0),yList.at(0),notfallziel[0],notfallziel[1]));
