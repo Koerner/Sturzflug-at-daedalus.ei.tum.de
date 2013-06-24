@@ -7,7 +7,7 @@
 weg::weg(){
     hinnummer = 0;
     hinanz = 0;
-    modus = true;
+    modus = 0;
     abwurfmodus = 0;
     schub[0]=0;
     schub[1]=0;
@@ -31,7 +31,7 @@ void weg::start()
         {notfallplan();}
         else
         {
-            if ((modus == false)&&(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y)<(zieltol*(hinnummer+1))))
+            if ((modus == false)&&(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
             {
                 modus = true;
                 hinnummer = hinnummer + 1;
@@ -42,40 +42,63 @@ void weg::start()
                 modus = false;
                 berechneWeg();
             }
-            //Starte neue Punktberechnung
-            if (modus){
-                if(abs(GetAbweichung())<100)
+
+            int Abweichung_Ausrichtung;
+            if (modus)
+            {
+                Abweichung_Ausrichtung=Ausrichtung.at(0)-Runden(GetWinkel(ziel_x-AP[0],ziel_y-AP[1],ziel_x-AP[0]));
+                if(abs(Berechne_Abweichung())<100)
                 {
-                    geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),Ausrichtung.at(0)-GetWinkel(ziel_x-xList.at(0),ziel_y-yList.at(0),ziel_x-xList.at(0)));
+                    geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),Abweichung_Ausrichtung);
                 }
                 else
                 {
-                    //if(GetAbweichung()>30)
-                    //{
-                    //    //Notfallmodus
-                    // }
-                    //else
-                    //{
-                    geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),GetAbweichung());
-                    //}
+                    if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<-100)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>100))
+                    {
+                        geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),Berechne_Abweichung());
+                    }
+                    else
+                    {
+                        geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y));
+                    }
+
                 }
+
+                //if(Berechne_Abweichung()>30)
+                //{
+                //    //Notfallmodus
+                // }
+                //else
+                //{
+
+                //}
             }
             else
             {
-                if(abs(GetAbweichung())<10)
+                int Soll_Ausrichtung;
+                qDebug()<<"Abweichung"<<Berechne_Abweichung();
+                if (hin[hinnummer][2]==0)
+                {
+                    Soll_Ausrichtung = Runden(GetWinkel(xList.at(0)-hin[hinnummer][0],yList.at(0)-hin[hinnummer][1],xList.at(0)-hin[hinnummer][0]))-90;
+                }
+                Abweichung_Ausrichtung=Ausrichtung.at(0)- Soll_Ausrichtung;
+                qDebug()<<"IST_Ausrichtung"<<Ausrichtung.at(0);
+                qDebug()<<"SOll_Ausrichtung"<<Soll_Ausrichtung;
+                qDebug()<<"Abweichung_Ausrichtung"<<Abweichung_Ausrichtung;
+                if(abs(Berechne_Abweichung())<=10)
                 {
                     kurve(hin[hinnummer][2],kreisradius[hinnummer]);
                 }
                 else
                 {
-                    //if(GetAbweichung()>30)
+                    //if(Berechne_Abweichung()>30)
                     //{
                     //    //Notfallmodus
                     // }
                     //else
                     //{
                     qDebug()<<"Regeln";
-                    kurve(hin[hinnummer][2],kreisradius[hinnummer],GetAbweichung());
+                    kurve(hin[hinnummer][2],kreisradius[hinnummer],Berechne_Abweichung());
                     //}
                 }
             }
@@ -85,7 +108,7 @@ void weg::start()
 //Ende Aufruf
 
 // Beginn Abweichung von idealer Flugbahn berechnen (negative Abweichung ist links von der Geraden)
-int weg::GetAbweichung()
+int weg::Berechne_Abweichung()
 {
     int abweichung;
     double alpha, beta, gamma, distance;
@@ -103,17 +126,19 @@ int weg::GetAbweichung()
                 notfallziel[0]=(EP[0] - AP[0])/distance;
                 notfallziel[1]=(EP[1] - AP[1])/distance;
 
-                if ((xList.at(0) - AP[0])==0&&(yList.at(0) - AP[1])==0){
+                distance = punktabweichung(AP[0],AP[1],xList.at(0),yList.at(0));
+                if (distance<10)
+                {
                     beta = alpha;
                 }
-                else{
+                else
+                {
                 beta = GetWinkel(xList.at(0) - AP[0], yList.at(0) - AP[1], EP[0] - AP[0]);
                 }
                 gamma = ((beta-alpha)* PI)/180;
+                abweichung = sin(gamma)*distance;
 
-                distance = sin(gamma)*distance;
-
-                abweichung = (distance/500)*100;
+                //abweichung = (distance/500)*100;
                 notfallziel[0]=cos(gamma)*notfallziel[0]+AP[0];
                 notfallziel[1]=cos(gamma)*notfallziel[1]+AP[1];
                 GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1],xList.at(0)-notfallziel[0]);
@@ -121,11 +146,10 @@ int weg::GetAbweichung()
              }
     case false :
     {
-        distance = punktabweichung(xList.at(0),yList.at(0),hin[hinnummer][0],hin[hinnummer][1]) - kreisradius[hinnummer];
+        distance = punktabweichung(hin[hinnummer][0],hin[hinnummer][1],xList.at(0),yList.at(0)) - kreisradius[hinnummer];
         if (hin[hinnummer][2]==0)
         { distance = distance*(-1);}
-        abweichung = Runden((distance/kreisradius[hinnummer])*100);
-        abweichung = 0;
+        abweichung = Runden(distance);
         break;
     }
     }
@@ -133,7 +157,7 @@ int weg::GetAbweichung()
     // Differenz Soll Ist Abwichung von der gerade (parallele!) in%
 
     //Differenz zwischen Soll und Ist Radius in %
-    qDebug()<<"Abweichung:"<<abweichung;
+    //qDebug()<<"Abweichung:"<<abweichung;
     return abweichung;
 }
 //Ende Abweichung berechnen
@@ -156,8 +180,11 @@ void weg::berechneWeg()
 
         if ((hinanz == 0)||(hinnummer==hinanz))
         {
+            if (hinanz == 0)
+            {
             AP[0]=xList.at(0);//Startpunkt festsetzen
             AP[1]=yList.at(0);//Startpunkt festsetzen
+            }
             EP[0]= zielkoordinaten[0];
             EP[1]= zielkoordinaten[1];
             ziel_x=EP[0];
@@ -167,11 +194,11 @@ void weg::berechneWeg()
         else
         {
 
-            //if (hinnummer == 0)
-            //{
+            if (hinnummer == 0)
+            {
                 AP[0]=xList.at(0);//Startpunkt festsetzen
                 AP[1]=yList.at(0);//Startpunkt festsetzen
-            //}
+            }
 
             buf1 =  (hin[hinnummer][0] - AP[0])/2;
             buf2 =  (hin[hinnummer][1] - AP[1])/2;
@@ -397,7 +424,6 @@ double weg::GetWinkel (double x, double y, int i)
         }
         else
         {
-            qDebug()<<"Param"<<param;
             result = acos (param) * (180.0 / PI);
 
         }
@@ -416,7 +442,6 @@ double weg::GetWinkel (double x, double y, int i)
     }
 
     //param = -(1/sqrt(2));
-    qDebug()<<"result"<<result;
     return result;
 }
 //Ende Winkel
@@ -565,6 +590,7 @@ void weg::geradeaus(int streckenlaenge)
 
 void weg::geradeaus(int streckenlaenge, int abweichung)
 {
+    double schu;
 //    if(streckenlaenge>1000)
 //    {
 //        schub[0]=SCHNELL;
@@ -574,25 +600,23 @@ void weg::geradeaus(int streckenlaenge, int abweichung)
 //    }
     if (streckenlaenge>=200)
     {
-        schub[0]=LANGSAM;
-        schub[1]=LANGSAM;
-        //schub[0]=(schub[0]*(100-abweichung))/100;
-        //schub[1]=(schub[1]*(100+abweichung))/100;
+        schu=LANGSAM;
+        //schub[1]=LANGSAM;
     }
     else if (streckenlaenge<200)
     {
-        schub[0]=SUPERLANGSAM;
-        schub[1]=SUPERLANGSAM;
-        //schub[0]=(schub[0]*(100-abweichung))/100;
-        //schub[1]=(schub[1]*(100+abweichung))/100;
+        schu=SUPERLANGSAM;
+        //schub[1]=SUPERLANGSAM;
     }
     if (abweichung<0)
     {
-        schub[0]=(schub[0]*(100-abweichung))/100;
+        schub[0]=Runden((schu*(100-abweichung))/100);
+        schub[1]=schu;
     }
     else
     {
-        schub[1]=(schub[1]*(100+abweichung))/100;
+        schub[0]=schu;
+        schub[1]=Runden((schu*(100+abweichung))/100);
     }
     qDebug()<<"Gerade mit Regelung:"<<schub[0]<<schub[1];
 }
@@ -615,19 +639,34 @@ void weg::kurve(int linksrechts, double radius)
 
 void weg::kurve(int linksrechts, int radius, int abweichung)
 {
+    double schu1,schu2;
+    schu1=SUPERLANGSAM;
+    schu2=schu1*((radius+spannweite)/(radius-spannweite));
     //Kurvenflugmodus
     if (linksrechts == 0){
-        schub[1]=SUPERLANGSAM;
-        schub[0]=schub[1]*((radius+spannweite)/(radius-spannweite));
-        schub[1]=(schub[1]*(100-abweichung))/100;
-        schub[0]=(schub[0]*(100+abweichung))/100;
+        if (abweichung<0)
+        {
+            schub[0]=Runden((schu2*(100-abweichung))/100);
+            schub[1]=schu1;
+        }
+        else
+        {
+            schub[0]=schu1;
+            schub[1]=Runden((schu2*(100+abweichung))/100);
+        }
         qDebug() << "Rechtskurve mit Regelung:" << schub[0]<< schub[1];
     }
     else{
-        schub[0]=SUPERLANGSAM;
-        schub[1]=schub[0]*((radius+spannweite)/(radius-spannweite));
-        schub[1]=(schub[1]*(100-abweichung))/100;
-        schub[0]=(schub[0]*(100+abweichung))/100;
+        if (abweichung<0)
+        {
+            schub[1]=Runden((schu2*(100-abweichung))/100);
+            schub[0]=schu1;
+        }
+        else
+        {
+            schub[1]=schu1;
+            schub[0]=Runden((schu2*(100+abweichung))/100);
+        }
         qDebug() << "Linkskurve mit Regelung:" << schub[0]<< schub[1];
     }
 }

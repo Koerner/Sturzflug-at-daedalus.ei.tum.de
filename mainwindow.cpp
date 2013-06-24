@@ -617,26 +617,30 @@ void MainWindow::DrawMap()
     QPen penziel;
     penziel.setWidth(20);
     penziel.setColor(Qt::green);
+    QPen penTP;
+    penTP.setWidth(20);
+    penTP.setColor(Qt::blue);
 
     int i=0;
     if(ui->printzeppelin->isChecked())
     {
     for(i=0;i<(x.xList.size()-1);i++)
     {
-        map->addRect(x.xList.at(i),x.yList.at(i),20,20)->setPen(normal);  // Positionsdarstellung Zeppelin - Rechtecke
+        map->addRect(x.xList.at(i)-10,x.yList.at(i)-10,20,20)->setPen(normal);  // Positionsdarstellung Zeppelin - Rechtecke
     }
     }
 
     for(i=0;i<9;i++)
     {
-        map->addRect(x.posStation[i][0],x.posStation[i][1],100,100)->setPen(normal);  // Zeichnen der Stationen
+        map->addRect(x.posStation[i][0]-50,x.posStation[i][1]-50,100,100)->setPen(normal);  // Zeichnen der Stationen
     }
     for(i=0;i<y.hinanz;i++)
     {
 
         map->addRect(y.hin[i][0],y.hin[i][1],50,50)->setPen(penhindernisse);  // Zeichnen der Hindernisse
     }
-    map->addEllipse(y.zielkoordinaten[0],y.zielkoordinaten[1],y.zieltol,y.zieltol)->setPen(penziel);  //Zeichnet Zielkreis
+    map->addEllipse(y.zielkoordinaten[0]-y.zieltol,y.zielkoordinaten[1]-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penziel);  //Zeichnet Zielkreis
+    map->addEllipse(y.ziel_x-y.zieltol,y.ziel_y-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penTP);
 }
 // ENDE Zeichnen der Karte --------------------------------------------------------------------------------------------
 
@@ -728,7 +732,7 @@ void MainWindow::schubsenden()
     var+=(y.abwurfmodus+1)*1000000000;
 
     XbeesendCOM(var);
-    qDebug()<< "gesendetet Schubdaten:" << var;
+    //qDebug()<< "gesendetet Schubdaten:" << var;
 
     z.schub[0]=y.schub[0];
     z.schub[1]=y.schub[1];
@@ -743,7 +747,7 @@ void MainWindow::schubsenden()
 
 void MainWindow::refresh()
 {
-    qDebug()<<"REFRESH";
+    //qDebug()<<"REFRESH";
 
     DrawMap();      //KARTE loeschen und neu zeichnen
 
@@ -771,6 +775,7 @@ void MainWindow::refresh()
     {
         x.wrapper();  //Wegberechnung
     }
+    DrawMap();      //KARTE loeschen und neu zeichnen
 }
 // ENDE Refreshfunktion ------------------- ENDE refresh -------------------------- ENDE refresh ----------------------
 

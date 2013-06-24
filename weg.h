@@ -65,7 +65,7 @@ public:
 //Funktionen:
 
     void start();
-    int GetAbweichung(); //IST/Sollwertabweichung in %
+    int Berechne_Abweichung(); //IST/Sollwertabweichung in %
     void punktabweichung();
 
     //Wegberechnung

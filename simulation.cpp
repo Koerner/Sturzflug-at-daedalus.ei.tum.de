@@ -70,4 +70,15 @@ void simulation::sim()
 
     xList.prepend(posx);
     yList.prepend(posy);
+    int k;
+    qDebug()<<"Ausrichtung1"<<start_ausrichtung;
+    k=start_ausrichtung/180;
+    if ((start_ausrichtung/180)>=1)
+    {
+        start_ausrichtung=start_ausrichtung-180*k-180;
+    }
+    else if (start_ausrichtung/180<=-1)
+    {
+        start_ausrichtung=start_ausrichtung-180*k+180;
+    }
 }
