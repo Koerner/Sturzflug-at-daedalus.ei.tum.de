@@ -126,6 +126,7 @@ private Q_SLOTS:
     void hoch();
     void runter();
     void stop();
+    void abwurf();
 
 
 

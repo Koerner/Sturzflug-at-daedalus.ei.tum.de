@@ -3,7 +3,7 @@
 #include "math.h"
 
 
-//Start Konstruktor
+//Start Konstruktor----------------------------------------------------------------------------------------------------
 weg::weg(){
     hinnummer = 0;
     hinanz = 0;
@@ -15,51 +15,57 @@ weg::weg(){
     notfallmodus=0;
 
 }
-//Ende Konstruktor
+//Ende Konstruktor-----------------------------------------------------------------------------------------------------
 
-//Start Aufruf
+//Start Aufruf und Abfragen--------------------------------------------------------------------------------------------
 void weg::start()
 {
-    //int streckenlange;
+    int Soll_Ausrichtung,Abweichung_Ausrichtung;;
     //Hier gehts los, das ist der Startpunkt für jedes mal
     qDebug()<<"Start und Modus:"<<modus;
-    if (punktabweichung(xList.at(0),yList.at(0),zielkoordinaten[0],zielkoordinaten[1])<zieltol)
+    if (BetragVektor(xList.at(0),yList.at(0),zielkoordinaten[0],zielkoordinaten[1])<zieltol)
     {stop();}
     else
-    {
+    { //Für den Notfallplan brauche ich das notfallziel array ausgefüllt, also die Daten wo das Zeppelin im Notfall hinsteuern soll (x und y) und den Ausrichtungswinkel, zum Schluss
         if(notfallmodus==1)
         {notfallplan();}
         else
         {
-            if ((modus == false)&&(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
+            if ((modus == false)&&(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
             {
                 modus = true;
                 hinnummer = hinnummer + 1;
                 berechneWeg();
             }
-            else if((modus==true)&&(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
+            else if((modus==true)&&(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
             {
                 modus = false;
                 berechneWeg();
             }
 
-            int Abweichung_Ausrichtung;
+
             if (modus)
             {
-                Abweichung_Ausrichtung=DifferenzWinkel(Runden(GetWinkel(ziel_x-AP[0],ziel_y-AP[1])),Ausrichtung.at(0));
+                Soll_Ausrichtung = Runden(GetWinkel(ziel_x-AP[0],ziel_y-AP[1]));
+                Abweichung_Ausrichtung=DifferenzWinkel(Soll_Ausrichtung,Ausrichtung.at(0));
+                notfallziel[2]=Soll_Ausrichtung;
+                qDebug()<<"Abweichung"<<Berechne_Abweichung();
+                qDebug()<<"IST_Ausrichtung"<<Ausrichtung.at(0);
+                qDebug()<<"SOll_Ausrichtung"<<Soll_Ausrichtung;
+                qDebug()<<"Abweichung_Ausrichtung"<<Abweichung_Ausrichtung;
                 if(abs(Berechne_Abweichung())<100)
                 {
-                    geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),Abweichung_Ausrichtung);
+                    geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y),Abweichung_Ausrichtung);
                 }
                 else
                 {
-                    if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<-100)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>100))
+                    if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<=-100)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>=100))
                     {
-                        geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y),Berechne_Abweichung());
+                        geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y),Berechne_Abweichung());
                     }
                     else
                     {
-                        geradeaus(punktabweichung(xList.at(0),yList.at(0),ziel_x,ziel_y));
+                        geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y));
                     }
 
                 }
@@ -75,17 +81,24 @@ void weg::start()
             }
             else
             {
-                int Soll_Ausrichtung;
+
                 qDebug()<<"Abweichung"<<Berechne_Abweichung();
                 if (hin[hinnummer][2]==0)
                 {
-                    Soll_Ausrichtung = Runden(GetWinkel(xList.at(0)-hin[hinnummer][0],yList.at(0)-hin[hinnummer][1])-90);
+                    Soll_Ausrichtung = Runden(GetWinkel(xList.at(0)-hin[hinnummer][0],yList.at(0)-hin[hinnummer][1]))+90;
+                    if (Soll_Ausrichtung>180){Soll_Ausrichtung = Soll_Ausrichtung-360;}
                 }
-                Abweichung_Ausrichtung=Ausrichtung.at(0)- Soll_Ausrichtung;
+                else
+                {
+                    Soll_Ausrichtung = Runden(GetWinkel(xList.at(0)-hin[hinnummer][0],yList.at(0)-hin[hinnummer][1]))-90;
+                    if (Soll_Ausrichtung<=-180){Soll_Ausrichtung = Soll_Ausrichtung+360;}
+                }
+                notfallziel[2]=Soll_Ausrichtung;
+                Abweichung_Ausrichtung=DifferenzWinkel(Soll_Ausrichtung,Ausrichtung.at(0));
                 qDebug()<<"IST_Ausrichtung"<<Ausrichtung.at(0);
                 qDebug()<<"SOll_Ausrichtung"<<Soll_Ausrichtung;
                 qDebug()<<"Abweichung_Ausrichtung"<<Abweichung_Ausrichtung;
-                if(abs(Berechne_Abweichung())<=10)
+                if(abs(Berechne_Abweichung())<10)
                 {
                     kurve(hin[hinnummer][2],kreisradius[hinnummer]);
                 }
@@ -97,17 +110,25 @@ void weg::start()
                     // }
                     //else
                     //{
-                    qDebug()<<"Regeln";
-                    kurve(hin[hinnummer][2],kreisradius[hinnummer],Berechne_Abweichung());
+//                    if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<=-100)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>=100))
+//                    {
+//                        kurve(hin[hinnummer][2],kreisradius[hinnummer],Berechne_Abweichung());
+//                    }
+//                    else
+//                    {
+                        kurve(hin[hinnummer][2],kreisradius[hinnummer],Berechne_Abweichung());
                     //}
+                    //}
+
                 }
             }
         }
     }
 }
-//Ende Aufruf
+//Ende Aufruf----------------------------------------------------------------------------------------------------------
 
-// Beginn Abweichung von idealer Flugbahn berechnen (negative Abweichung ist links von der Geraden)
+// Beginn IST-Abweichung von idealer Flugbahn berechnen (negative Abweichung ist links von der Geraden/Kurve)--------------
+// und Einspeichern des Notfallarrays
 int weg::Berechne_Abweichung()
 {
     int abweichung;
@@ -115,18 +136,14 @@ int weg::Berechne_Abweichung()
 
     switch (modus){
          case true:{
-                //double alpha, beta, gamma,distance;
-//                if (hinnummer == 0)
-//                {
-//                        AP[0]=startpunkt;  //Startpunkt festsetzen
-//                        AP[1]=startpunkt;  //Startpunkt festsetzen
-//                }
                 alpha = GetWinkel(EP[0] - AP[0], EP[1] - AP[1]);
-                distance = punktabweichung(AP[0],AP[1],EP[0],EP[1]);
-                notfallziel[0]=(EP[0] - AP[0])/distance;
-                notfallziel[1]=(EP[1] - AP[1])/distance;
 
-                distance = punktabweichung(AP[0],AP[1],xList.at(0),yList.at(0));
+//Notfallmodus optimieren
+//                distance = BetragVektor(AP[0],AP[1],EP[0],EP[1]);
+//                notfallziel[0]=(EP[0] - AP[0])/distance;
+//                notfallziel[1]=(EP[1] - AP[1])/distance;
+
+                distance = BetragVektor(AP[0],AP[1],xList.at(0),yList.at(0));
                 if (distance<10)
                 {
                     beta = alpha;
@@ -138,19 +155,19 @@ int weg::Berechne_Abweichung()
                 gamma = (DifferenzWinkel(alpha,beta)* PI)/180;
                 abweichung = sin(gamma)*distance;
 
-                //abweichung = (distance/500)*100;
-                notfallziel[0]=cos(gamma)*notfallziel[0]+AP[0];
-                notfallziel[1]=cos(gamma)*notfallziel[1]+AP[1];
-                GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1]);
+//Notfallmodus
+//                notfallziel[0]=cos(gamma)*notfallziel[0]+AP[0];
+//                notfallziel[1]=cos(gamma)*notfallziel[1]+AP[1];
+//                GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1]);
                 break;
              }
     case false :
     {
-        distance = punktabweichung(hin[hinnummer][0],hin[hinnummer][1],xList.at(0),yList.at(0)) - kreisradius[hinnummer];
+        distance = BetragVektor(hin[hinnummer][0],hin[hinnummer][1],xList.at(0),yList.at(0)) - kreisradius[hinnummer];
         if (hin[hinnummer][2]==0)
         { distance = distance*(-1);}
         abweichung = Runden(distance);
-        abweichung = 0;
+        //abweichung = 0; //muss gelöscht werden
         break;
     }
     }
@@ -158,12 +175,13 @@ int weg::Berechne_Abweichung()
     // Differenz Soll Ist Abwichung von der gerade (parallele!) in%
 
     //Differenz zwischen Soll und Ist Radius in %
-    //qDebug()<<"Abweichung:"<<abweichung;
     return abweichung;
 }
-//Ende Abweichung berechnen
+//Ende IST-Abweichung berechnen----------------------------------------------------------------------------------------
 
-//Beginn neue Zielkoordinaten berechnen
+//Beginn der Wegberechnung---------------------------------------------------------------------------------------------
+
+//Übergabe der Koordinatspunkte für Tangentenpunktberechnung..................
 void weg::berechneWeg()
 {
     qDebug()<<"hStart_Berechne";
@@ -243,13 +261,13 @@ void weg::berechneWeg()
     }
 
     }
- //Für den Notfallplan brauche ich das notfallziel array ausgefüllt, also die Daten wo das Zeppelin im Notfall hinsteuern soll (x und y) und den Ausrichtungswinkel, zum Schluss
+
 }
-//Ende neue Zielkoordinaten berechnen
+//Ende Übergabe der Koordinatspunkte für Tangentenpunktberechnung.............
 
 
-//Beginn Tangentenpunktberechnung
-void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, double r1, double r2, double *res1, double *res2, double *res3, double *res4 )
+//Schnittpunktbestimmung der zwei Kreise --> mögliche Tangentenpunkte.........
+void weg::BestimmeSchnittpunkte(double P_x, double P_y, double Q_x, double Q_y, double r1, double r2, double *res1, double *res2, double *res3, double *res4 )
 {
      r1 = abs(r1);
      r2 = abs(r2);
@@ -257,7 +275,7 @@ void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, doub
      //Kein Schnittpunkt
      SetPoints(0);
 
-//     double abc = punktabweichung(P_x,P_y,Q_x,Q_y);
+//     double abc = BetragVektor(P_x,P_y,Q_x,Q_y);
 
 //     //Kreise innerhalb
 //     if(abc <= abs(r1-r2))
@@ -308,22 +326,27 @@ void weg::GetCollisionPoint(double P_x, double P_y, double Q_x, double Q_y, doub
      if(*res2 == *res4 && *res1 == *res3)
           SetPoints(1);
 }
-//Ende Schnittpunktberechnung
+//Ende Schnittpunktberechnung.................................................
 
 
-//Beginn Tangentenberechnung
+//Beginn Tangentenpunktberechnung..................................................
 void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunktx, double bezugspunkty, double rad)
 {
-    double x1,x2,y1,y2,alpha, beta;
+    double x1,x2; /*Schnittpunkt 1**/
+    double y1,y2; /*Schnittpunkt 2**/
+    double alpha,beta; /*Buffer**/
 
-    GetCollisionPoint(mittelx, mittely, hin[hinnummer][0], hin[hinnummer][1], rad, kreisradius[hinnummer],&x1,&y1,&x2,&y2); //Schnittpunkte der zwei Kreise berechnen
-    qDebug()<<"Punkt1"<<x1<<y1;
-    qDebug()<<"Punkt2"<<x2<<y2;
+    /*Aufruf Schnittpunktbestimmung**/
+    BestimmeSchnittpunkte(mittelx, mittely, hin[hinnummer][0], hin[hinnummer][1], rad, kreisradius[hinnummer],&x1,&y1,&x2,&y2); //Schnittpunkte der zwei Kreise berechnen
+//    qDebug()<<"Punkt1"<<x1<<y1;
+//    qDebug()<<"Punkt2"<<x2<<y2;
 
-    //Entscheidung, welcher Punkt der richtige ist, abhängig davon, ob der zeppelin rechts oder links herum fliegen soll
+    /*Entscheidung, welcher Schnittpunkt der richtige Tangentenpunkt ist, abhängig davon,
+     *ob der zeppelin rechts oder links herum fliegen soll und
+     *ob es ein Austrittspunkt bzw ein Eintrittspunkt sein soll**/
+
     alpha = GetWinkel(hin[hinnummer][0] - bezugspunktx,hin[hinnummer][1] - bezugspunkty);
     beta = GetWinkel(x1-bezugspunktx,y1-bezugspunkty);
-    //gamma = GetWinkel(x2-bezugspunktx,y2-bezugspunkty);
     qDebug()<<"alpha"<<alpha;
     qDebug()<<"beta"<<beta;
     if (modus == true) //Flug Geradeaus
@@ -354,7 +377,7 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunkt
                 EP[1]=y2;
             }
         }
-        ziel_x = EP[0];
+        ziel_x = EP[0]; /*Abspeichern der Zielkoordinaten**/
         ziel_y = EP[1];
     }
 
@@ -386,7 +409,7 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunkt
                 AP[1]=y2;
             }
         }
-        ziel_x = AP[0];
+        ziel_x = AP[0]; /*Abspeichern der Zielkoordinaten**/
         ziel_y = AP[1];
      }
 
@@ -394,19 +417,19 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunkt
     qDebug()<<"Zielpunkte Hindernis"<<ziel_x<<ziel_y;
 
 }
-//Ende Tangentenberechnung
+//Ende Tangentenpunktberechnung...............................................
 
-int weg::punktabweichung(int x_1, int y_1, int x_2, int y_2)
+//Abstand zweier Vektoren bzw Betrag eines Vektors............................
+int weg::BetragVektor(int x_1, int y_1, int x_2, int y_2)
 {
     //Berechnet den Abstand zweier Punkte
     return sqrt(((x_2-x_1)*(x_2-x_1))+((y_2-y_1)*(y_2-y_1)));
 }
+//Ende Abstandsbrechnung......................................................
 
-
-//Winkel zwischen zwei Geraden
-double weg::GetWinkel (double An, double Geg)
+//Winkel eines Vektors im Koordinatensystem...................................
+double weg::GetWinkel (double An, double Geg)//An: Ankathete bzw x-Koordinate, Geg: Gegenkathete bzw y-Koordinate
 {
-    //double V[2];
     double H; //Hypotenuse
     double Winkel;
 
@@ -423,36 +446,34 @@ double weg::GetWinkel (double An, double Geg)
     }
     return Winkel;
 }
-//Ende Winkel
+//Ende Winkelbestimmung.......................................................
 
-//Berechne Differenz von Winkeln
+//Berechne Differenz von Winkeln..............................................
 double weg::DifferenzWinkel(double Winkel1, double Winkel2)
 {
     double DifferenzWinkel1;
-    //double DifferenzWinkel2;
     DifferenzWinkel1=Winkel2-Winkel1;
-    //DifferenzWinkel2=Winkel3-Winkel1;
     if (DifferenzWinkel1<-180)
  {
     DifferenzWinkel1 = DifferenzWinkel1+360;
  }
     return DifferenzWinkel1;
 }
+//Ende Differenz von Winkeln..................................................
 
-//Runden
+//Runden......................................................................
 int weg::Runden(double Zahl)
 {
     if (Zahl>=0){Zahl += 0.5;}
     else {Zahl -= 0.5;}
     return Zahl;
 }
+//Ende Runden.................................................................
 
-//Radien um die Stangen berechnen
+//Radien um die Hindernisse berechnen.........................................
 void weg::berechneRadien()
 {
-    int i;
-    int j;
-    int d;
+    int i,j,d;
     double Abstand;
 
     for (i=0;i<hinanz;i++)
@@ -462,7 +483,7 @@ void weg::berechneRadien()
         {
             if (i!=j)
             {
-                Abstand=punktabweichung(hin[i][0],hin[i][1],hin[j][0],hin[j][1]);
+                Abstand=BetragVektor(hin[i][0],hin[i][1],hin[j][0],hin[j][1]);
 
                 if (Abstand<d)
                 {
@@ -475,14 +496,14 @@ void weg::berechneRadien()
         qDebug()<<"Kreisradius"<<kreisradius[i];
     }
 }
+//Ende Radiusbestimmung.......................................................
+
+//Ende Wegfindung------------------------------------------------------------------------------------------------------
 
 
 
 
-
-
-
-//NOTFALLPLAN
+//NOTFALLPLAN----------------------------------------------------------------------------------------------------------
 
 
 
@@ -490,7 +511,7 @@ void weg::notfallplan()
 {
     notfallmodus=1;
     //Filtertimer->setInterval(400);   EVENTUELL BENÖTIGT
-    if(punktabweichung(xList.at(0),yList.at(0),notfallziel[0],notfallziel[1])<notfalltol)
+    if(BetragVektor(xList.at(0),yList.at(0),notfallziel[0],notfallziel[1])<notfalltol)
     {
         notfallplanende();
         //Filtertimer->setInterval(1000);
@@ -501,7 +522,7 @@ void weg::notfallplan()
         winkelzumziel=GetWinkel(notfallziel[0]-xList.at(0), notfallziel[1]-yList.at(0)); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         if(abs(winkelzumziel-Ausrichtung.at(0))<notfalltolwinkel)
         {
-            geradeaus(punktabweichung(xList.at(0),yList.at(0),notfallziel[0],notfallziel[1]));
+            geradeaus(BetragVektor(xList.at(0),yList.at(0),notfallziel[0],notfallziel[1]));
         }
         else
         {
@@ -528,7 +549,12 @@ void weg::notfallplanende()
     }
 }
 
-// HOEHENSTEUERUNG
+//Ende Notfallplan-----------------------------------------------------------------------------------------------------
+
+
+//Steuerung------------------------------------------------------------------------------------------------------------
+
+// Hoehensteuerung............................................................
 
 void weg::hoehensteuerung()
 {
@@ -554,12 +580,11 @@ void weg::hoehensteuerung()
     }
 
 }
+//............................................................................
 
+//STEUERUNG linker/rechter Motor..............................................
 
-// MOTORSTEUERUNG
-
-
-
+//Geradeaus>>>>>>>>>>>>>>>>>>
 void weg::geradeaus(int streckenlaenge)
 {
 
@@ -613,8 +638,9 @@ void weg::geradeaus(int streckenlaenge, int abweichung)
     }
     qDebug()<<"Gerade mit Regelung:"<<schub[0]<<schub[1];
 }
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-
+//Kurvenflug>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void weg::kurve(int linksrechts, double radius)
 {
     //Kurvenflugmodus
@@ -633,27 +659,32 @@ void weg::kurve(int linksrechts, double radius)
 void weg::kurve(int linksrechts, int radius, int abweichung)
 {
     double schu1,schu2;
+    qDebug()<<"Radius"<<radius;
+    qDebug()<<"Spannweite"<<spannweite;
     schu1=SUPERLANGSAM;
     schu2=schu1*((radius+spannweite)/(radius-spannweite));
     //Kurvenflugmodus
     if (linksrechts == 0){
+        qDebug()<<"Abweichung"<<abweichung;
         if (abweichung<0)
         {
+            qDebug()<<"Abweichung"<<abweichung;
+            qDebug()<<"schu2"<<schu2;
             schub[0]=Runden((schu2*(100-abweichung))/100);
             schub[1]=schu1;
         }
         else
         {
-            schub[0]=schu1;
-            schub[1]=Runden((schu2*(100+abweichung))/100);
+            schub[0]=schu2;
+            schub[1]=Runden((schu1*(100+abweichung))/100);
         }
         qDebug() << "Rechtskurve mit Regelung:" << schub[0]<< schub[1];
     }
     else{
         if (abweichung<0)
         {
-            schub[1]=Runden((schu2*(100-abweichung))/100);
-            schub[0]=schu1;
+            schub[1]=Runden((schu1*(100-abweichung))/100);
+            schub[0]=schu2;
         }
         else
         {
@@ -663,6 +694,7 @@ void weg::kurve(int linksrechts, int radius, int abweichung)
         qDebug() << "Linkskurve mit Regelung:" << schub[0]<< schub[1];
     }
 }
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 void weg::standdrehung(int winkel)
 {
@@ -670,11 +702,13 @@ void weg::standdrehung(int winkel)
     schub[1]=-winkel/3.6;
 }
 
+
 void weg::stop()
 {
     schub[0]=0;
     schub[1]=0;
 }
 
+// Ende STEUERUNG linker/rechter Motor........................................
 
-
+// Ende Steuerung------------------------------------------------------------------------------------------------------

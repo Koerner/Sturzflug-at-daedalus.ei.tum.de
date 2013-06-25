@@ -20,16 +20,13 @@ void simulation::sim()
 {
     double alpha,theta,gamma,tau,z,b,h;
     if (xList.size()!=0){
-        qDebug()<<"if";
         start_x = xList.at(0);
         start_y = yList.at(0);
-        //start_ausrichtung = 0;
         //start_z = zList.at(0);
     }
     else {
         scheitel=100;
         start_ausrichtung=0;
-        qDebug() << "else";
         start_x = 0;
         start_y = 0;
         //start_z = 0;
@@ -41,7 +38,6 @@ void simulation::sim()
 
     if (rechteDistanz==linkeDistanz)
     {
-        qDebug()<<start_ausrichtung;
         posx=Runden(start_x+cos(alpha)*rechteDistanz/100);
         posy=Runden(start_y+sin(alpha)*rechteDistanz/100);
     }
@@ -81,4 +77,5 @@ void simulation::sim()
     {
         start_ausrichtung=start_ausrichtung-180*k+180;
     }
+    qDebug()<<"Ausrichtung2"<<start_ausrichtung;
 }

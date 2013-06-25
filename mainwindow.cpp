@@ -115,6 +115,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->stop, SIGNAL(clicked()), SLOT(stop()));
     connect(ui->hoch, SIGNAL(clicked()), SLOT(hoch()));
     connect(ui->runter, SIGNAL(clicked()), SLOT(runter()));
+    connect(ui->abwurf, SIGNAL(clicked()), SLOT(abwurf()));
 
     //ENDE Connectoren ------------------------------------------------------------------------------------------------
 
@@ -295,16 +296,23 @@ void MainWindow::IPSonPortNameChanged(const QString & /*name*/)
 // ComPort lesen
 void MainWindow::XbeeonReadyRead()
 {
-    qDebug() << "lesen..";
+    //qDebug() << "lesen..";
     if (Xbeeport->bytesAvailable()) {
-        qDebug()<<"Daten..";
+        //qDebug()<<"Daten..";
         QString comdata = QString::fromLatin1(Xbeeport->readAll());
         XbeewriteComText ("->");    //
         XbeewriteComText(comdata);  // Grafische Ausgabe
         XbeewriteComText ("\n");    //
-        bool *ok;
-        y.Ausrichtung.prepend(comdata.toInt(ok,10));  //konvertiert die Daten in eine Integer
-        qDebug() << y.Ausrichtung.at(0);
+        //qDebug()<<"umrechnung starten";
+        bool *ok=0;
+        int ausrichtung=0;
+        ausrichtung=comdata.toInt(ok,10); //konvertiert die Daten in eine Integer
+        if(ausrichtung>999)
+        {
+            y.Ausrichtung.prepend(ausrichtung);  //konvertiert die Daten in eine Integer
+            qDebug() << y.Ausrichtung.at(0);
+        }
+
     }
 }
 void MainWindow::IPSonReadyRead()
@@ -620,6 +628,9 @@ void MainWindow::DrawMap()
     QPen penTP;
     penTP.setWidth(20);
     penTP.setColor(Qt::blue);
+    QPen penAB;
+    penAB.setWidth(20);
+    penAB.setColor(Qt::yellow);
 
     int i=0;
     if(ui->printzeppelin->isChecked())
@@ -637,10 +648,11 @@ void MainWindow::DrawMap()
     for(i=0;i<y.hinanz;i++)
     {
 
-        map->addRect(y.hin[i][0],y.hin[i][1],50,50)->setPen(penhindernisse);  // Zeichnen der Hindernisse
+        map->addRect(y.hin[i][0]-25,y.hin[i][1]-25,50,50)->setPen(penhindernisse);  // Zeichnen der Hindernisse
     }
     map->addEllipse(y.zielkoordinaten[0]-y.zieltol,y.zielkoordinaten[1]-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penziel);  //Zeichnet Zielkreis
     map->addEllipse(y.ziel_x-y.zieltol,y.ziel_y-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penTP);
+    map->addEllipse(y.abwurfkoordinate[0]-y.zieltol,y.abwurfkoordinate[1]-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penAB);
 }
 // ENDE Zeichnen der Karte --------------------------------------------------------------------------------------------
 
@@ -837,7 +849,20 @@ void MainWindow::stop()
     y.schub[2]=0;
     geradeabweichung=0;
     hoehenschubHand=0;
-    qDebug() << "Key_Space: Abweichung:" << geradeabweichung << "Schub: " << y.schub[0];
+    qDebug() << "Key_Space: Stop:" << geradeabweichung << "Schub: " << y.schub[0];
+}
+
+void MainWindow::abwurf()
+{
+    if(!y.abwurfmodus)
+    {
+        y.abwurfmodus=true;
+        qDebug() << "Key_Space: Abwurf:" << y.abwurfmodus;
+    }
+    else
+    {
+        y.abwurfmodus=false;
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *qkeyevent) //Tatstertur .............
