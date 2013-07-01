@@ -20,7 +20,7 @@ public:
     int filterOben;             //Zahl der höchsten Werte die gestrichen werden
 
     int stationtime[10][10];//={{0}};
-    int posStation[10][3];
+    int posStation[10][4];
     QList<int> xList;
     QList<int> yList;
     QList<int> zList;

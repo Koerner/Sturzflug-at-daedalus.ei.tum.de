@@ -32,7 +32,9 @@ void simulation::sim()
         //start_z = 0;
     }
 
-    if (schub[0]>=0&&schub[1]>=0)
+    if (schub[0]<0&&schub[1]<0)
+    {}
+    else
     {
     rechteDistanz=(schub[1]*SIMULATIONMAX);
     linkeDistanz=(schub[0]*SIMULATIONMAX);
@@ -69,7 +71,7 @@ void simulation::sim()
     xList.prepend(posx);
     yList.prepend(posy);
     int k;
-    qDebug()<<"Ausrichtung1"<<start_ausrichtung;
+    //Ausrichtung kalibrieren
     k=start_ausrichtung/180;
     if ((start_ausrichtung/180)>=1)
     {

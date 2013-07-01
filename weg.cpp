@@ -314,16 +314,16 @@ void weg::BestimmeSchnittpunkte(double P_x, double P_y, double Q_x, double Q_y, 
      {
           SetPoints(2);
 
-          double a = (P_x - Q_x)/(Q_y - P_y); // =0
+          double a = (P_x - Q_x)/(Q_y - P_y);
           double b = ( (r1*r1 - r2*r2)- (P_y*P_y - Q_y*Q_y) - (P_x*P_x - Q_x*Q_x)  )/(2*Q_y - 2*P_y); // =((r1^2 -r2^2) - (y^2 - y^2) - 0 ) / (2 * (y - y))
-          double e = a*a+1; // =1
-          double f = (2*a*(b-P_y))-(2*P_x); // =0 -(2*x)
+          double e = a*a+1;
+          double f = (2*a*(b-P_y))-(2*P_x);
           double g = (b-P_y)*(b-P_y) -r1*r1 + P_x*P_x;
 
           *res1 = (-f + sqrt(f*f - 4*e*g) )/(2*e);
           *res3 = (-f - sqrt(f*f - 4*e*g) )/(2*e);
-          *res2 = *res1 * a + b; // =b
-          *res4 = *res3 * a + b; // =b
+          *res2 = *res1 * a + b;
+          *res4 = *res3 * a + b;
      }
      else
      {

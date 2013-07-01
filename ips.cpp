@@ -15,51 +15,51 @@ void ips::setdata(QString comdata)
     QStringList comdatasplit = comdata.split(delimiterPattern);
     int i=0;
     for (i=0; i<comdatasplit.size(); i++)
-        {
+    {
 
         if(comdatasplit[i].length()>0){
-        if (comdatasplit[i].left(1).contains("t", Qt::CaseInsensitive))
+            if (comdatasplit[i].left(1).contains("t", Qt::CaseInsensitive))
             {if(comdatasplit[i].length()==13)
                 {
-//            setstationtime(0,3);
-                bool ok;
-                int s=0;
-                s=comdatasplit[i].mid(1,2).toInt(&ok,10)-1;
-                int t=0;
-                comdatasplit[i].mid(3,10).toInt(&ok,10);
-                if(ok){
-                t=comdatasplit[i].mid(3,10).toInt(&ok,10);
-                }
-                setstationtime(s,t);
-               }
-            else{ //braucht es das? ich glaub nicht
-                if(comdatasplit[i].length()>3)
-                {
+                    //            setstationtime(0,3);
                     bool ok;
                     int s=0;
-                    comdatasplit[i].mid(1,2).toInt(&ok,10);
-                    if(ok)
-                    {
                     s=comdatasplit[i].mid(1,2).toInt(&ok,10)-1;
+                    int t=0;
+                    comdatasplit[i].mid(3,10).toInt(&ok,10);
+                    if(ok){
+                        t=comdatasplit[i].mid(3,10).toInt(&ok,10);
+                    }
+                    setstationtime(s,t);
+                }
+                else{ //braucht es das? ich glaub nicht
+                    if(comdatasplit[i].length()>3)
+                    {
+                        bool ok;
+                        int s=0;
+                        comdatasplit[i].mid(1,2).toInt(&ok,10);
+                        if(ok)
+                        {
+                            s=comdatasplit[i].mid(1,2).toInt(&ok,10)-1;
+                        }
+                        else
+                        {
+                            //                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10);  //geht nicht
+                        }
+                        //setstationtime(s,0);
+                        keepstationtime(s);
                     }
                     else
                     {
-//                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10);  //geht nicht
+                        //                    bool ok;
+                        int s=0;
+                        //                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10); //geht nicht
+                        //setstationtime(s,0);
+                        keepstationtime(s);
                     }
-                    //setstationtime(s,0);
-                    keepstationtime(s);
-                }
-                else
-                {
-//                    bool ok;
-                    int s=0;
-//                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10); //geht nicht
-                    //setstationtime(s,0);
-                    keepstationtime(s);
-                }
 
 
-            }
+                }
             }
         }
     }
@@ -106,7 +106,7 @@ int ips::gettimef(int station)
     {
         if(stationtime[station][i]!=0)
         {
-        array[i] = stationtime[station][i];
+            array[i] = stationtime[station][i];
         }
         else
         {
@@ -127,7 +127,7 @@ int ips::gettimef(int station)
     timef=0;
 
     for(i=filterstreichenunten;i<(filterzus-filterstreichenoben);i++)   //Die Höchsten und niedrigsten Werte werden gestrichen, der Rest zusammengerechnet
-            {timef=timef+array[i];}
+    {timef=timef+array[i];}
 
     timef=timef/(filterzus-(filterstreichenoben+filterstreichenunten)); //Mittelwert bilden
 
@@ -153,48 +153,35 @@ int ips::wrapper()
 
     int numstations =9;
     int i = 0;
+    int j = 0;
 
-    //    millis = int(round(time.time() * 1000))
+    for (i=0;i<numstations;i++)
+    {
+        if (posStation[i][3]==1)
+        {
 
-    for (i=0;i<numstations;i++) {
+            base_x[j] = posStation[i][0];       //Die Koordinaten der
+            base_y[j] = posStation[i][1];       //Bodenstationen werden
+            base_z[j] = posStation[i][2];       //abgepeichert
 
-        base_x[i] = posStation[i][0];       //Die Koordinaten der
-        base_y[i] = posStation[i][1];       //Bodenstationen werden
-        base_z[i] = posStation[i][2];       //abgepeichert
-
-        //Berechnung des Abstandes des Zeppelins zu den einzelnen Bodenstationen anhand der Laufzeiten
-        r[i] = gettimef(i)*0.343;
-        //r[0]=1978*0.34;
-        //r[1]=3675*0.34;
-        //r[2]=5139*0.34;
-        //r[3]=4366*0.34;
-        //r[4]=4953*0.34;
-        //r[5]=3649*0.34;
-        //r[6]=3851*0.34;
-        //r[7]=2789*0.34;
-        //r[8]=3790*0.34;
-
-
+            //Berechnung des Abstandes des Zeppelins zu den einzelnen Bodenstationen anhand der Laufzeiten
+            r[j] = gettimef(i)*0.343;
+            j++;
+        }
     }
-    n = numstations;
+    n = j;
     if (xList.size()!=0){
         start_x = xList.at(0);
         start_y = yList.at(0);
         start_z = zList.at(0);
     }
     else {
-        qDebug() << "ohne startwert";
         start_x = 0;
         start_y = 0;
         start_z = 0;
     }
 
-
-    qDebug() << "rechne";
-
     rechne();
-
-    qDebug() << "fertig rechne";
 
     xList.prepend(posx);//posx
     yList.prepend(posy);//posy
@@ -214,7 +201,6 @@ int ips::wrapper()
 //Start Berechnung der Koordinaten
 void ips::rechne()
 {
-    //double *richtung;
     double richtung[3]={0};
     double schritt = 0.0;
     double x = start_x;
@@ -235,30 +221,23 @@ void ips::rechne()
         richtung[2] = erg[2];
         //Schrittweite nach Armijo (google it!!)
         schritt = armijo(x,y,z,n);
-//qDebug() << schritt;
+        //qDebug() << schritt;
         x_neu = x - schritt*richtung[0];
-//qDebug() << x_neu;
+        //qDebug() << x_neu;
         y_neu = y - schritt*richtung[1];
         z_neu = z - schritt*richtung[2];
         i++;
 
         //auf Staionaritaet pruefen
         if (((x-x_neu)*(x-x_neu)+(y-y_neu)*(y-y_neu)+(z-z_neu)*(z-z_neu))<0.0001)
-           { break;}
+        { break;}
         x = x_neu;
         y = y_neu;
         z = z_neu;
 
     }
-    qDebug() << "Schleife:" << i;
+    qDebug() << "Anzahl der Schleifen:" << i;
 
-//    x = x_neu;
-//    y = y_neu;
-//    z = z_neu;
-
-//    posx = x;
-//    posy = y;
-//    posz = z;
     if(i==300)
     {
         posx=0;
@@ -272,11 +251,6 @@ void ips::rechne()
         posy = y_neu;
         posz = z_neu;
     }
-
-
-
-    //int ret = 0;
-    //return ret;
 }
 //Ende Berechnung der Koordinaten
 
