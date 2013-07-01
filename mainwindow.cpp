@@ -302,9 +302,9 @@ void MainWindow::XbeeonReadyRead()
     if (Xbeeport->bytesAvailable()) {
         //qDebug()<<"Daten..";
         QString comdata = QString::fromLatin1(Xbeeport->readAll());
-        //XbeewriteComText ("->");    //
-        //XbeewriteComText(comdata);  // Grafische Ausgabe
-        //XbeewriteComText ("\n");    //
+        XbeewriteComText ("->");    //
+        XbeewriteComText(comdata);  // Grafische Ausgabe
+        XbeewriteComText ("\n");    //
         //qDebug()<<"umrechnung starten";
         bool *ok=0;
         int ausrichtung=0;
