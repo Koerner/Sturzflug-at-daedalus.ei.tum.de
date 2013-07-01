@@ -104,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->setFilter, SIGNAL(clicked()), SLOT(setFilter()));
     connect(ui->setHindernisse, SIGNAL(clicked()), SLOT(setHindernisse()));
     connect(ui->setSchub, SIGNAL(clicked()), SLOT(setRueckschub()));
+    connect(ui->ultraschall, SIGNAL(stateChanged(int)), SLOT(setUltraschall()));
 
     //Hansteuerung
 
@@ -308,11 +309,18 @@ void MainWindow::XbeeonReadyRead()
         //qDebug()<<"umrechnung starten";
         bool *ok=0;
         int ausrichtung=0;
-        ausrichtung=comdata.toInt(ok,10); //konvertiert die Daten in eine Integer
-        if(ausrichtung>999)
+        int hoehe=0;
+        ausrichtung=comdata.mid(3,3).toInt(ok,10); //konvertiert die Daten in eine Integer
+        if(ausrichtung>320 && ok)
         {
-            y.Ausrichtung.prepend(ausrichtung);  //konvertiert die Daten in eine Integer
-            qDebug() << y.Ausrichtung.at(0);
+            y.Ausrichtung.prepend(ausrichtung-500);  //konvertiert die Daten in eine Integer
+            qDebug() << "Ausrichtung:" << y.Ausrichtung.at(0);
+        }
+        hoehe=comdata.mid(0,3).toInt(ok,10);
+        if(hoehe>99 && ok)
+        {
+            y.zList.prepend(hoehe-100);  //konvertiert die Daten in eine Integer
+            qDebug() << "Hoehe:" << y.zList.at(0);
         }
 
     }
@@ -590,6 +598,20 @@ void MainWindow::setRueckschub()
     y.anz_rueckschub=ui->rueckAnz->value();
 }
 
+void MainWindow::setUltraschall()
+{
+    if(ui->ultraschall->isChecked())
+    {
+        x.ultraschall=true;
+        qDebug()<<"Ultraschall an";
+    }
+    if(!ui->ultraschall->isChecked())
+    {
+        x.ultraschall=false;
+        qDebug()<<"Ultraschall aus";
+    }
+}
+
 //ENDE Abspeichern von Werten -----------------------------------------------------------------------------------------
 
 
@@ -661,6 +683,9 @@ void MainWindow::DrawMap()
     map->addEllipse(y.zielkoordinaten[0]-y.zieltol,y.zielkoordinaten[1]-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penziel);  //Zeichnet Zielkreis
     map->addEllipse(y.ziel_x-y.zieltol,y.ziel_y-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penTP);
     map->addEllipse(y.abwurfkoordinate[0]-y.zieltol,y.abwurfkoordinate[1]-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penAB);
+
+    ui->hoeheDisplay->display(y.zList.at(0));
+
 }
 // ENDE Zeichnen der Karte --------------------------------------------------------------------------------------------
 

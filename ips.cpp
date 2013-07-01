@@ -198,7 +198,10 @@ int ips::wrapper()
 
     xList.prepend(posx);//posx
     yList.prepend(posy);//posy
+    if(ultraschall)
+    {
     zList.prepend(posz);//posz
+    }
 
     qDebug() << "Posx: " << posx << "Posy: " << posy <<"Posz: "<< posz;
 

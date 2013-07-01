@@ -25,6 +25,8 @@ public:
     QList<int> yList;
     QList<int> zList;
 
+    bool ultraschall;
+
 private:
     int x[50];
     int y[50];
