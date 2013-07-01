@@ -103,6 +103,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->setHoehe, SIGNAL(clicked()), SLOT(setHoehe()));
     connect(ui->setFilter, SIGNAL(clicked()), SLOT(setFilter()));
     connect(ui->setHindernisse, SIGNAL(clicked()), SLOT(setHindernisse()));
+    connect(ui->setSchub, SIGNAL(clicked()), SLOT(setRueckschub()));
 
     //Hansteuerung
 
@@ -582,6 +583,12 @@ void MainWindow::setFilter()
     x.filterAnzahlMittel=ui->filtergemittelt->value();
 }
 
+void MainWindow::setRueckschub()
+{
+    y.rueckschub=ui->rueckschub->value();
+    y.anz_rueckschub=ui->rueckAnz->value();
+}
+
 //ENDE Abspeichern von Werten -----------------------------------------------------------------------------------------
 
 
@@ -768,6 +775,8 @@ void MainWindow::refresh()
         schubsenden();  //Aktuelle Schubwerte über XbeeCom senden
     }
 
+
+
     if(ui->sim->isChecked())
     {
         qDebug() << "start sim";
@@ -787,6 +796,12 @@ void MainWindow::refresh()
     {
         x.wrapper();  //Wegberechnung
     }
+    if(ui->hoehe->isChecked())
+    {
+       y.hoehensteuerung(); //Hoehensteuerung
+    }
+
+
     DrawMap();      //KARTE loeschen und neu zeichnen
 }
 // ENDE Refreshfunktion ------------------- ENDE refresh -------------------------- ENDE refresh ----------------------

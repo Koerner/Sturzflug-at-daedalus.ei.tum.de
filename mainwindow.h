@@ -117,6 +117,7 @@ private Q_SLOTS:
     void setHoehe();
     void setHandsteuerung();
     void setFilter();
+    void setRueckschub();
 
     //Handsteuerung Buttons
     void vor();
