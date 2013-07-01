@@ -567,6 +567,7 @@ void MainWindow::setHindernisse()
         }
     }
     qDebug() << "Anzahl der Hindernisse: " << y.hinanz;
+    y.berechneRadien();//alle Kurvenradien berechnen
 
 }
 // ENDE Hindernisse speichern .................................................
@@ -676,6 +677,17 @@ void MainWindow::deletekoordinaten()
     x.xList.clear();
     x.yList.clear();
     x.zList.clear();
+    y.xList.clear();
+    y.yList.clear();
+    y.zList.clear();
+    z.xList.clear();
+    z.yList.clear();
+
+    x.wrapper();
+    y.xList.prepend(x.xList.at(0));
+    y.yList.prepend(x.yList.at(0));
+    y.berechneWeg();
+
 }
 
 // Zeichnet die Karte -------------------------------------------------------------------------------------------------
@@ -983,11 +995,11 @@ void MainWindow::keyPressEvent(QKeyEvent *qkeyevent) //Tatstertur .............
 // Test Button ---------------- Test ------------------- Test ---------------------------------------------------------
 void MainWindow::onTestButtonClicked()
 {
-   z.sim();
-   y.xList.prepend(z.xList.at(0));
-   y.yList.prepend(z.yList.at(0));
-   y.berechneRadien();//alle Kurvenradien berechnen
-   y.berechneWeg();//erste Zielkoordinate berechnen
+//   z.sim();
+//   y.xList.prepend(z.xList.at(0));
+//   y.yList.prepend(z.yList.at(0));
+
+//   y.berechneWeg();//erste Zielkoordinate berechnen
 
 }
 // ENDE Test Button ---------------------------------------------------------------------------------------------------
