@@ -7,15 +7,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //deafult
-    ui->s1x->setValue(1000);ui->s1y->setValue(1000);ui->s1z->setValue(0);
-    ui->s2x->setValue(2000);ui->s2y->setValue(1000);ui->s2z->setValue(0);
-    ui->s3x->setValue(2000);ui->s3y->setValue(0000);ui->s3z->setValue(1000);
-    ui->s4x->setValue(1000);ui->s4y->setValue(0000);ui->s4z->setValue(0);
-    ui->s5x->setValue(0000);ui->s5y->setValue(0000);ui->s5z->setValue(1000);
-    ui->s6x->setValue(0000);ui->s6y->setValue(1000);ui->s6z->setValue(0);
-    ui->s7x->setValue(0000);ui->s7y->setValue(2000);ui->s7z->setValue(1000);
-    ui->s8x->setValue(1000);ui->s8y->setValue(2000);ui->s8z->setValue(0);
-    ui->s9x->setValue(2000);ui->s9y->setValue(2000);ui->s9z->setValue(1000);
+//    ui->s1x->setValue(1000);ui->s1y->setValue(1000);ui->s1z->setValue(0);
+//    ui->s2x->setValue(2000);ui->s2y->setValue(1000);ui->s2z->setValue(0);
+//    ui->s3x->setValue(2000);ui->s3y->setValue(0000);ui->s3z->setValue(1000);
+//    ui->s4x->setValue(1000);ui->s4y->setValue(0000);ui->s4z->setValue(0);
+//    ui->s5x->setValue(0000);ui->s5y->setValue(0000);ui->s5z->setValue(1000);
+//    ui->s6x->setValue(0000);ui->s6y->setValue(1000);ui->s6z->setValue(0);
+//    ui->s7x->setValue(0000);ui->s7y->setValue(2000);ui->s7z->setValue(1000);
+//    ui->s8x->setValue(1000);ui->s8y->setValue(2000);ui->s8z->setValue(0);
+//    ui->s9x->setValue(2000);ui->s9y->setValue(2000);ui->s9z->setValue(1000);
     //Ende default;
 
     //Karte erstellen
@@ -400,38 +400,74 @@ void MainWindow::setPosStation()
     x.posStation[0][0]=ui->s1x->value(); //x
     x.posStation[0][1]=ui->s1y->value(); //y
     x.posStation[0][2]=ui->s1z->value(); //z
+    if(ui->stat1_checkBox->isChecked())
+    {x.posStation[0][3]=1;}
+    else
+    {x.posStation[0][3]=0;}
 
     x.posStation[1][0]=ui->s2x->value(); //x
     x.posStation[1][1]=ui->s2y->value(); //y
     x.posStation[1][2]=ui->s2z->value(); //z
+    if(ui->stat2_checkBox->isChecked())
+    {x.posStation[1][3]=1;}
+    else
+    {x.posStation[1][3]=0;}
 
     x.posStation[2][0]=ui->s3x->value(); //x
     x.posStation[2][1]=ui->s3y->value(); //y
     x.posStation[2][2]=ui->s3z->value(); //z
+    if(ui->stat3_checkBox->isChecked())
+    {x.posStation[2][3]=1;}
+    else
+    {x.posStation[2][3]=0;}
 
     x.posStation[3][0]=ui->s4x->value(); //x
     x.posStation[3][1]=ui->s4y->value(); //y
     x.posStation[3][2]=ui->s4z->value(); //z
+    if(ui->stat4_checkBox->isChecked())
+    {x.posStation[3][3]=1;}
+    else
+    {x.posStation[3][3]=0;}
 
     x.posStation[4][0]=ui->s5x->value(); //x
     x.posStation[4][1]=ui->s5y->value(); //y
     x.posStation[4][2]=ui->s5z->value(); //z
+    if(ui->stat5_checkBox->isChecked())
+    {x.posStation[4][3]=1;}
+    else
+    {x.posStation[4][3]=0;}
 
     x.posStation[5][0]=ui->s6x->value(); //x
     x.posStation[5][1]=ui->s6y->value(); //y
     x.posStation[5][2]=ui->s6z->value(); //z
+    if(ui->stat6_checkBox->isChecked())
+    {x.posStation[5][3]=1;}
+    else
+    {x.posStation[5][3]=0;}
 
     x.posStation[6][0]=ui->s7x->value(); //x
     x.posStation[6][1]=ui->s7y->value(); //y
     x.posStation[6][2]=ui->s7z->value(); //z
+    if(ui->stat7_checkBox->isChecked())
+    {x.posStation[6][3]=1;}
+    else
+    {x.posStation[6][3]=0;}
 
     x.posStation[7][0]=ui->s8x->value(); //x
     x.posStation[7][1]=ui->s8y->value(); //y
     x.posStation[7][2]=ui->s8z->value(); //z
+    if(ui->stat8_checkBox->isChecked())
+    {x.posStation[7][3]=1;}
+    else
+    {x.posStation[7][3]=0;}
 
     x.posStation[8][0]=ui->s9x->value(); //x
     x.posStation[8][1]=ui->s9y->value(); //y
     x.posStation[8][2]=ui->s9z->value(); //z
+    if(ui->stat9_checkBox->isChecked())
+    {x.posStation[8][3]=1;}
+    else
+    {x.posStation[8][3]=0;}
 }
 //STOP Positionen der Bodenstationen speichern ................................
 
