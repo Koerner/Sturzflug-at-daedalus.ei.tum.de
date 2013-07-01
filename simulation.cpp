@@ -32,7 +32,7 @@ void simulation::sim()
         //start_z = 0;
     }
 
-    if (schub[0]>0&&schub[1]<0)
+    if (schub[0]>=0&&schub[1]>=0)
     {
     rechteDistanz=(schub[1]*SIMULATIONMAX);
     linkeDistanz=(schub[0]*SIMULATIONMAX);

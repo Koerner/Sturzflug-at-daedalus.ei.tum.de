@@ -22,7 +22,7 @@ public:
     int zielkoordinaten[2]; // Zielkoordinaten
     int zieltol;        //Tolleranz, wann es als Ziel erreicht gilt
     int rueckschub;     //Kurze Rückschubdaten, um der Trägheit entgegenzuwirken
-    int anz_rueckschub; //Anzahl der Rueckshcubwiederholungen
+    int anz_rueckschub; //Anzahl der Rueckschubwiederholungen
 
     //Variablen für die Berechnung
 
@@ -32,6 +32,7 @@ public:
     int AP[2]; //Ausrittspunkt aus Kreis
     int ziel_x; //Zielkoordinaten
     int ziel_y; //Zielkoordinaten
+    int rueck_countdown;  //zählt die Schleifen
 
 
     //Zeppelindaten
@@ -94,7 +95,7 @@ public:
     void kurve(int linksrechts, double radius);
     void kurve(int linksrechts, int radius, int abweichung);
     void standdrehung(int winkel);
-    void weg::rueck();
+    void rueck();
     void stop();
 
     //Hoehensteuerung

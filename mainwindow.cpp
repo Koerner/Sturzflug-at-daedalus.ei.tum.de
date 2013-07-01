@@ -138,6 +138,7 @@ void MainWindow::setup()
     setrefreshrate();
     setPosStation();
     setHindernisse();
+    setRueckschub();
 
     Refreshtimer->start();  //Starten den Refresher, sonst geht garnix ;)
 

@@ -13,14 +13,14 @@ weg::weg(){
     schub[1]=0;
     schub[2]=0;
     notfallmodus=0;
-
+    rueck_countdown=0;
 }
 //Ende Konstruktor-----------------------------------------------------------------------------------------------------
 
 //Start Aufruf und Abfragen--------------------------------------------------------------------------------------------
 void weg::start()
 {
-    int rueck_countdown;
+
     int Soll_Ausrichtung,Abweichung_Ausrichtung;
     //Hier gehts los, das ist der Startpunkt für jedes mal
     qDebug()<<"Start und Modus:"<<modus;
@@ -32,6 +32,8 @@ void weg::start()
         {notfallplan();}
         else
         {
+            qDebug()<<"Anzahl"<<anz_rueckschub;
+            qDebug()<<"Reuckcountdown"<<rueck_countdown;
             if (rueck_countdown>0)
             {
                 rueck();
@@ -184,7 +186,7 @@ int weg::Berechne_Abweichung()
         if (hin[hinnummer][2]==0)
         { distance = distance*(-1);}
         abweichung = Runden(distance);
-        //abweichung = 0; //muss gelöscht werden
+        abweichung = 0; //muss gelöscht werden
         break;
     }
     }
@@ -201,8 +203,8 @@ int weg::Berechne_Abweichung()
 //Übergabe der Koordinatspunkte für Tangentenpunktberechnung..................
 void weg::berechneWeg()
 {
-    qDebug()<<"hStart_Berechne";
-    qDebug()<<"hindernisse"<<hinnummer<<"Modus"<<modus;
+    qDebug()<<"Start_Berechne";
+    qDebug()<<"hinderniss"<<hinnummer<<"Modus"<<modus;
 
     float verhaeltnis;
     double buf1, buf2;
@@ -364,8 +366,6 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunkt
 
     alpha = GetWinkel(hin[hinnummer][0] - bezugspunktx,hin[hinnummer][1] - bezugspunkty);
     beta = GetWinkel(x1-bezugspunktx,y1-bezugspunkty);
-    qDebug()<<"alpha"<<alpha;
-    qDebug()<<"beta"<<beta;
     if (modus == true) //Flug Geradeaus
     {
         if (hin[hinnummer][2]==1) //falls linksrum
@@ -626,14 +626,11 @@ void weg::geradeaus(int streckenlaenge)
 void weg::geradeaus(int streckenlaenge, int abweichung)
 {
     double schu;
-//    if(streckenlaenge>1000)
-//    {
-//        schub[0]=SCHNELL;
-//        schub[1]=SCHNELL;
-//        //schub[0]=(schub[0]*(100-abweichung/3))/100;
-//        //schub[1]=(schub[1]*(100+abweichung/3))/100;
-//    }
-    if (streckenlaenge>=200)
+    if(streckenlaenge>1000)
+    {
+        schu=SCHNELL;
+    }
+    else if (streckenlaenge>=200)
     {
         schu=LANGSAM;
         //schub[1]=LANGSAM;
@@ -676,17 +673,12 @@ void weg::kurve(int linksrechts, double radius)
 void weg::kurve(int linksrechts, int radius, int abweichung)
 {
     double schu1,schu2;
-    qDebug()<<"Radius"<<radius;
-    qDebug()<<"Spannweite"<<spannweite;
     schu1=SUPERLANGSAM;
     schu2=schu1*((radius+spannweite)/(radius-spannweite));
     //Kurvenflugmodus
     if (linksrechts == 0){
-        qDebug()<<"Abweichung"<<abweichung;
         if (abweichung<0)
         {
-            qDebug()<<"Abweichung"<<abweichung;
-            qDebug()<<"schu2"<<schu2;
             schub[0]=Runden((schu2*(100-abweichung))/100);
             schub[1]=schu1;
         }
@@ -723,6 +715,7 @@ void weg::rueck()
 {
     schub[0]=rueckschub;
     schub[1]=rueckschub;
+    qDebug()<<"Rueckschub";
 }
 
 void weg::stop()
