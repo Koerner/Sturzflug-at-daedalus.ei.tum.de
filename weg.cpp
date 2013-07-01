@@ -20,7 +20,8 @@ weg::weg(){
 //Start Aufruf und Abfragen--------------------------------------------------------------------------------------------
 void weg::start()
 {
-    int Soll_Ausrichtung,Abweichung_Ausrichtung;;
+    int rueck_countdown;
+    int Soll_Ausrichtung,Abweichung_Ausrichtung;
     //Hier gehts los, das ist der Startpunkt für jedes mal
     qDebug()<<"Start und Modus:"<<modus;
     if (BetragVektor(xList.at(0),yList.at(0),zielkoordinaten[0],zielkoordinaten[1])<zieltol)
@@ -31,95 +32,111 @@ void weg::start()
         {notfallplan();}
         else
         {
-            if ((modus == false)&&(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
+            if (rueck_countdown>0)
             {
-                modus = true;
-                hinnummer = hinnummer + 1;
-                berechneWeg();
-            }
-            else if((modus==true)&&(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
-            {
-                modus = false;
-                berechneWeg();
-            }
-
-
-            if (modus)
-            {
-                Soll_Ausrichtung = Runden(GetWinkel(ziel_x-AP[0],ziel_y-AP[1]));
-                Abweichung_Ausrichtung=DifferenzWinkel(Soll_Ausrichtung,Ausrichtung.at(0));
-                notfallziel[2]=Soll_Ausrichtung;
-                qDebug()<<"Abweichung"<<Berechne_Abweichung();
-                qDebug()<<"IST_Ausrichtung"<<Ausrichtung.at(0);
-                qDebug()<<"SOll_Ausrichtung"<<Soll_Ausrichtung;
-                qDebug()<<"Abweichung_Ausrichtung"<<Abweichung_Ausrichtung;
-                if(abs(Berechne_Abweichung())<100)
-                {
-                    geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y),Abweichung_Ausrichtung);
-                }
-                else
-                {
-                    if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<=-100)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>=100))
-                    {
-                        geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y),Berechne_Abweichung());
-                    }
-                    else
-                    {
-                        geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y));
-                    }
-
-                }
-
-                //if(Berechne_Abweichung()>30)
-                //{
-                //    //Notfallmodus
-                // }
-                //else
-                //{
-
-                //}
+                rueck();
+                rueck_countdown-=1;
             }
             else
             {
-
-                qDebug()<<"Abweichung"<<Berechne_Abweichung();
-                if (hin[hinnummer][2]==0)
+                if ((modus == false)&&(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
                 {
-                    Soll_Ausrichtung = Runden(GetWinkel(xList.at(0)-hin[hinnummer][0],yList.at(0)-hin[hinnummer][1]))+90;
-                    if (Soll_Ausrichtung>180){Soll_Ausrichtung = Soll_Ausrichtung-360;}
+                    modus = true;
+                    hinnummer = hinnummer + 1;
+                    berechneWeg();
+                    rueck();
+                    rueck_countdown=anz_rueckschub-1;
+
                 }
+                else if((modus==true)&&(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
+                {
+                    modus = false;
+                    berechneWeg();
+                    rueck();
+                    rueck_countdown=anz_rueckschub-1;
+                }
+
                 else
                 {
-                    Soll_Ausrichtung = Runden(GetWinkel(xList.at(0)-hin[hinnummer][0],yList.at(0)-hin[hinnummer][1]))-90;
-                    if (Soll_Ausrichtung<=-180){Soll_Ausrichtung = Soll_Ausrichtung+360;}
-                }
-                notfallziel[2]=Soll_Ausrichtung;
-                Abweichung_Ausrichtung=DifferenzWinkel(Soll_Ausrichtung,Ausrichtung.at(0));
-                qDebug()<<"IST_Ausrichtung"<<Ausrichtung.at(0);
-                qDebug()<<"SOll_Ausrichtung"<<Soll_Ausrichtung;
-                qDebug()<<"Abweichung_Ausrichtung"<<Abweichung_Ausrichtung;
-                if(abs(Berechne_Abweichung())<10)
-                {
-                    kurve(hin[hinnummer][2],kreisradius[hinnummer]);
-                }
-                else
-                {
-                    //if(Berechne_Abweichung()>30)
-                    //{
-                    //    //Notfallmodus
-                    // }
-                    //else
-                    //{
-//                    if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<=-100)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>=100))
-//                    {
-//                        kurve(hin[hinnummer][2],kreisradius[hinnummer],Berechne_Abweichung());
-//                    }
-//                    else
-//                    {
-                        kurve(hin[hinnummer][2],kreisradius[hinnummer],Berechne_Abweichung());
-                    //}
-                    //}
 
+                    if (modus)
+                    {
+                        Soll_Ausrichtung = Runden(GetWinkel(ziel_x-AP[0],ziel_y-AP[1]));
+                        Abweichung_Ausrichtung=DifferenzWinkel(Soll_Ausrichtung,Ausrichtung.at(0));
+                        notfallziel[2]=Soll_Ausrichtung;
+                        qDebug()<<"Abweichung"<<Berechne_Abweichung();
+                        qDebug()<<"IST_Ausrichtung"<<Ausrichtung.at(0);
+                        qDebug()<<"SOll_Ausrichtung"<<Soll_Ausrichtung;
+                        qDebug()<<"Abweichung_Ausrichtung"<<Abweichung_Ausrichtung;
+                        if(abs(Berechne_Abweichung())<100)
+                        {
+                            geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y),Abweichung_Ausrichtung);
+                        }
+                        else
+                        {
+                            if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<=-100)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>=100))
+                            {
+                                geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y),Berechne_Abweichung());
+                            }
+                            else
+                            {
+                                geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y));
+                            }
+
+                        }
+
+                        //if(Berechne_Abweichung()>30)
+                        //{
+                        //    //Notfallmodus
+                        // }
+                        //else
+                        //{
+
+                        //}
+                    }
+                    else
+                    {
+
+                        qDebug()<<"Abweichung"<<Berechne_Abweichung();
+                        if (hin[hinnummer][2]==0)
+                        {
+                            Soll_Ausrichtung = Runden(GetWinkel(xList.at(0)-hin[hinnummer][0],yList.at(0)-hin[hinnummer][1]))+90;
+                            if (Soll_Ausrichtung>180){Soll_Ausrichtung = Soll_Ausrichtung-360;}
+                        }
+                        else
+                        {
+                            Soll_Ausrichtung = Runden(GetWinkel(xList.at(0)-hin[hinnummer][0],yList.at(0)-hin[hinnummer][1]))-90;
+                            if (Soll_Ausrichtung<=-180){Soll_Ausrichtung = Soll_Ausrichtung+360;}
+                        }
+                        notfallziel[2]=Soll_Ausrichtung;
+                        Abweichung_Ausrichtung=DifferenzWinkel(Soll_Ausrichtung,Ausrichtung.at(0));
+                        qDebug()<<"IST_Ausrichtung"<<Ausrichtung.at(0);
+                        qDebug()<<"SOll_Ausrichtung"<<Soll_Ausrichtung;
+                        qDebug()<<"Abweichung_Ausrichtung"<<Abweichung_Ausrichtung;
+                        if(abs(Berechne_Abweichung())<10)
+                        {
+                            kurve(hin[hinnummer][2],kreisradius[hinnummer]);
+                        }
+                        else
+                        {
+                            //if(Berechne_Abweichung()>30)
+                            //{
+                            //    //Notfallmodus
+                            // }
+                            //else
+                            //{
+                            //                    if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<=-100)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>=100))
+                            //                    {
+                            //                        kurve(hin[hinnummer][2],kreisradius[hinnummer],Berechne_Abweichung());
+                            //                    }
+                            //                    else
+                            //                    {
+                            kurve(hin[hinnummer][2],kreisradius[hinnummer],Berechne_Abweichung());
+                            //}
+                            //}
+
+                        }
+                    }
                 }
             }
         }
@@ -702,6 +719,11 @@ void weg::standdrehung(int winkel)
     schub[1]=-winkel/3.6;
 }
 
+void weg::rueck()
+{
+    schub[0]=rueckschub;
+    schub[1]=rueckschub;
+}
 
 void weg::stop()
 {

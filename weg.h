@@ -21,6 +21,8 @@ public:
     int abwurfkoordinate[2];      // Abwurfkoordinaten
     int zielkoordinaten[2]; // Zielkoordinaten
     int zieltol;        //Tolleranz, wann es als Ziel erreicht gilt
+    int rueckschub;     //Kurze Rückschubdaten, um der Trägheit entgegenzuwirken
+    int anz_rueckschub; //Anzahl der Rueckshcubwiederholungen
 
     //Variablen für die Berechnung
 
@@ -92,6 +94,7 @@ public:
     void kurve(int linksrechts, double radius);
     void kurve(int linksrechts, int radius, int abweichung);
     void standdrehung(int winkel);
+    void weg::rueck();
     void stop();
 
     //Hoehensteuerung

@@ -301,9 +301,9 @@ void MainWindow::XbeeonReadyRead()
     if (Xbeeport->bytesAvailable()) {
         //qDebug()<<"Daten..";
         QString comdata = QString::fromLatin1(Xbeeport->readAll());
-        XbeewriteComText ("->");    //
-        XbeewriteComText(comdata);  // Grafische Ausgabe
-        XbeewriteComText ("\n");    //
+        //XbeewriteComText ("->");    //
+        //XbeewriteComText(comdata);  // Grafische Ausgabe
+        //XbeewriteComText ("\n");    //
         //qDebug()<<"umrechnung starten";
         bool *ok=0;
         int ausrichtung=0;
@@ -830,15 +830,18 @@ void MainWindow::back()
 
 void MainWindow::links()
 {
-    geradeabweichung+=5;
-    y.geradeaus(500, geradeabweichung);
+    //geradeabweichung+=5;
+    //y.geradeaus(100, geradeabweichung);
+
+    y.schub[1]+=6;
     qDebug() << "Key_Left:" << geradeabweichung;
 }
 
 void MainWindow::rechts()
 {
-    geradeabweichung-=5;
-    y.geradeaus(500, geradeabweichung);
+    //geradeabweichung-=5;
+    //y.geradeaus(100, geradeabweichung);
+    y.schub[0]+=5;
     qDebug() << "Key_Right:" << geradeabweichung;
 }
 

@@ -32,6 +32,8 @@ void simulation::sim()
         //start_z = 0;
     }
 
+    if (schub[0]>0&&schub[1]<0)
+    {
     rechteDistanz=(schub[1]*SIMULATIONMAX);
     linkeDistanz=(schub[0]*SIMULATIONMAX);
     alpha = start_ausrichtung*PI/180;
@@ -78,4 +80,5 @@ void simulation::sim()
         start_ausrichtung=start_ausrichtung-180*k+180;
     }
     qDebug()<<"Ausrichtung2"<<start_ausrichtung;
+    }
 }
