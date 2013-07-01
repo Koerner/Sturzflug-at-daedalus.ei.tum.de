@@ -58,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Xbeetimer = new QTimer(this);
     Xbeetimer->setInterval(80);
     IPStimer = new QTimer(this);
-    IPStimer->setInterval(40); //könnte probleme lösen
+    IPStimer->setInterval(155); //könnte probleme lösen
 
     Refreshtimer = new QTimer(this);
     Refreshtimer->setInterval(ui->refreshTime->value()); //Aktuallisierungsrate aus der GUI in ms
@@ -859,6 +859,9 @@ void MainWindow::refresh()
 
     if(ui->flug->isChecked())
     {
+        y.xList.prepend(x.xList.at(0));
+        y.yList.prepend(x.yList.at(0));
+        y.zList.prepend(x.zList.at(0));
         x.wrapper();  //Wegberechnung
     }
     if(ui->hoehe->isChecked())
