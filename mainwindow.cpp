@@ -720,7 +720,10 @@ void MainWindow::DrawMap()
     map->addEllipse(y.ziel_x-y.zieltol,y.ziel_y-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penTP);
     map->addEllipse(y.abwurfkoordinate[0]-y.zieltol,y.abwurfkoordinate[1]-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penAB);
 
-    ui->hoeheDisplay->display(y.zList.at(0));
+    if (y.zList.size()!=0)
+    {
+        ui->hoeheDisplay->display(y.zList.at(0));
+    }
 
 }
 // ENDE Zeichnen der Karte --------------------------------------------------------------------------------------------

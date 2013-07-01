@@ -157,7 +157,7 @@ int ips::wrapper()
 
     for (i=0;i<numstations;i++)
     {
-        if (posStation[i][3]==1)
+        if (gettimef(i)!=0)
         {
 
             base_x[j] = posStation[i][0];       //Die Koordinaten der
@@ -169,6 +169,7 @@ int ips::wrapper()
             j++;
         }
     }
+    qDebug()<<"Funktionstüchtige Stationen: "<<j;
     n = j;
     if (xList.size()!=0){
         start_x = xList.at(0);
@@ -243,7 +244,7 @@ void ips::rechne()
         posx=0;
         posy=0;
         posz=0;
-        qDebug()<< "Keinne Annäherung in 300 Schritten möglich";
+        qDebug()<< "Keine Annäherung in 300 Schritten möglich";
     }
     else
     {
@@ -256,7 +257,7 @@ void ips::rechne()
 
 
 //Start zu minimierende Funktion f
-double ips::f(double x, double y, double z, int n)
+double ips::f(double x, double y, double z, int h)
 {
     int i = 0;
     double erg3 = 0.0;
@@ -273,7 +274,7 @@ double ips::f(double x, double y, double z, int n)
 
 
 //Start Berechnung des Gradienten f (gradf)
-void ips::gradf(double x, double y, double z, int n)
+void ips::gradf(double x, double y, double z, int h)
 {
 
     erg[0] = 0.0; erg[1] = 0.0; erg[2] = 0.0;
@@ -298,13 +299,13 @@ void ips::gradf(double x, double y, double z, int n)
 
 
 //Start Bestimmung der armijo-Schrittweite(armijo)
-double ips::armijo(double x, double y, double z, int n)
+double ips::armijo(double x, double y, double z, int h)
 {
     double schritt = 1;
     int i = 0;
     double ls = 0.0;
     double rs = 0.0;
-    //double *gradient; Bärle
+    //double *gradient;
     //gradf(x,y,z,n);
     double gradient[3];
     gradient[0] = erg[0];

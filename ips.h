@@ -54,9 +54,9 @@ private:
     void setstationtime(int nr, int rawtime);
     void keepstationtime (int nr);
     void rechne();
-    double f(double x, double y, double z, int n);
-    void gradf(double x, double y, double z, int n);
-    double armijo(double x, double y, double z, int n);
+    double f(double x, double y, double z, int h);
+    void gradf(double x, double y, double z, int h);
+    double armijo(double x, double y, double z, int h);
 
 };
 

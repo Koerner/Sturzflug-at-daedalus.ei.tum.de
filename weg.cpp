@@ -22,8 +22,16 @@ void weg::start()
 {
 
     int Soll_Ausrichtung,Abweichung_Ausrichtung;
-    //Hier gehts los, das ist der Startpunkt für jedes mal
     qDebug()<<"Start und Modus:"<<modus;
+
+    if (BetragVektor(xList.at(0),yList.at(0),abwurfkoordinate[0],abwurfkoordinate[1])<zieltol)
+    {
+        abwurfmodus = 1;
+    }
+    else
+    {
+        abwurfmodus = 0;
+    }
     if (BetragVektor(xList.at(0),yList.at(0),zielkoordinaten[0],zielkoordinaten[1])<zieltol)
     {stop();}
     else
