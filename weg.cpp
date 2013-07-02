@@ -365,8 +365,13 @@ void weg::Tangentenberechnung(double S_x, double S_y, double P_x, double P_y, do
      *ob der zeppelin rechts oder links herum fliegen soll und
      *ob es ein Austrittspunkt bzw ein Eintrittspunkt sein soll**/
 
+
     alpha = GetWinkel(hin[hinnummer][0] - P_x,hin[hinnummer][1] - P_y);
     beta = GetWinkel(x1-P_x,y1-P_y);
+
+    qDebug()<<"Alpha"<<alpha;
+    qDebug()<<"Beta"<<beta;
+    qDebug()<<"Differenz"<<DifferenzWinkel(alpha,beta);
     if (modus == true) //Flug Geradeaus
     {
         if (hin[hinnummer][2]==1) //falls linksrum
@@ -416,7 +421,7 @@ void weg::Tangentenberechnung(double S_x, double S_y, double P_x, double P_y, do
         }
         else
         {
-            if (DifferenzWinkel(alpha,beta)>0)
+            if (DifferenzWinkel(alpha,beta)>=0)
             {
                 AP[0]=x1;
                 AP[1]=y1;
@@ -432,6 +437,8 @@ void weg::Tangentenberechnung(double S_x, double S_y, double P_x, double P_y, do
      }
 
     //Entscheidung Ende
+    qDebug()<<"Punkt 1:"<<x1<<y1;
+    qDebug()<<"Punkt 2:"<<x2<<y2;
     qDebug()<<"Zielpunkte Hindernis"<<ziel_x<<ziel_y;
 
 }
@@ -472,9 +479,13 @@ double weg::DifferenzWinkel(double Winkel1, double Winkel2)
     double DifferenzWinkel1;
     DifferenzWinkel1=Winkel2-Winkel1;
     if (DifferenzWinkel1<-180)
- {
-    DifferenzWinkel1 = DifferenzWinkel1+360;
- }
+    {
+        DifferenzWinkel1 = DifferenzWinkel1+360;
+    }
+    else if (DifferenzWinkel1>180)
+    {
+        DifferenzWinkel1 = DifferenzWinkel1-360;
+    }
     return DifferenzWinkel1;
 }
 //Ende Differenz von Winkeln..................................................
