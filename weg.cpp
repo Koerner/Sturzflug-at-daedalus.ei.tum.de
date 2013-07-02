@@ -580,13 +580,17 @@ void weg::hoehensteuerung()
     dif=sollHoehe-zList.at(0);
     if (abs(dif)<hoehentol)
     {
+
+        schub[2]=dif/(HOEHENSCHUBMULTIPLIKATOR)*(rueckschub);
+
+
         schub[2]=0;
     }
     else
     {
         if(abs(dif)<400)
         {
-            schub[2]=dif/10;
+            schub[2]=dif/HOEHENSCHUBMULTIPLIKATOR;
         }
         else
         {

@@ -190,7 +190,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -224,7 +224,7 @@
         <x>840</x>
         <y>10</y>
         <width>171</width>
-        <height>151</height>
+        <height>165</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -232,6 +232,12 @@
         <widget class="QCheckBox" name="sim">
          <property name="text">
           <string>Simulation</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -1106,21 +1112,21 @@
        <rect>
         <x>390</x>
         <y>450</y>
-        <width>341</width>
-        <height>99</height>
+        <width>350</width>
+        <height>107</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_6">
        <item row="3" column="1">
         <widget class="QSpinBox" name="rueckschub">
          <property name="minimum">
-          <number>-99</number>
+          <number>-10</number>
          </property>
          <property name="maximum">
           <number>0</number>
          </property>
          <property name="value">
-          <number>-50</number>
+          <number>-2</number>
          </property>
         </widget>
        </item>
@@ -1165,13 +1171,6 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QLabel" name="label_rueckschub">
-         <property name="text">
-          <string>Rückschub</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_rueckschub_2">
          <property name="text">
@@ -1183,6 +1182,13 @@
         <widget class="QSpinBox" name="offsetPro">
          <property name="minimum">
           <number>-99</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="2">
+        <widget class="QLabel" name="label_rueckschub">
+         <property name="text">
+          <string>Rückschub Multiplikator</string>
          </property>
         </widget>
        </item>
@@ -1738,7 +1744,7 @@
      <rect>
       <x>1040</x>
       <y>370</y>
-      <width>182</width>
+      <width>191</width>
       <height>184</height>
      </rect>
     </property>
@@ -1882,7 +1888,7 @@
      <x>0</x>
      <y>0</y>
      <width>1224</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
