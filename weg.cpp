@@ -631,12 +631,13 @@ void weg::geradeaus(int streckenlaenge)
     qDebug()<<"Gerade ohne Regelung:"<<schub[0]<<schub[1];
 }
 
-void weg::geradeaus(int streckenlaenge, int abweichung)
+void weg::geradeaus(int streckenlaenge, double abweichung)
 {
     double schu;
     if(streckenlaenge>1000)
     {
         schu=SCHNELL;
+        abweichung = abweichung/3;
     }
     else if (streckenlaenge>=200)
     {

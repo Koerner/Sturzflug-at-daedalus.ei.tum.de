@@ -91,7 +91,7 @@ public:
 
     //Motorsteuerung
     void geradeaus(int streckenlaenge);  //Strecke in mm
-    void geradeaus(int streckenlaenge, int abweichung); //Strecke in mm, abweichung in %
+    void geradeaus(int streckenlaenge, double abweichung); //Strecke in mm, abweichung in %
     void kurve(int linksrechts, double radius);
     void kurve(int linksrechts, int radius, int abweichung);
     void standdrehung(int winkel);
