@@ -7,7 +7,7 @@
 weg::weg(){
     hinnummer = 0;
     hinanz = 0;
-    modus = 0;
+    modus = 1;
     abwurfmodus = 0;
     schub[0]=0;
     schub[1]=0;
@@ -44,7 +44,7 @@ void weg::start()
             qDebug()<<"Reuckcountdown"<<rueck_countdown;
             if (rueck_countdown>0)
             {
-                rueck();
+
                 rueck_countdown-=1;
             }
             else
@@ -162,32 +162,32 @@ int weg::Berechne_Abweichung()
     double alpha, beta, gamma, distance;
 
     switch (modus){
-         case true:{
-                alpha = GetWinkel(EP[0] - AP[0], EP[1] - AP[1]);
+    case true:{
+        alpha = GetWinkel(EP[0] - AP[0], EP[1] - AP[1]);
 
-//Notfallmodus optimieren
-//                distance = BetragVektor(AP[0],AP[1],EP[0],EP[1]);
-//                notfallziel[0]=(EP[0] - AP[0])/distance;
-//                notfallziel[1]=(EP[1] - AP[1])/distance;
+        //Notfallmodus optimieren
+        //                distance = BetragVektor(AP[0],AP[1],EP[0],EP[1]);
+        //                notfallziel[0]=(EP[0] - AP[0])/distance;
+        //                notfallziel[1]=(EP[1] - AP[1])/distance;
 
-                distance = BetragVektor(AP[0],AP[1],xList.at(0),yList.at(0));
-                if (distance<10)
-                {
-                    beta = alpha;
-                }
-                else
-                {
-                beta = GetWinkel(xList.at(0) - AP[0], yList.at(0) - AP[1]);
-                }
-                gamma = (DifferenzWinkel(alpha,beta)* PI)/180;
-                abweichung = sin(gamma)*distance;
+        distance = BetragVektor(AP[0],AP[1],xList.at(0),yList.at(0));
+        if (distance<10)
+        {
+            beta = alpha;
+        }
+        else
+        {
+            beta = GetWinkel(xList.at(0) - AP[0], yList.at(0) - AP[1]);
+        }
+        gamma = (DifferenzWinkel(alpha,beta)* PI)/180;
+        abweichung = sin(gamma)*distance;
 
-//Notfallmodus
-//                notfallziel[0]=cos(gamma)*notfallziel[0]+AP[0];
-//                notfallziel[1]=cos(gamma)*notfallziel[1]+AP[1];
-//                GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1]);
-                break;
-             }
+        //Notfallmodus
+        //                notfallziel[0]=cos(gamma)*notfallziel[0]+AP[0];
+        //                notfallziel[1]=cos(gamma)*notfallziel[1]+AP[1];
+        //                GetWinkel(xList.at(0)-notfallziel[0],yList.at(0)-notfallziel[1]);
+        break;
+    }
     case false :
     {
         distance = BetragVektor(hin[hinnummer][0],hin[hinnummer][1],xList.at(0),yList.at(0)) - kreisradius[hinnummer];
@@ -198,10 +198,6 @@ int weg::Berechne_Abweichung()
         break;
     }
     }
-
-    // Differenz Soll Ist Abwichung von der gerade (parallele!) in%
-
-    //Differenz zwischen Soll und Ist Radius in %
     return abweichung;
 }
 //Ende IST-Abweichung berechnen----------------------------------------------------------------------------------------
@@ -211,11 +207,10 @@ int weg::Berechne_Abweichung()
 //Übergabe der Koordinatspunkte für Tangentenpunktberechnung..................
 void weg::berechneWeg()
 {
-    qDebug()<<"Start_Berechne";
     qDebug()<<"hinderniss"<<hinnummer<<"Modus"<<modus;
 
     float verhaeltnis;
-    double buf1, buf2;
+    double buf1, buf2;// P_x, P_y, S_x, S_y;
     double Radius;
 
 
@@ -224,18 +219,18 @@ void weg::berechneWeg()
     case true:
     {
 
-        if ((hinanz == 0)||(hinnummer==hinanz))
-        {
+        if ((hinanz == 0)||(hinnummer==hinanz))         /* hier werden die Zielkoordinaten*/
+        {                                               /* als Zielpunkt definiert*/
             if (hinanz == 0)
             {
-            AP[0]=xList.at(0);//Startpunkt festsetzen
-            AP[1]=yList.at(0);//Startpunkt festsetzen
+                AP[0]=xList.at(0);//Startpunkt festsetzen
+                AP[1]=yList.at(0);//Startpunkt festsetzen
             }
             EP[0]= zielkoordinaten[0];
             EP[1]= zielkoordinaten[1];
             ziel_x=EP[0];
             ziel_y=EP[1];
-            qDebug()<<"Ziel"<<ziel_x<<ziel_y;
+            qDebug()<<"Ziel:"<<ziel_x<<ziel_y;
         }
         else
         {
@@ -246,28 +241,28 @@ void weg::berechneWeg()
                 AP[1]=yList.at(0);//Startpunkt festsetzen
             }
 
-            buf1 =  (hin[hinnummer][0] - AP[0])/2;
+            buf1 =  (hin[hinnummer][0] - AP[0])/2;              /*Mittelpunkt S berechnen*/
             buf2 =  (hin[hinnummer][1] - AP[1])/2;
             Radius = sqrt(buf1*buf1+buf2*buf2);
             buf1 = AP[0] + buf1;
             buf2 = AP[1] + buf2;
-            Tangentenberechnung(buf1,buf2,AP[0],AP[1], Radius); //Eintrittspunkt in Kreis
+            Tangentenberechnung(buf1,buf2,AP[0],AP[1], Radius); //Eintrittspunkt in Kreis berechnen
         }
-    break;
+        break;
     }
 
     case false:
     {
-        if (hinnummer+1==hinanz){
+        if (hinnummer+1==hinanz){                               /*letzter Austrittspunkt*/
             buf1 =  (zielkoordinaten[0] - hin[hinnummer][0])/2;
             buf2 =  (zielkoordinaten[1] - hin[hinnummer][1])/2;
             Radius = sqrt(buf1*buf1+buf2*buf2);
-            buf1 = hin[hinnummer][0] + buf1;
-            buf2 = hin[hinnummer][1] + buf2;
+            buf1 = hin[hinnummer][0] + buf1;                    /*Punkt S berechnen*/
+            buf2 = hin[hinnummer][1] + buf2;                    /*Punkt S berechnen*/
             Tangentenberechnung(buf1,buf2,zielkoordinaten[0],zielkoordinaten[1], Radius); //Austrittspunkt aus Kreis
         }
-        else{
-            verhaeltnis = (kreisradius[hinnummer]+kreisradius[hinnummer+1]);
+        else{                                                           /*innere Tangente der zwei Kreise bilden*/
+            verhaeltnis = (kreisradius[hinnummer]+kreisradius[hinnummer+1]); /*Punkt P über Strahlensatz*/
             verhaeltnis = kreisradius[hinnummer]/verhaeltnis;
             qDebug()<<"Verhaeltnis"<<verhaeltnis;
 
@@ -276,8 +271,8 @@ void weg::berechneWeg()
             buf1 = buf1/2;
             buf2 = buf2/2;
             Radius = sqrt(buf1*buf1+buf2*buf2);
-            buf1 = hin[hinnummer][0] + buf1;
-            buf2 = hin[hinnummer][1] + buf2;
+            buf1 = hin[hinnummer][0] + buf1;                    /*Punkt S berechnen*/
+            buf2 = hin[hinnummer][1] + buf2;                    /*Punkt S berechnen*/
 
             Tangentenberechnung(buf1,buf2,buf1,buf2, Radius); //Austrittspunkt
 
@@ -357,23 +352,21 @@ void weg::BestimmeSchnittpunkte(double P_x, double P_y, double Q_x, double Q_y, 
 
 
 //Beginn Tangentenpunktberechnung..................................................
-void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunktx, double bezugspunkty, double rad)
+void weg::Tangentenberechnung(double S_x, double S_y, double P_x, double P_y, double rad)
 {
-    double x1,x2; /*Schnittpunkt 1**/
-    double y1,y2; /*Schnittpunkt 2**/
+    double x1,y1; /*Schnittpunkt 1**/
+    double x2,y2; /*Schnittpunkt 2**/
     double alpha,beta; /*Buffer**/
 
-    /*Aufruf Schnittpunktbestimmung**/
-    BestimmeSchnittpunkte(mittelx, mittely, hin[hinnummer][0], hin[hinnummer][1], rad, kreisradius[hinnummer],&x1,&y1,&x2,&y2); //Schnittpunkte der zwei Kreise berechnen
-//    qDebug()<<"Punkt1"<<x1<<y1;
-//    qDebug()<<"Punkt2"<<x2<<y2;
+    /*Schnittpunktbestimmung**/
+    BestimmeSchnittpunkte(S_x, S_y, hin[hinnummer][0], hin[hinnummer][1], rad, kreisradius[hinnummer],&x1,&y1,&x2,&y2); //Schnittpunkte der zwei Kreise berechnen
 
     /*Entscheidung, welcher Schnittpunkt der richtige Tangentenpunkt ist, abhängig davon,
      *ob der zeppelin rechts oder links herum fliegen soll und
      *ob es ein Austrittspunkt bzw ein Eintrittspunkt sein soll**/
 
-    alpha = GetWinkel(hin[hinnummer][0] - bezugspunktx,hin[hinnummer][1] - bezugspunkty);
-    beta = GetWinkel(x1-bezugspunktx,y1-bezugspunkty);
+    alpha = GetWinkel(hin[hinnummer][0] - P_x,hin[hinnummer][1] - P_y);
+    beta = GetWinkel(x1-P_x,y1-P_y);
     if (modus == true) //Flug Geradeaus
     {
         if (hin[hinnummer][2]==1) //falls linksrum
@@ -434,7 +427,7 @@ void weg::Tangentenberechnung(double mittelx, double mittely, double bezugspunkt
                 AP[1]=y2;
             }
         }
-        ziel_x = AP[0]; /*Abspeichern der Zielkoordinaten**/
+        ziel_x = AP[0]; /*Abspeichern des Zwischenziels**/
         ziel_y = AP[1];
      }
 
@@ -722,8 +715,8 @@ void weg::standdrehung(int winkel)
 
 void weg::rueck()
 {
-    schub[0]=rueckschub;
-    schub[1]=rueckschub;
+    schub[0]=rueckschub*(schub[0]);
+    schub[1]=rueckschub*(schub[1]);
     qDebug()<<"Rueckschub";
 }
 

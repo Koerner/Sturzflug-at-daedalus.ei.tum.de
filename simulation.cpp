@@ -18,6 +18,7 @@ int simulation::Runden(double Zahl)
 
 void simulation::sim()
 {
+    scheitel=spannweite;
     double alpha,theta,gamma,tau,z,b,h;
     if (xList.size()!=0){
         start_x = xList.at(0);
@@ -25,7 +26,7 @@ void simulation::sim()
         //start_z = zList.at(0);
     }
     else {
-        scheitel=100;
+        //scheitel=100;
         start_ausrichtung=0;
         start_x = 0;
         start_y = 0;

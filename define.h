@@ -3,8 +3,8 @@
 
 #define PI 3.14159265
 
-#define SCHNELL 60
-#define MITTEL 40
+#define SCHNELL 20
+#define MITTEL 20
 #define LANGSAM 20
 #define SUPERLANGSAM 10
 #define MAX 99

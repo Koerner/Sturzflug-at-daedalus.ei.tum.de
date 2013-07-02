@@ -593,6 +593,7 @@ void MainWindow::setZiel()
     y.abwurfkoordinate[0]=ui->abwurfpunkt_x->value();
     y.abwurfkoordinate[1]=ui->abwurfpunkt_y->value();
     y.spannweite=ui->spannweite->value();
+    z.spannweite=y.spannweite;
     qDebug() << "Zielkoordinaten und Abwurfunkt gestezt:" << y.zielkoordinaten[0] << y.zielkoordinaten[1] << y.abwurfkoordinate[0] << y.abwurfkoordinate[1];
 }
 
@@ -683,6 +684,15 @@ void MainWindow::deletekoordinaten()
     z.xList.clear();
     z.yList.clear();
 
+    y.hinnummer = 0;
+    //y.hinanz = 0;
+    y.modus = 1;
+    y.abwurfmodus = 0;
+    y.schub[0]=0;
+    y.schub[1]=0;
+    y.schub[2]=0;
+    y.notfallmodus=0;
+    y.rueck_countdown=0;
     x.wrapper();
     y.xList.prepend(x.xList.at(0));
     y.yList.prepend(x.yList.at(0));
