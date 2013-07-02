@@ -8,7 +8,7 @@
 class ips
 {
 public:
-    //ips();
+    ips();
     //int getpos();
     void setdata(QString comdata);
     int gettime (int station, int time);

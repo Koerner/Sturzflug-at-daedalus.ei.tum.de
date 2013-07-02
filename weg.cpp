@@ -583,7 +583,7 @@ void weg::notfallplanende()
 
 void weg::hoehensteuerung()
 {
-    int dif;
+    double dif;
     dif=sollHoehe-zList.at(0);
     if (abs(dif)<hoehentol)
     {
@@ -593,7 +593,7 @@ void weg::hoehensteuerung()
     {
         if(abs(dif)<400)
         {
-            schub[2]=dif/5;
+            schub[2]=dif/10;
         }
         else
         {

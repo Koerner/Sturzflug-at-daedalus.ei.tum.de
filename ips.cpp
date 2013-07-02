@@ -4,9 +4,10 @@
 #include "QDebug"
 
 
-//ips::ips()
-//{
-//}
+ips::ips()
+{
+    //stationtime = {{0}};
+}
 
 //Extrahiert die Laufzeit aller Stationen
 void ips::setdata(QString comdata)
@@ -157,7 +158,7 @@ int ips::wrapper()
 
     for (i=0;i<numstations;i++)
     {
-        if (gettimef(i)!=0)
+        if (posStation[i][3]==1)
         {
 
             base_x[j] = posStation[i][0];       //Die Koordinaten der

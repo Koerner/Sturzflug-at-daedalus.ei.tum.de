@@ -913,7 +913,7 @@ void MainWindow::links()
     //geradeabweichung+=5;
     //y.geradeaus(100, geradeabweichung);
 
-    y.schub[1]+=6;
+    y.schub[1]+=5;
     qDebug() << "Key_Left:" << geradeabweichung;
 }
 
@@ -921,7 +921,7 @@ void MainWindow::rechts()
 {
     //geradeabweichung-=5;
     //y.geradeaus(100, geradeabweichung);
-    y.schub[0]+=5;
+    y.schub[0]+=6;
     qDebug() << "Key_Right:" << geradeabweichung;
 }
 
