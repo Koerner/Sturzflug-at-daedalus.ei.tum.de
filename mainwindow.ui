@@ -190,7 +190,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -1666,7 +1666,7 @@
         <x>10</x>
         <y>360</y>
         <width>502</width>
-        <height>146</height>
+        <height>156</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_8">
@@ -1694,7 +1694,7 @@
        <item row="1" column="1">
         <widget class="QSpinBox" name="filterunten">
          <property name="maximum">
-          <number>2</number>
+          <number>5</number>
          </property>
          <property name="value">
           <number>1</number>
@@ -1703,6 +1703,9 @@
        </item>
        <item row="2" column="1">
         <widget class="QSpinBox" name="filteroben">
+         <property name="maximum">
+          <number>5</number>
+         </property>
          <property name="value">
           <number>1</number>
          </property>
@@ -1715,7 +1718,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2">
+       <item row="5" column="0" colspan="2">
         <widget class="QPushButton" name="setFilter">
          <property name="text">
           <string>Filterwerte speichern</string>
@@ -1728,10 +1731,30 @@
           <number>1</number>
          </property>
          <property name="maximum">
-          <number>8</number>
+          <number>15</number>
          </property>
          <property name="value">
           <number>3</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QSpinBox" name="maxFiltererweiterung">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>15</number>
+         </property>
+         <property name="value">
+          <number>8</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_24">
+         <property name="text">
+          <string>Maximale Filtererweiterung bei Nullzeiten</string>
          </property>
         </widget>
        </item>

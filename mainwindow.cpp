@@ -568,7 +568,7 @@ void MainWindow::setHindernisse()
         }
     }
     qDebug() << "Anzahl der Hindernisse: " << y.hinanz;
-    y.berechneRadien();//alle Kurvenradien berechnen
+    y.berechneRadien();//alle Kurvenradien berechnen, folgt aus Abstand zum nächsten Hindernis bzw. Wand
 
 }
 // ENDE Hindernisse speichern .................................................
@@ -629,6 +629,7 @@ void MainWindow::setFilter()
     x.filterOben=ui->filteroben->value();
     x.filterUnten=ui->filterunten->value();
     x.filterAnzahlMittel=ui->filtergemittelt->value();
+    x.maxFilterwerweiterung=ui->maxFiltererweiterung->value();
 }
 
 void MainWindow::setRueckschub()
@@ -756,7 +757,7 @@ void MainWindow::DrawMap()
 // Offset zu den Schubdaten hinzufügen.........................................
 void MainWindow::offset()
 {
-    qDebug() << "offset hinzufühen";
+    //qDebug() << "offset hinzufühen";
     if(!y.schub[0]==0||!y.schub[1]==0)
     {
     schuboffset[0]=y.schub[0]+ui->offsetAbs->value();

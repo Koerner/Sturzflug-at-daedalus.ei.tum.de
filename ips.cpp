@@ -6,104 +6,135 @@
 
 ips::ips()
 {
-    //stationtime = {{0}};
-}
-
-//Extrahiert die Laufzeit aller Stationen
-void ips::setdata(QString comdata)
-{
-    QString delimiterPattern("\n");
-    QStringList comdatasplit = comdata.split(delimiterPattern);
-    int i=0;
-    for (i=0; i<comdatasplit.size(); i++)
+    //Konstruktor
+    for(int i=0; i<10;i++)
     {
-
-        if(comdatasplit[i].length()>0){
-            if (comdatasplit[i].left(1).contains("t", Qt::CaseInsensitive))
-            {if(comdatasplit[i].length()==13)
-                {
-                    //            setstationtime(0,3);
-                    bool ok;
-                    int s=0;
-                    s=comdatasplit[i].mid(1,2).toInt(&ok,10)-1;
-                    int t=0;
-                    comdatasplit[i].mid(3,10).toInt(&ok,10);
-                    if(ok){
-                        t=comdatasplit[i].mid(3,10).toInt(&ok,10);
-                    }
-                    setstationtime(s,t);
-                }
-                else{ //braucht es das? ich glaub nicht
-                    if(comdatasplit[i].length()>3)
-                    {
-                        bool ok;
-                        int s=0;
-                        comdatasplit[i].mid(1,2).toInt(&ok,10);
-                        if(ok)
-                        {
-                            s=comdatasplit[i].mid(1,2).toInt(&ok,10)-1;
-                        }
-                        else
-                        {
-                            //                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10);  //geht nicht
-                        }
-                        //setstationtime(s,0);
-                        keepstationtime(s);
-                    }
-                    else
-                    {
-                        //                    bool ok;
-                        int s=0;
-                        //                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10); //geht nicht
-                        //setstationtime(s,0);
-                        keepstationtime(s);
-                    }
-
-
-                }
-            }
+        for(int j=0;j<15;j++)
+        {
+            stationtime[i][j]=0;
         }
     }
 }
-//ENDE Extrahiert die Laufzeit aller Stationen
 
-//Speichert die letzten 10 Laufzeiten aller Stationen / 0 ist aktuell
+//---------------------------------------------------------------------------------------------------------------------
+// Kommunikation mit dem IPS und Aufarbeitung der Daten (Es können nur maximal 9 Stationen berücksichstigt werden)
+
+//.............................................................................
+//Extrahiert die Laufzeit aller Stationen aus dem String vom seriellen Port (comdata)
+
+//Funkprotokoll:
+// Typ  |Stationsnummer | Zeit  |Endezeichen
+// t    |01             | 1000  | \n
+
+void ips::setdata(QString comdata)
+{    
+    for (int j=0; j<10; j++)        //
+    {                               // Setzt das Zwischenspeicher-Array=0
+        zwischenspeicher[j]=0;      //
+    }                               //
+
+    QString delimiterPattern("\n");                             //Teilt den comdata-String in die einzelnen Datenpakete, anhand der Endmarke \n
+    QStringList comdatasplit = comdata.split(delimiterPattern); //
+
+    for (int i=0; i<comdatasplit.size(); i++) //Die Schleife geht alle Datenpakete7Stücke durch
+    {
+        if(comdatasplit[i].length()>0){ //Verhindert Abstürze bei leeren Paketen
+            if (comdatasplit[i].left(1).contains("t", Qt::CaseInsensitive)) //Fragt ab ob es ein t Paket ist, andere werden verworfen
+            {if(comdatasplit[i].length()==13)   //Verhindert Abstürze bei unvollständigen Datenpaketen
+                {
+                    bool ok;
+                    int s=0;
+                    s=comdatasplit[i].mid(1,2).toInt(&ok,10)-1; //extrahiert den String mit der Stationsnummer und konvertiert in einene int (Basis 10)
+                    int t=0;
+                    comdatasplit[i].mid(3,10).toInt(&ok,10); //extrahiert den String mit der Zeit und konvertiert in eine int (Basis 10)
+                    if(ok){
+                        t=comdatasplit[i].mid(3,10).toInt(&ok,10);
+                    }
+                    zwischenspeicher[s]=t;  //Speichert die empfangenenen Werte zwischen
+                    //setstationtime(s,t); //speichert die Stationsnummer und Zeit
+                }
+//                else{ //braucht es das? ich glaub nicht
+//                    if(comdatasplit[i].length()>3)
+//                    {
+//                        bool ok;
+//                        int s=0;
+//                        comdatasplit[i].mid(1,2).toInt(&ok,10);
+//                        if(ok)
+//                        {
+//                            s=comdatasplit[i].mid(1,2).toInt(&ok,10)-1;
+//                        }
+//                        else
+//                        {
+//                            //                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10);  //geht nicht
+//                        }
+//                        //setstationtime(s,0);
+//                        keepstationtime(s);
+//                    }
+//                    else
+//                    {
+//                        //                    bool ok;
+//                        int s=0;
+//                        //                    s=comdatasplit[i-1].mid(1,2).toInt(&ok,10); //geht nicht
+//                        //setstationtime(s,0);
+//                        keepstationtime(s);
+//                    }
+//              }
+//
+            }
+        }
+    }
+    for(int k=0; k<10; k++)
+    {
+        setstationtime(k, zwischenspeicher[k]);
+    }
+}
+
+//ENDE Extrahiert die Laufzeit aller Stationen
+//.............................................................................
+
+//.............................................................................
+//Speichert den aktuellen Wert der Stationen an der Stelle [0] im Array und verschiebt alle alten Werte nach unten
 void ips::setstationtime (int nr, int rawtime)
 {
     int i=0;
-    for (i=8; i>0; i--)
+    for (i=15; i>0; i--)
     {stationtime[nr][i]=stationtime[nr][i-1];}
     stationtime[nr][0]=rawtime;
-
-
 }
-void ips::keepstationtime (int nr)
-{
-    int i=0;
-    for (i=8; i>0; i--)
-    {stationtime[nr][i]=stationtime[nr][i-1];}
-    stationtime[nr][0]=stationtime[nr][1];
+//void ips::keepstationtime (int nr)
+//{
+//    int i=0;
+//    for (i=8; i>0; i--)
+//    {stationtime[nr][i]=stationtime[nr][i-1];}
+//    stationtime[nr][0]=stationtime[nr][1];
 
 
-}
-// STOP Speichert die letzten 10 Laufzeiten aller Stationen
+//}
+// ENDE Stationen speichern
+//.............................................................................
 
+//Einfache Funktion die eine Zeit direkt auslesen kann (vorsicht nur die letzten 15 Werte stehen zur Verfügung, aktuellster ist 0)
 int ips::gettime (int station, int time)
 {
     return stationtime[station][time];
 }
 
+//.............................................................................
 // Hochleistungfilter ;) Neu Neu Neu
+
+// Dieser Filter nimmt die letzen Werte der Station, sortiert sie, streicht Nullwerte und ggf.
+// den hohe und tiefe Werte (in der GUI einzustellen) und bildet dann das Mittel der verbleibenden
+
 int ips::gettimef(int station)
 {
-    int i=0;
-    double timef=0;
-    int array[10];
-    int filterzus=1;            //Zahl der Werte die gemittelt werden sollen
-    int filterstreichenunten=0; //Zahl der niedrigsten Werte die gestrichen werden
-    int filterstreichenoben=0;  //Zahl der höchsten Werte die gestrichen werden
+    double timef=0; //Setzt den Filter am Anfang zurück
+    int array[15];  //Array zum Zwischenspeichern der Werte
 
-    for(i=0;i<filterzus;i++)
+    int filterzus=filterAnzahlMittel;
+    int filterstreichenunten=filterUnten;
+    int filterstreichenoben=filterOben;
+
+    for(int i=0;i<filterzus;i++)
     {
         if(stationtime[station][i]!=0)
         {
@@ -111,24 +142,31 @@ int ips::gettimef(int station)
         }
         else
         {
-            if(filterzus==9)                                    // damit der Filter nicht überläuft, gerade am Anfang wenn noch keine Werte da sind
+            if(filterzus==14||filterzus==maxFilterwerweiterung)   // damit der Filter nicht überläuft, gerade am Anfang wenn noch keine Werte da sind
             {
                 qDebug()<< "Kein Wert";
                 array[i] = stationtime[station][i];
             }
             else                                                //0 erhöhen die Zusammenfassungsanzahl um 1 und den Wert der unten getrichen wird. ergo die null wird am schluss gestrichen
-            {
-                filterzus=filterzus+1;
-                filterstreichenunten=filterstreichenunten+1;
+            {                                                   //
+                array[i] = 0;                                   //
+                filterzus=filterzus+1;                          //
+                filterstreichenunten=filterstreichenunten+1;    //
             }
         }
     }
 
     std::sort(array, array+filterzus);                          // Das array wird nach größe sortiert
-    timef=0;
 
-    for(i=filterstreichenunten;i<(filterzus-filterstreichenoben);i++)   //Die Höchsten und niedrigsten Werte werden gestrichen, der Rest zusammengerechnet
-    {timef=timef+array[i];}
+    if(filterzus-filterstreichenunten<=filterstreichenoben)
+    {
+        filterstreichenoben=0;
+        qDebug()<< "Filter: streichen oben auf Null gesetzt, wegen zu vielen Nullzeiten";
+    }
+    for(int i=filterstreichenunten;i<(filterzus-filterstreichenoben);i++)   //Die Höchsten und niedrigsten Werte werden gestrichen, der Rest zusammengerechnet
+    {
+        timef=timef+array[i];
+    }
 
     timef=timef/(filterzus-(filterstreichenoben+filterstreichenunten)); //Mittelwert bilden
 
@@ -137,16 +175,17 @@ int ips::gettimef(int station)
     return timef;
 
 }
-//ENDE Filter
+
+//ENDE Extrahieren und Filtern
+//---------------------------------------------------------------------------------------------------------------------
 
 
 
-
+//---------------------------------------------------------------------------------------------------------------------
 //Beginn Triang.
 //Der Großteil des Codes ist vom Tutor Markus erstellt und wurde hier übernommen.
 //Einige Änderungen wurden durchgeführt, um es c++-konform zu machen
 //Die Berechnung basiert auf dem numerischen Gradientenverfahren
-
 
 //Beginn wrapper (Sammeln der Daten)
 int ips::wrapper()
@@ -200,7 +239,7 @@ int ips::wrapper()
 }
 //Ende wrapper
 
-
+//.............................................................................
 //Start Berechnung der Koordinaten
 void ips::rechne()
 {
@@ -256,8 +295,9 @@ void ips::rechne()
     }
 }
 //Ende Berechnung der Koordinaten
+//.............................................................................
 
-
+//.............................................................................
 //Start zu minimierende Funktion f
 double ips::f(double x, double y, double z, int h)
 {
@@ -272,10 +312,13 @@ double ips::f(double x, double y, double z, int h)
     }
     return erg3;
 }
+
 //Ende zu minimierende Funktion f
+//.............................................................................
 
-
+//.............................................................................
 //Start Berechnung des Gradienten f (gradf)
+
 void ips::gradf(double x, double y, double z, int h)
 {
 
@@ -298,9 +341,11 @@ void ips::gradf(double x, double y, double z, int h)
 
 }
 //Ende gradf
+//.............................................................................
 
-
+//.............................................................................
 //Start Bestimmung der armijo-Schrittweite(armijo)
+
 double ips::armijo(double x, double y, double z, int h)
 {
     double schritt = 1;
@@ -328,5 +373,7 @@ double ips::armijo(double x, double y, double z, int h)
     return schritt;
 }
 //Ende armijo
+//.............................................................................
 
 //Ende Triang.
+//---------------------------------------------------------------------------------------------------------------------

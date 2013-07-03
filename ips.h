@@ -9,7 +9,8 @@ class ips
 {
 public:
     ips();
-    //int getpos();
+
+
     void setdata(QString comdata);
     int gettime (int station, int time);
     int gettimef(int station);
@@ -18,14 +19,17 @@ public:
     int filterAnzahlMittel;     //Zahl der Werte die gemittelt werden sollen
     int filterUnten;            //Zahl der niedrigsten Werte die gestrichen werden
     int filterOben;             //Zahl der höchsten Werte die gestrichen werden
+    int maxFilterwerweiterung; //Maximalzahl der zusammengefassten Werte im Filter, wenn NULL Werte dabei sind
 
-    int stationtime[10][10];//={{0}};
-    int posStation[10][4];
-    QList<int> xList;
-    QList<int> yList;
-    QList<int> zList;
+    int stationtime[10][15];    //Speicher für die ungefilterten Stationszeiten [Nummer der Station][Gespeicherte Zeiten]
+    int posStation[10][4];      //Positionen der Stationen (Koordinaten) [Stationsnummer][x,y,z,aktiv]
+    int zwischenspeicher[10];   //Zwischenspeicher für die aktuellen Stationszeiten bis zur Abspeicherung in Stationtime
 
-    bool ultraschall;
+    QList<int> xList;   //
+    QList<int> yList;   // Liste aller bisherigen Positionen (Koordinaten)
+    QList<int> zList;   //
+
+    bool ultraschall;   //Höhenbestimmung mit Ultraschall statt IPS (->true)
 
 private:
     int x[50];
