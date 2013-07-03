@@ -592,14 +592,14 @@ void weg::hoehensteuerung()
     if (abs(dif)<hoehentol)
     {
 
-        schub[2]=dif/(HOEHENSCHUBMULTIPLIKATOR)*(rueckschub);
+        schub[2]=dif/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
 
 
-        schub[2]=0;
+        //schub[2]=0;
     }
     else
     {
-        if(abs(dif)<400)
+        if(abs(dif)<800)
         {
             schub[2]=dif/HOEHENSCHUBMULTIPLIKATOR;
         }

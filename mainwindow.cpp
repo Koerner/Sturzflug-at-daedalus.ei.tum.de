@@ -306,20 +306,21 @@ void MainWindow::XbeeonReadyRead()
         XbeewriteComText ("->");    //
         XbeewriteComText(comdata);  // Grafische Ausgabe
         XbeewriteComText ("\n");    //
-        //qDebug()<<"umrechnung starten";
+        qDebug()<<"umrechnung starten";
         bool *ok=0;
         int ausrichtung=0;
         int hoehe=0;
         ausrichtung=comdata.mid(3,3).toInt(ok,10); //konvertiert die Daten in eine Integer
-        if(ausrichtung>320 && ok)
+        qDebug() << ausrichtung;
+        if(ausrichtung>320)
         {
             y.Ausrichtung.prepend(ausrichtung-500);  //konvertiert die Daten in eine Integer
             qDebug() << "Ausrichtung:" << y.Ausrichtung.at(0);
         }
         hoehe=comdata.mid(0,3).toInt(ok,10);
-        if(hoehe>99 && ok)
+        if(hoehe>99 && ui->ultraschall->isChecked())
         {
-            y.zList.prepend(hoehe-100);  //konvertiert die Daten in eine Integer
+            y.zList.prepend(hoehe*10-1000);  //konvertiert die Daten in eine Integer
             qDebug() << "Hoehe:" << y.zList.at(0);
         }
 
