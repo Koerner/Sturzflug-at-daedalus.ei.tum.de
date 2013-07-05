@@ -190,7 +190,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -200,9 +200,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>10</y>
+        <y>0</y>
         <width>831</width>
-        <height>541</height>
+        <height>551</height>
        </rect>
       </property>
       <property name="verticalScrollBarPolicy">
@@ -245,6 +245,13 @@
         <widget class="QCheckBox" name="flug">
          <property name="text">
           <string>echter Flug</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="pos_rechne">
+         <property name="text">
+          <string>Positionsbestimmung (IPS)</string>
          </property>
         </widget>
        </item>
@@ -1023,6 +1030,9 @@
          <property name="singleStep">
           <number>5</number>
          </property>
+         <property name="value">
+          <number>400</number>
+         </property>
         </widget>
        </item>
        <item row="0" column="1">
@@ -1101,7 +1111,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_Spannweite">
          <property name="text">
-          <string>Spannweite [mm]</string>
+          <string>halbe Spannweite:</string>
          </property>
         </widget>
        </item>

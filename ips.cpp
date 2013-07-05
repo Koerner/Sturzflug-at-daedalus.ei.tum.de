@@ -197,7 +197,7 @@ int ips::wrapper()
 
     for (i=0;i<numstations;i++)
     {
-        if (posStation[i][3]==1)
+        if ((posStation[i][3]==1) && (gettimef(i)!=0))
         {
 
             base_x[j] = posStation[i][0];       //Die Koordinaten der
@@ -209,7 +209,6 @@ int ips::wrapper()
             j++;
         }
     }
-    qDebug()<<"Funktionstüchtige Stationen: "<<j;
     n = j;
     if (xList.size()!=0){
         start_x = xList.at(0);
@@ -257,12 +256,12 @@ void ips::rechne()
     while(i<300)
     {
         //Grad (google it!!)
-        gradf(x,y,z,n);
+        gradf(x,y,z);
         richtung[0] = erg[0];
         richtung[1] = erg[1];
         richtung[2] = erg[2];
         //Schrittweite nach Armijo (google it!!)
-        schritt = armijo(x,y,z,n);
+        schritt = armijo(x,y,z);
         //qDebug() << schritt;
         x_neu = x - schritt*richtung[0];
         //qDebug() << x_neu;
@@ -299,7 +298,7 @@ void ips::rechne()
 
 //.............................................................................
 //Start zu minimierende Funktion f
-double ips::f(double x, double y, double z, int h)
+double ips::f(double x, double y, double z)
 {
     int i = 0;
     double erg3 = 0.0;
@@ -319,7 +318,7 @@ double ips::f(double x, double y, double z, int h)
 //.............................................................................
 //Start Berechnung des Gradienten f (gradf)
 
-void ips::gradf(double x, double y, double z, int h)
+void ips::gradf(double x, double y, double z)
 {
 
     erg[0] = 0.0; erg[1] = 0.0; erg[2] = 0.0;
@@ -346,7 +345,7 @@ void ips::gradf(double x, double y, double z, int h)
 //.............................................................................
 //Start Bestimmung der armijo-Schrittweite(armijo)
 
-double ips::armijo(double x, double y, double z, int h)
+double ips::armijo(double x, double y, double z)
 {
     double schritt = 1;
     int i = 0;
@@ -362,8 +361,8 @@ double ips::armijo(double x, double y, double z, int h)
 
     while (i < 1200)
     {
-        ls = f(x+schritt*(-gradient[0]),y+schritt*(-gradient[1]),z+schritt*(-gradient[2]),n);
-        rs = f(x,y,z,n) + 0.5*schritt*(-gradient[0]*gradient[0]-gradient[1]*gradient[1]-gradient[2]*gradient[2]);
+        ls = f(x+schritt*(-gradient[0]),y+schritt*(-gradient[1]),z+schritt*(-gradient[2]));
+        rs = f(x,y,z) + 0.5*schritt*(-gradient[0]*gradient[0]-gradient[1]*gradient[1]-gradient[2]*gradient[2]);
         if (ls <= rs)
             break;
         schritt = schritt / 2;

@@ -4,7 +4,6 @@
 
 simulation::simulation()
 {
-//start_ausrichtung=0;
     schub[0]=0;
     schub[1]=0;
 }
@@ -82,6 +81,7 @@ void simulation::sim()
     {
         start_ausrichtung=start_ausrichtung-180*k+180;
     }
-    qDebug()<<"Ausrichtung2"<<start_ausrichtung;
+    qDebug()<< "Position Zeppelin: "<<xList.at(0)<<"(x),"<<yList.at(0)<<"(y)";
+    qDebug()<<"Ausrichtung:"<<start_ausrichtung;
     }
 }

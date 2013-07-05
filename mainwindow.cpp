@@ -877,8 +877,12 @@ void MainWindow::refresh()
         y.xList.prepend(x.xList.at(0));
         y.yList.prepend(x.yList.at(0));
         y.Ausrichtung.prepend(z.start_ausrichtung);
-        qDebug()<< "Position Zeppelin: "<<y.xList.at(0)<<"(x),"<<y.yList.at(0)<<"(y)";
         y.start();
+    }
+
+    if(ui->pos_rechne->isChecked())
+    {
+        x.wrapper();  //Positionsbestimmung
     }
 
     if(ui->flug->isChecked())
@@ -886,7 +890,7 @@ void MainWindow::refresh()
         y.xList.prepend(x.xList.at(0));
         y.yList.prepend(x.yList.at(0));
         y.zList.prepend(x.zList.at(0));
-        x.wrapper();  //Wegberechnung
+        y.start(); //Regelung und Weg
     }
     if(ui->hoehe->isChecked())
     {
