@@ -49,8 +49,9 @@ void ips::setdata(QString comdata)
                     comdatasplit[i].mid(3,10).toInt(&ok,10); //extrahiert den String mit der Zeit und konvertiert in eine int (Basis 10)
                     if(ok){
                         t=comdatasplit[i].mid(3,10).toInt(&ok,10);
+                        zwischenspeicher[s]=t;
                     }
-                    zwischenspeicher[s]=t;  //Speichert die empfangenenen Werte zwischen
+                      //Speichert die empfangenenen Werte zwischen
                     //setstationtime(s,t); //speichert die Stationsnummer und Zeit
                 }
 //                else{ //braucht es das? ich glaub nicht
@@ -98,7 +99,7 @@ void ips::setdata(QString comdata)
 void ips::setstationtime (int nr, int rawtime)
 {
     int i=0;
-    for (i=15; i>0; i--)
+    for (i=14; i>0; i--)
     {stationtime[nr][i]=stationtime[nr][i-1];}
     stationtime[nr][0]=rawtime;
     //qDebug()<<stationtime[nr][0];
