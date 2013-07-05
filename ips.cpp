@@ -86,6 +86,7 @@ void ips::setdata(QString comdata)
     for(int k=0; k<10; k++)
     {
         setstationtime(k, zwischenspeicher[k]);
+        //qDebug()<<zwischenspeicher[k];
     }
 }
 
@@ -100,6 +101,7 @@ void ips::setstationtime (int nr, int rawtime)
     for (i=15; i>0; i--)
     {stationtime[nr][i]=stationtime[nr][i-1];}
     stationtime[nr][0]=rawtime;
+    //qDebug()<<stationtime[nr][0];
 }
 //void ips::keepstationtime (int nr)
 //{
@@ -128,24 +130,29 @@ int ips::gettime (int station, int time)
 int ips::gettimef(int station)
 {
     double timef=0; //Setzt den Filter am Anfang zurück
-    int array[15];  //Array zum Zwischenspeichern der Werte
+    int array[15];//Array zum Zwischenspeichern der Werte
 
+    for (int i=0;i<15;i++)
+    {
+        array[i]=30000;
+    }
     int filterzus=filterAnzahlMittel;
     int filterstreichenunten=filterUnten;
     int filterstreichenoben=filterOben;
 
     for(int i=0;i<filterzus;i++)
     {
-        if(stationtime[station][i]!=0)
+        if(stationtime[station][i]>0 && stationtime[station][i]<30000)
         {
             array[i] = stationtime[station][i];
+            qDebug()<<"Array"<<array[i];
         }
         else
         {
             if(filterzus==14||filterzus==maxFilterwerweiterung)   // damit der Filter nicht überläuft, gerade am Anfang wenn noch keine Werte da sind
             {
                 qDebug()<< "Kein Wert";
-                array[i] = stationtime[station][i];
+                array[i] = 0;
             }
             else                                                //0 erhöhen die Zusammenfassungsanzahl um 1 und den Wert der unten getrichen wird. ergo die null wird am schluss gestrichen
             {                                                   //
@@ -156,7 +163,7 @@ int ips::gettimef(int station)
         }
     }
 
-    std::sort(array, array+filterzus);                          // Das array wird nach größe sortiert
+    std::sort(std::begin(array), std::end(array));                          // Das array wird nach größe sortiert
 
     if(filterzus-filterstreichenunten<=filterstreichenoben)
     {
@@ -173,6 +180,7 @@ int ips::gettimef(int station)
     qDebug()<< "timef: " << timef << "zusammengefasst:"<< filterzus << "unten gestrichen:" << filterstreichenunten << "oben gestrichen:" << filterstreichenoben;
 
     return timef;
+    //return stationtime[station][0];
 
 }
 
@@ -199,6 +207,7 @@ int ips::wrapper()
     {
         if ((posStation[i][3]==1) && (gettimef(i)!=0))
         {
+            qDebug()<<"Nummer i"<<i;
 
             base_x[j] = posStation[i][0];       //Die Koordinaten der
             base_y[j] = posStation[i][1];       //Bodenstationen werden
@@ -209,6 +218,7 @@ int ips::wrapper()
             j++;
         }
     }
+    qDebug()<<"Anzahl"<<j;
     n = j;
     if (xList.size()!=0){
         start_x = xList.at(0);

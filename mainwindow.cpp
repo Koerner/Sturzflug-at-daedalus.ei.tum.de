@@ -7,15 +7,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //deafult
-//    ui->s1x->setValue(1000);ui->s1y->setValue(1000);ui->s1z->setValue(0);
-//    ui->s2x->setValue(2000);ui->s2y->setValue(1000);ui->s2z->setValue(0);
-//    ui->s3x->setValue(2000);ui->s3y->setValue(0000);ui->s3z->setValue(1000);
-//    ui->s4x->setValue(1000);ui->s4y->setValue(0000);ui->s4z->setValue(0);
-//    ui->s5x->setValue(0000);ui->s5y->setValue(0000);ui->s5z->setValue(1000);
-//    ui->s6x->setValue(0000);ui->s6y->setValue(1000);ui->s6z->setValue(0);
-//    ui->s7x->setValue(0000);ui->s7y->setValue(2000);ui->s7z->setValue(1000);
-//    ui->s8x->setValue(1000);ui->s8y->setValue(2000);ui->s8z->setValue(0);
-//    ui->s9x->setValue(2000);ui->s9y->setValue(2000);ui->s9z->setValue(1000);
+    ui->s1x->setValue(1000);ui->s1y->setValue(1000);ui->s1z->setValue(0);
+    ui->s2x->setValue(2000);ui->s2y->setValue(1000);ui->s2z->setValue(0);
+    ui->s3x->setValue(2000);ui->s3y->setValue(0000);ui->s3z->setValue(1000);
+    ui->s4x->setValue(1000);ui->s4y->setValue(0000);ui->s4z->setValue(0);
+    ui->s5x->setValue(0000);ui->s5y->setValue(0000);ui->s5z->setValue(1000);
+    ui->s6x->setValue(0000);ui->s6y->setValue(1000);ui->s6z->setValue(0);
+    ui->s7x->setValue(0000);ui->s7y->setValue(2000);ui->s7z->setValue(1000);
+    ui->s8x->setValue(1000);ui->s8y->setValue(2000);ui->s8z->setValue(0);
+    ui->s9x->setValue(2000);ui->s9y->setValue(2000);ui->s9z->setValue(1000);
     //Ende default;
 
     //Karte erstellen
@@ -882,6 +882,7 @@ void MainWindow::refresh()
 
     if(ui->pos_rechne->isChecked())
     {
+
         x.wrapper();  //Positionsbestimmung
     }
 
