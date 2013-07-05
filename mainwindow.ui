@@ -190,7 +190,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -223,8 +223,8 @@
        <rect>
         <x>840</x>
         <y>10</y>
-        <width>171</width>
-        <height>165</height>
+        <width>182</width>
+        <height>192</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -1676,7 +1676,7 @@
         <x>10</x>
         <y>360</y>
         <width>502</width>
-        <height>156</height>
+        <height>177</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_8">
@@ -1921,7 +1921,7 @@
      <x>0</x>
      <y>0</y>
      <width>1224</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
