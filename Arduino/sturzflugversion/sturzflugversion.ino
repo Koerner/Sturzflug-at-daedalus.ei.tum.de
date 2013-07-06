@@ -17,20 +17,21 @@ void setup(){
   time = millis() - 200;
 }
 
-float posx=0,posy=0,posz=500;
+float posx=1000,posy=1000,posz=500;
 float vx=0,vy=0,vz=0;
 long randi=0;
 int k=0;
+double g=0;
 // Position der Bodenstationen
-int pos[9][3] = { {0,0,0},
+int pos[9][3] = { {1000,1000,0},
+                   {2000,1000,0},
+                   {2000,0,1000},
                    {1000,0,0},
-                   {1000,1000,1000},
-                   {0,1000,0},
-                   {-1000,1000,1000},
-                   {-1000,0,0},
-                   {-1000,-1000,1000},
-                   {0,-1000,0},
-                   {1000,-1000,1000} };
+                   {0,0000,1000},
+                   {000,1000,0},
+                   {000,2000,1000},
+                   {1000,2000,0},
+                   {2000,2000,1000} };
 
 
 void loop(){
@@ -43,7 +44,7 @@ void loop(){
     from = i+1;
     unsigned long deltat;
     distance = sqrt((pos[i][0]-posx)*(pos[i][0]-posx)+(pos[i][1]-posy)*(pos[i][1]-posy)+(pos[i][2]-posz)*(pos[i][2]-posz));
-    randi = random(-100,500);
+    randi = 0;
     deltat = long(distance * 2.94);
     deltat = deltat + long(float(deltat) * float(randi) / 10000.0);
     if (randi > 460) deltat = deltat + 2000;
@@ -80,24 +81,24 @@ void loop(){
   Serial.print("x");
   Serial.println(posz);
    
-  randi = random(-1000,1000);
-  vx = vx + randi/100.0; 
-  if(abs(posx) > 2000) vx = vx - 10.0*posx/abs(posx);
-  if(abs(vx) > 200) vx = 170 * vx/abs(vx);
-  randi = random(-1000,1000);
-  vy = vy + randi/100.0; 
-  if(abs(posy) > 2000) vy = vy - 10.0*posy/abs(posy);
-  if(abs(vy) > 200) vy = 170 * vy/abs(vy);
-  randi = random(-1000,1000);
-  vz = vz + randi/300.0; 
-  if(posz > 2000) vz = vz - 4.0;
-  if(posz < 500) vz = vz + 4.0;
-  //if(posz < 20) posz = 20;
-  if(abs(vz) > 80) vz = 80 * vz/abs(vz);
-  
-  posx = posx + vx;
-  posy = posy + vy;
-  posz = posz + vz;
+//  randi = random(-1000,1000);
+//  vx = vx + randi/100.0; 
+//  if(abs(posx) > 2000) vx = vx - 10.0*posx/abs(posx);
+//  if(abs(vx) > 200) vx = 170 * vx/abs(vx);
+//  randi = random(-1000,1000);
+//  vy = vy + randi/100.0; 
+//  if(abs(posy) > 2000) vy = vy - 10.0*posy/abs(posy);
+//  if(abs(vy) > 200) vy = 170 * vy/abs(vy);
+//  randi = random(-1000,1000);
+//  vz = vz + randi/300.0; 
+//  if(posz > 2000) vz = vz - 4.0;
+//  if(posz < 500) vz = vz + 4.0;
+//  //if(posz < 20) posz = 20;
+//  if(abs(vz) > 80) vz = 80 * vz/abs(vz);
+  g=g+(2*(3.14/180));
+  posx = 1000*(sin(g));
+  posy = 1000*(cos(g));
+  posz = 900;
   
   
   if(k%53 == 0) Serial.println("Bodenstation 4 meldet schwachen Akku!");

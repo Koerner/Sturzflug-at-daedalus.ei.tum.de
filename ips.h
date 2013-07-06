@@ -31,6 +31,7 @@ public:
 
     bool ultraschall;   //Höhenbestimmung mit Ultraschall statt IPS (->true)
 
+    void setup();
 private:
     int x[50];
     int y[50];

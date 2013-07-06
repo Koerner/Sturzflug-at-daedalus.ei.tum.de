@@ -140,6 +140,7 @@ void MainWindow::setup()
     setPosStation();
     setHindernisse();
     setRueckschub();
+    x.setup();
 
     Refreshtimer->start();  //Starten den Refresher, sonst geht garnix ;)
 
@@ -608,6 +609,7 @@ void MainWindow::setHoehe()
 {
     y.sollHoehe=ui->SollHoehe->value();
     y.hoehentol=ui->HoeheTol->value();
+    y.hoehe_d=ui->hoehe_d->value();
     qDebug()<<"Hoehe + Hoehentol gesetzt: " << y.sollHoehe << y.hoehentol;
 }
 

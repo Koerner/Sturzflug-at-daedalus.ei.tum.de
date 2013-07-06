@@ -60,6 +60,7 @@ public:
     //Hoehensteuerung
     int sollHoehe;
     int hoehentol;
+    int hoehe_d;
 
 
     //gerade(0) oder kreis(1)
