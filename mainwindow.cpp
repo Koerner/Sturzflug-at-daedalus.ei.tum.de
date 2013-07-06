@@ -737,6 +737,9 @@ void MainWindow::DrawMap()
     QPen penAB;
     penAB.setWidth(20);
     penAB.setColor(Qt::yellow);
+    QPen penZeppelin;
+    penZeppelin.setWidth(20);
+    penZeppelin.setColor(Qt::gray);
 
     int i=0;
     if(ui->printzeppelin->isChecked())
@@ -763,6 +766,11 @@ void MainWindow::DrawMap()
     if (x.zList.size()!=0)
     {
         ui->hoeheDisplay->display(x.zList.at(0));
+    }
+    if (y.Ausrichtung.size()!=0)
+    {
+        map->addLine(x.xList.at(0),x.yList.at(0),(x.xList.at(0)+1000*cos(y.Ausrichtung.at(0))),(x.yList.at(0)+1000*sin(y.Ausrichtung.at(0))),penZeppelin);
+
     }
 
 }
