@@ -769,7 +769,9 @@ void MainWindow::DrawMap()
     }
     if (y.Ausrichtung.size()!=0)
     {
-        map->addLine(x.xList.at(0),x.yList.at(0),(x.xList.at(0)+1000*cos(y.Ausrichtung.at(0))),(x.yList.at(0)+1000*sin(y.Ausrichtung.at(0))),penZeppelin);
+        double winkel=y.Ausrichtung.at(0)*PI/180;
+        qDebug()<<"winkel: " << winkel;
+        map->addLine(x.xList.at(0),x.yList.at(0),(x.xList.at(0)+300*cos(winkel)),(x.yList.at(0)+300*sin(winkel)),penZeppelin);
 
     }
 
