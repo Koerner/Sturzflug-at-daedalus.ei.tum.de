@@ -6,8 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //deafult
-    ui->s1x->setValue(1000);ui->s1y->setValue(1000);ui->s1z->setValue(0);
+    //IPS Stationen Arduino-Simulation
+    /*ui->s1x->setValue(1000);ui->s1y->setValue(1000);ui->s1z->setValue(0);
     ui->s2x->setValue(2000);ui->s2y->setValue(1000);ui->s2z->setValue(0);
     ui->s3x->setValue(2000);ui->s3y->setValue(0000);ui->s3z->setValue(1000);
     ui->s4x->setValue(1000);ui->s4y->setValue(0000);ui->s4z->setValue(0);
@@ -15,8 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->s6x->setValue(0000);ui->s6y->setValue(1000);ui->s6z->setValue(0);
     ui->s7x->setValue(0000);ui->s7y->setValue(2000);ui->s7z->setValue(1000);
     ui->s8x->setValue(1000);ui->s8y->setValue(2000);ui->s8z->setValue(0);
-    ui->s9x->setValue(2000);ui->s9y->setValue(2000);ui->s9z->setValue(1000);
-    //Ende default;
+    ui->s9x->setValue(2000);ui->s9y->setValue(2000);ui->s9z->setValue(1000);*/
+    //Ende IPS Stationen;
 
     //Karte erstellen
     map = new QGraphicsScene(this);
@@ -579,6 +579,9 @@ void MainWindow::setrefreshrate()
 
     Refreshtimer->setInterval(ui->refreshTime->value());
     qDebug() << "Refreshrate geändert:" << ui->refreshTime->value();
+
+    //Damit der Abweichungsfilter mit angepasst wird!
+    setFilter();
 }
 
 void MainWindow::setAbweichung()
@@ -628,10 +631,15 @@ void MainWindow::setHandsteuerung()
 
 void MainWindow::setFilter()
 {
+    //ZEITEN Filter
     x.filterOben=ui->filteroben->value();
     x.filterUnten=ui->filterunten->value();
     x.filterAnzahlMittel=ui->filtergemittelt->value();
     x.maxFilterwerweiterung=ui->maxFiltererweiterung->value();
+
+    //Logik Maximalabweichungsfilter
+    x.max_abw_flug=(ui->max_geschw_flug->value()*ui->refreshTime->value());
+    x.max_abw_hoehe=(ui->max_geschw_hoehe->value()*ui->refreshTime->value());
 }
 
 void MainWindow::setRueckschub()

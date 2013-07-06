@@ -1252,6 +1252,9 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>3000</number>
+         </property>
         </widget>
        </item>
        <item row="6" column="1">
@@ -1287,12 +1290,18 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>1500</number>
+         </property>
         </widget>
        </item>
        <item row="8" column="2">
         <widget class="QSpinBox" name="s8y">
          <property name="maximum">
           <number>99999</number>
+         </property>
+         <property name="value">
+          <number>3000</number>
          </property>
         </widget>
        </item>
@@ -1357,6 +1366,9 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>3000</number>
+         </property>
         </widget>
        </item>
        <item row="8" column="3">
@@ -1385,6 +1397,9 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>3000</number>
+         </property>
         </widget>
        </item>
        <item row="6" column="2">
@@ -1399,12 +1414,18 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>420</number>
+         </property>
         </widget>
        </item>
        <item row="5" column="3">
         <widget class="QSpinBox" name="s5z">
          <property name="maximum">
           <number>99999</number>
+         </property>
+         <property name="value">
+          <number>0</number>
          </property>
         </widget>
        </item>
@@ -1419,6 +1440,9 @@
         <widget class="QSpinBox" name="s9y">
          <property name="maximum">
           <number>99999</number>
+         </property>
+         <property name="value">
+          <number>1500</number>
          </property>
         </widget>
        </item>
@@ -1448,6 +1472,9 @@
          <property name="text">
           <string>3</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item row="4" column="0">
@@ -1455,12 +1482,18 @@
          <property name="text">
           <string>4</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item row="5" column="0">
         <widget class="QCheckBox" name="stat5_checkBox">
          <property name="text">
           <string>5</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1483,12 +1516,18 @@
          <property name="text">
           <string>8</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item row="9" column="0">
         <widget class="QCheckBox" name="stat9_checkBox">
          <property name="text">
           <string>9</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1691,9 +1730,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>360</y>
+        <y>350</y>
         <width>502</width>
-        <height>177</height>
+        <height>221</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_8">
@@ -1745,7 +1784,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="2">
+       <item row="8" column="0" colspan="2">
         <widget class="QPushButton" name="setFilter">
          <property name="text">
           <string>Filterwerte speichern</string>
@@ -1782,6 +1821,59 @@
         <widget class="QLabel" name="label_24">
          <property name="text">
           <string>Maximale Filtererweiterung bei Nullzeiten</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string>Maximale Fluggeschwindigkeit [mm/s]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string>Maximale Höhenänderung [mm/s]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QSpinBox" name="max_geschw_flug">
+         <property name="minimum">
+          <number>50</number>
+         </property>
+         <property name="maximum">
+          <number>9999</number>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
+         <property name="value">
+          <number>300</number>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QSpinBox" name="max_geschw_hoehe">
+         <property name="minimum">
+          <number>10</number>
+         </property>
+         <property name="maximum">
+          <number>9999</number>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
+         <property name="value">
+          <number>300</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
