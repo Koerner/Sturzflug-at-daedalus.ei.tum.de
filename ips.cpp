@@ -6,7 +6,6 @@
 
 ips::ips()
 {
-
 }
 
 void ips::setup()
@@ -19,6 +18,8 @@ void ips::setup()
             stationtime[i][j]=0;
         }
     }
+    q=0;
+    w=0;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -239,7 +240,7 @@ int ips::wrapper()
 
     rechne();
     pos_filter();
-
+    qDebug()<<"Position z"<<posz;
     qDebug() << "Posx: " << xList.at(0) << "Posy: " << yList.at(0) <<"Posz: "<< zList.at(0);
 
     int genauigkeit = BetragVektor(posx, posy, xList.at(0), yList.at(0));
@@ -252,16 +253,30 @@ int ips::wrapper()
 //Positionen filtern
 void ips::pos_filter()
 {
-    if ((xList.size()< 6) || (BetragVektor(posx, posy, xList.at(0), yList.at(0)) < max_abw_flug))
+    if ((xList.size()< 6) || (BetragVektor(posx, posy, xList.at(0), yList.at(0)) < max_abw_flug)||(q>2))
     {
         xList.prepend(posx);
         yList.prepend(posy);
+        q=0;
     }
-    if(!ultraschall)
+    else
     {
-        if ((zList.size()< 6) || (abs(zList.at(0)- posz) < max_abw_hoehe))
+        q++;
+        qDebug()<<"Fehler - q:"<<q;
+    }
+
+    if(ultraschall==false)
+    {
+        qDebug()<<"Position z"<<posz;
+        if ((zList.size()< 6) || (abs(zList.at(0)- posz) < max_abw_hoehe) || (w>2))
         {
             zList.prepend(posz);
+            w=0;
+        }
+        else
+        {
+            w++;
+            qDebug()<<"Fehler - w:"<<w;
         }
     }
 }

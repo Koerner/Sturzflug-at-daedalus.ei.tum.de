@@ -591,33 +591,33 @@ void weg::hoehensteuerung()
     dif1=sollHoehe-zList.at(0);
     dif2=zList.at(hoehe_d)-zList.at(0);
     dif3=sollHoehe-zList.at(hoehe_d);
-    if (abs(dif1)<hoehentol)
+    if ((abs(dif3)>hoehentol)&&(dif3<0)&&(dif2>0))
     {
-        if ((abs(dif3)>hoehentol)&&(dif3<0)&&(dif2>0))
-        {
-            schub[2]=dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
-        }
-        else if ((abs(dif3)>hoehentol)&&(dif3>0)&&(dif2<0))
-        {
-            schub[2]=dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
-        }
-        else
-        {
-            schub[2]=0;
-        }
+        schub[2]=dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
+    }
+    else if ((abs(dif3)>hoehentol)&&(dif3>0)&&(dif2<0))
+    {
+        schub[2]=dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
     }
     else
     {
-        if(abs(dif1)<800)
+        if (abs(dif1)<hoehentol)
         {
-            schub[2]=dif/HOEHENSCHUBMULTIPLIKATOR;
+            schub[2]=0;
         }
         else
         {
-            if(dif1<0)
-            {schub[2]=-MAX;}
+            if(abs(dif1)<800)
+            {
+                schub[2]=dif1/HOEHENSCHUBMULTIPLIKATOR;
+            }
             else
-            {schub[2]=MAX;}
+            {
+                if(dif1<0)
+                {schub[2]=-MAX;}
+                else
+                {schub[2]=MAX;}
+            }
         }
     }
 

@@ -141,6 +141,8 @@ void MainWindow::setup()
     setHindernisse();
     setRueckschub();
     x.setup();
+    setUltraschall();
+
 
     Refreshtimer->start();  //Starten den Refresher, sonst geht garnix ;)
 
@@ -321,9 +323,10 @@ void MainWindow::XbeeonReadyRead()
         hoehe=comdata.mid(0,3).toInt(ok,10);//konvertiert die Daten in eine Integer
         if(hoehe>99 && ui->ultraschall->isChecked())
         {
-            if ((y.zList.size()< 6) || (abs(zList.at(0)- posz) < x.max_abw_hoehe))
+            if ((y.zList.size()< 6) || (abs(y.zList.at(0)- (hoehe*10-1000)) < x.max_abw_hoehe))
             {
                 y.zList.prepend(hoehe*10-1000);
+                x.zList.prepend(hoehe*10-1000);
             }
         qDebug() << "Hoehe:" << y.zList.at(0);
         }
@@ -641,8 +644,8 @@ void MainWindow::setFilter()
     x.maxFilterwerweiterung=ui->maxFiltererweiterung->value();
 
     //Logik Maximalabweichungsfilter
-    x.max_abw_flug=(ui->max_geschw_flug->value()*ui->refreshTime->value());
-    x.max_abw_hoehe=(ui->max_geschw_hoehe->value()*ui->refreshTime->value());
+    x.max_abw_flug=(ui->max_geschw_flug->value()/10*(ui->refreshTime->value()/50));
+    x.max_abw_hoehe=(ui->max_geschw_hoehe->value()/10*(ui->refreshTime->value()/50));
 }
 
 void MainWindow::setRueckschub()
@@ -757,9 +760,9 @@ void MainWindow::DrawMap()
     map->addEllipse(y.ziel_x-y.zieltol,y.ziel_y-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penTP);
     map->addEllipse(y.abwurfkoordinate[0]-y.zieltol,y.abwurfkoordinate[1]-y.zieltol,y.zieltol*2,y.zieltol*2)->setPen(penAB);
 
-    if (y.zList.size()!=0)
+    if (x.zList.size()!=0)
     {
-        ui->hoeheDisplay->display(y.zList.at(0));
+        ui->hoeheDisplay->display(x.zList.at(0));
     }
 
 }
@@ -902,12 +905,12 @@ void MainWindow::refresh()
     if(ui->flug->isChecked())
     {
         y.xList.prepend(x.xList.at(0));
-        y.yList.prepend(x.yList.at(0));
-        y.zList.prepend(x.zList.at(0));
+        y.yList.prepend(x.yList.at(0));        
         y.start(); //Regelung und Weg
     }
     if(ui->hoehe->isChecked())
     {
+       y.zList.prepend(x.zList.at(0));
        y.hoehensteuerung(); //Hoehensteuerung
     }
 

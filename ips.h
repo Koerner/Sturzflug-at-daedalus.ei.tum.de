@@ -31,6 +31,11 @@ public:
 
     bool ultraschall;   //Höhenbestimmung mit Ultraschall statt IPS (->true)
 
+    int max_abw_flug;
+    int max_abw_hoehe;
+    void pos_filter();
+    int BetragVektor(int x_1, int y_1, int x_2, int y_2);
+
     void setup();
 private:
     int x[50];
@@ -54,6 +59,9 @@ private:
     double r[10];
     //Anz der Basen
     int n;// = 0;
+    int q;
+    int w;
+
 
 
     void setstationtime(int nr, int rawtime);
