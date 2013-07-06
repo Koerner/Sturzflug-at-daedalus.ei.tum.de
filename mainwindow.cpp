@@ -318,11 +318,14 @@ void MainWindow::XbeeonReadyRead()
             y.Ausrichtung.prepend(ausrichtung-500);  //konvertiert die Daten in eine Integer
             qDebug() << "Ausrichtung:" << y.Ausrichtung.at(0);
         }
-        hoehe=comdata.mid(0,3).toInt(ok,10);
+        hoehe=comdata.mid(0,3).toInt(ok,10);//konvertiert die Daten in eine Integer
         if(hoehe>99 && ui->ultraschall->isChecked())
         {
-            y.zList.prepend(hoehe*10-1000);  //konvertiert die Daten in eine Integer
-            qDebug() << "Hoehe:" << y.zList.at(0);
+            if ((y.zList.size()< 6) || (abs(zList.at(0)- posz) < x.max_abw_hoehe))
+            {
+                y.zList.prepend(hoehe*10-1000);
+            }
+        qDebug() << "Hoehe:" << y.zList.at(0);
         }
 
     }

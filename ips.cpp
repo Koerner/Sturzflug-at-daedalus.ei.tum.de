@@ -238,23 +238,47 @@ int ips::wrapper()
     }
 
     rechne();
+    pos_filter();
 
-    xList.prepend(posx);//posx
-    yList.prepend(posy);//posy
-    if(!ultraschall)
-    {
-    zList.prepend(posz);//posz
-    qDebug()<<"posz:"<<posz;
-    }
+    qDebug() << "Posx: " << xList.at(0) << "Posy: " << yList.at(0) <<"Posz: "<< zList.at(0);
 
-    qDebug() << "Posx: " << posx << "Posy: " << posy <<"Posz: "<< posz;
-
-    int genauigkeit = xList.at(0);
+    int genauigkeit = BetragVektor(posx, posy, xList.at(0), yList.at(0));
     return genauigkeit;
 }
 //Ende wrapper
 
 //.............................................................................
+
+//Positionen filtern
+void ips::pos_filter()
+{
+    if ((xList.size()< 6) || (BetragVektor(posx, posy, xList.at(0), yList.at(0)) < max_abw_flug))
+    {
+        xList.prepend(posx);
+        yList.prepend(posy);
+    }
+    if(!ultraschall)
+    {
+        if ((zList.size()< 6) || (abs(zList.at(0)- posz) < max_abw_hoehe))
+        {
+            zList.prepend(posz);
+        }
+    }
+}
+//Ende Position filtern
+
+//.............................................................................
+
+//Abstand zweier Vektoren bzw Betrag eines Vektors............................
+int ips::BetragVektor(int x_1, int y_1, int x_2, int y_2)
+{
+    //Berechnet den Abstand zweier Punkte
+    return sqrt(((x_2-x_1)*(x_2-x_1))+((y_2-y_1)*(y_2-y_1)));
+}
+//Ende Abstandsbrechnung......................................................
+
+//.............................................................................
+
 //Start Berechnung der Koordinaten
 void ips::rechne()
 {
