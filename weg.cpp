@@ -587,25 +587,34 @@ void weg::notfallplanende()
 
 void weg::hoehensteuerung()
 {
-    double dif;
-    dif=sollHoehe-zList.at(0);
-    if (abs(dif)<hoehentol)
+    double dif1, dif2, dif3;
+    dif1=sollHoehe-zList.at(0);
+    dif2=zList.at(hoehe_d)-zList.at(0);
+    dif3=sollHoehe-zList.at(hoehe_d);
+    if (abs(dif1)<hoehentol)
     {
-
-        schub[2]=dif/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
-
-
-        //schub[2]=0;
+        if ((abs(dif3)>hoehentol)&&(dif3<0)&&(dif2>0))
+        {
+            schub[2]=dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
+        }
+        else if ((abs(dif3)>hoehentol)&&(dif3>0)&&(dif2<0))
+        {
+            schub[2]=dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
+        }
+        else
+        {
+            schub[2]=0;
+        }
     }
     else
     {
-        if(abs(dif)<800)
+        if(abs(dif1)<800)
         {
             schub[2]=dif/HOEHENSCHUBMULTIPLIKATOR;
         }
         else
         {
-            if(dif<0)
+            if(dif1<0)
             {schub[2]=-MAX;}
             else
             {schub[2]=MAX;}
