@@ -591,11 +591,12 @@ void weg::hoehensteuerung()
     dif1=sollHoehe-zList.at(0);
     dif2=zList.at(hoehe_d)-zList.at(0);
     dif3=sollHoehe-zList.at(hoehe_d);
-    if ((abs(dif3)>hoehentol)&&(dif3<0)&&(dif2>0))
+
+    if ((abs(dif1)<3*hoehentol)&&(abs(dif3)>hoehentol)&&(dif3<0)&&(dif2>0))
     {
         schub[2]=dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
     }
-    else if ((abs(dif3)>hoehentol)&&(dif3>0)&&(dif2<0))
+    else if ((abs(dif1)<3*hoehentol)&&(abs(dif3)>hoehentol)&&(dif3>0)&&(dif2<0))
     {
         schub[2]=dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
     }
