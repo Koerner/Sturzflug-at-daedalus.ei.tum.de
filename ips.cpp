@@ -230,12 +230,12 @@ int ips::wrapper()
     if (xList.size()!=0){
         start_x = xList.at(0);
         start_y = yList.at(0);
-        start_z = 1000;//zList.at(0);
+        start_z = 5000;//zList.at(0);
     }
     else {
         start_x = 0;
         start_y = 0;
-        start_z = 1000;
+        start_z = 5000;
     }
 
     rechne();

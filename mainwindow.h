@@ -81,6 +81,7 @@ private:
     //Handsteuerung
     int geradeabweichung;
     int hoehenschubHand;
+    int imu_init;
     void keyPressEvent(QKeyEvent *qkeyevent);
     void setup();
 
@@ -107,6 +108,7 @@ private Q_SLOTS:
     virtual void wheelEvent(QWheelEvent* event);
 
     void onTestButtonClicked();
+    void onreset_imuClicked();
 
     void setPosStation();
     void setHindernisse();

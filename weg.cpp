@@ -78,14 +78,16 @@ void weg::start()
                         qDebug()<<"IST_Ausrichtung"<<Ausrichtung.at(0);
                         qDebug()<<"SOll_Ausrichtung"<<Soll_Ausrichtung;
                         qDebug()<<"Abweichung_Ausrichtung"<<Abweichung_Ausrichtung;
-                        if(abs(Berechne_Abweichung())<100)
+                        if(abs(Berechne_Abweichung())<150)
                         {
+                            qDebug()<<"Regelung Ausrichtung";
                             geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y),Abweichung_Ausrichtung);
                         }
                         else
                         {
-                            if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<=-100)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>=100))
+                            if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<=-150)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>=150))
                             {
+                                qDebug()<<"Regelung Abweichung";
                                 geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y),Berechne_Abweichung());
                             }
                             else
@@ -594,11 +596,11 @@ void weg::hoehensteuerung()
 
     if ((abs(dif1)<3*hoehentol)&&(abs(dif3)>hoehentol)&&(dif3<0)&&(dif2>0))
     {
-        schub[2]=dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
+        schub[2]=2*dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
     }
     else if ((abs(dif1)<3*hoehentol)&&(abs(dif3)>hoehentol)&&(dif3>0)&&(dif2<0))
     {
-        schub[2]=dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
+        schub[2]=2*dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
     }
     else
     {
@@ -631,42 +633,39 @@ void weg::hoehensteuerung()
 void weg::geradeaus(int streckenlaenge)
 {
 
-    if(streckenlaenge>400)
-    {
-        schub[0]=SCHNELL;
-        schub[1]=SCHNELL;
-    }
-    else if (streckenlaenge>=200)
-    {
-        schub[0]=LANGSAM;
-        schub[1]=LANGSAM;
-    }
-    else if (streckenlaenge<200)
-    {
+//    if(streckenlaenge>400)
+//    {
+//        schub[0]=SCHNELL;
+//        schub[1]=SCHNELL;
+//    }
+//    else if (streckenlaenge>=200)
+//    {
+//        schub[0]=LANGSAM;
+//        schub[1]=LANGSAM;
+//    }
+//    else if (streckenlaenge<200)
+//    {
         schub[0]=SUPERLANGSAM;
         schub[1]=SUPERLANGSAM;
-    }
+    //}
     qDebug()<<"Gerade ohne Regelung:"<<schub[0]<<schub[1];
 }
 
 void weg::geradeaus(int streckenlaenge, double abweichung)
 {
     double schu;
-    if(streckenlaenge>1000)
-    {
-        schu=SCHNELL;
-        abweichung = abweichung/3;
-    }
-    else if (streckenlaenge>=200)
-    {
-        schu=LANGSAM;
-        //schub[1]=LANGSAM;
-    }
-    else if (streckenlaenge<200)
-    {
+//    if(streckenlaenge>1000)
+//    {
+//        schu=SCHNELL;
+//    }
+//    else if (streckenlaenge>=200)
+//    {
+//        schu=LANGSAM;
+//    }
+//    else if (streckenlaenge<200)
+//    {
         schu=SUPERLANGSAM;
-        //schub[1]=SUPERLANGSAM;
-    }
+//    }
     if (abweichung<0)
     {
         schub[0]=Runden((schu*(100-abweichung))/100);

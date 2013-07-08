@@ -74,6 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //globale Connectoren
     connect(ui->TestButton, SIGNAL(clicked()), SLOT(onTestButtonClicked()));
+    connect(ui->reset_imu, SIGNAL(clicked()), SLOT(onreset_imuClicked()));
 
 
     //Xbee connectoren
@@ -106,7 +107,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->setSchub, SIGNAL(clicked()), SLOT(setRueckschub()));
     connect(ui->ultraschall, SIGNAL(stateChanged(int)), SLOT(setUltraschall()));
 
-    //Hansteuerung
+    //Handsteuerung
 
     connect(ui->Handsteuerung, SIGNAL(stateChanged(int)), SLOT(setHandsteuerung()));
 
@@ -142,6 +143,7 @@ void MainWindow::setup()
     setRueckschub();
     x.setup();
     setUltraschall();
+    onreset_imuClicked();
 
 
     Refreshtimer->start();  //Starten den Refresher, sonst geht garnix ;)
@@ -317,7 +319,17 @@ void MainWindow::XbeeonReadyRead()
         qDebug() << ausrichtung;
         if(ausrichtung>320)
         {
-            y.Ausrichtung.prepend(ausrichtung-500);  //konvertiert die Daten in eine Integer
+            int imu = ausrichtung-500-imu_init;
+            if (imu>180)
+            {
+                imu = imu - 360;
+            }
+            else if (imu <= -180)
+            {
+                imu = imu + 360;
+            }
+            y.Ausrichtung.prepend(imu);//konvertiert die Daten in eine Integer
+
             qDebug() << "Ausrichtung:" << y.Ausrichtung.at(0);
         }
         hoehe=comdata.mid(0,3).toInt(ok,10);//konvertiert die Daten in eine Integer
@@ -770,7 +782,7 @@ void MainWindow::DrawMap()
     if (y.Ausrichtung.size()!=0)
     {
         double winkel=y.Ausrichtung.at(0)*PI/180;
-        qDebug()<<"winkel: " << winkel;
+        //qDebug()<<"winkel: " << winkel;
         map->addLine(x.xList.at(0),x.yList.at(0),(x.xList.at(0)+300*cos(winkel)),(x.yList.at(0)+300*sin(winkel)),penZeppelin);
 
     }
@@ -1044,6 +1056,20 @@ void MainWindow::onTestButtonClicked()
 
 //   y.berechneWeg();//erste Zielkoordinate berechnen
 
+}
+
+void MainWindow::onreset_imuClicked()
+{
+    if (y.Ausrichtung.size()!=0)
+    {
+        int imu_aktuell=y.Ausrichtung.at(0)-imu_init;
+        imu_init = imu_aktuell;
+    }
+    else
+    {
+        imu_init = 0;
+    }
+    qDebug()<<"IMU"<<imu_init;
 }
 // ENDE Test Button ---------------------------------------------------------------------------------------------------
 
