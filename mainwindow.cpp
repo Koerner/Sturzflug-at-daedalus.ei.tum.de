@@ -329,6 +329,7 @@ void MainWindow::XbeeonReadyRead()
             {
                 imu = imu + 360;
             }
+            imu=imu*(-1);
             y.Ausrichtung.prepend(imu);//konvertiert die Daten in eine Integer
 
             qDebug() << "Ausrichtung:" << y.Ausrichtung.at(0);

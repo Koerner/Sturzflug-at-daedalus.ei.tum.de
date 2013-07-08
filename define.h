@@ -5,13 +5,13 @@
 
 #define SCHNELL 20
 #define MITTEL 20
-#define LANGSAM 20
-#define SUPERLANGSAM 7
+#define LANGSAM 7
+#define SUPERLANGSAM 2
 #define MAX 99
 
 #define HOEHENSCHUBMULTIPLIKATOR 10
 
-#define SIMULATIONMAX 500
+#define SIMULATIONMAX 250
 
 
 #endif // DEFINE_H

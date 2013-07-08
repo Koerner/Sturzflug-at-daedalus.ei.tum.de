@@ -668,8 +668,8 @@ void weg::geradeaus(int streckenlaenge, double abweichung)
 //    }
 //    else if (streckenlaenge<200)
 //    {
-        schu=SUPERLANGSAM;
-        abweichung=abweichung/5;
+        schu=LANGSAM;
+        abweichung=abweichung/3;
 //    }
     if (abweichung<0)
     {
@@ -690,8 +690,8 @@ void weg::kurve(int linksrechts, double radius)
 {
     //Kurvenflugmodus
     if (linksrechts == 0){
-        schub[1]=SUPERLANGSAM;
-        schub[0]=schub[1]*((radius+spannweite)/(radius-spannweite));
+        schub[1]=LANGSAM;
+        schub[0]=schub[1]*2;//((radius+spannweite)/(radius-spannweite));
         qDebug() << "Rechtskurve:" << schub[0]<< schub[1];
     }
     else{

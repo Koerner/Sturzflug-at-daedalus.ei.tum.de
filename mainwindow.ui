@@ -190,7 +190,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -1233,6 +1233,9 @@
          <property name="minimum">
           <number>-99</number>
          </property>
+         <property name="value">
+          <number>5</number>
+         </property>
         </widget>
        </item>
        <item row="0" column="0">
@@ -1268,6 +1271,9 @@
          <property name="minimum">
           <number>-99</number>
          </property>
+         <property name="value">
+          <number>20</number>
+         </property>
         </widget>
        </item>
        <item row="2" column="1" colspan="2">
@@ -1299,6 +1305,9 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>1500</number>
+         </property>
         </widget>
        </item>
        <item row="7" column="2">
@@ -1313,12 +1322,18 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>1500</number>
+         </property>
         </widget>
        </item>
        <item row="1" column="1">
         <widget class="QSpinBox" name="s1x">
          <property name="maximum">
           <number>99999</number>
+         </property>
+         <property name="value">
+          <number>3000</number>
          </property>
         </widget>
        </item>
@@ -1328,7 +1343,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>1500</number>
+          <number>2990</number>
          </property>
         </widget>
        </item>
@@ -1338,7 +1353,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>3000</number>
+          <number>0</number>
          </property>
         </widget>
        </item>
@@ -1379,7 +1394,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>4500</number>
+          <number>2990</number>
          </property>
         </widget>
        </item>
@@ -1389,7 +1404,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>6000</number>
+          <number>0</number>
          </property>
         </widget>
        </item>
@@ -1441,7 +1456,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>3000</number>
+          <number>0</number>
          </property>
         </widget>
        </item>
@@ -1460,6 +1475,9 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>500</number>
+         </property>
         </widget>
        </item>
        <item row="4" column="2">
@@ -1468,7 +1486,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>4500</number>
+          <number>1500</number>
          </property>
         </widget>
        </item>
@@ -1485,7 +1503,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>6000</number>
+          <number>0</number>
          </property>
         </widget>
        </item>
@@ -1558,6 +1576,9 @@
          <property name="text">
           <string>2</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item row="3" column="0">
@@ -1576,7 +1597,7 @@
           <string>4</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -1613,7 +1634,7 @@
           <string>8</string>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -2139,7 +2160,7 @@
      <x>0</x>
      <y>0</y>
      <width>1224</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
