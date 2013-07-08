@@ -319,7 +319,8 @@ void MainWindow::XbeeonReadyRead()
         qDebug() << ausrichtung;
         if(ausrichtung>320)
         {
-            int imu = ausrichtung-500-imu_init;
+            imu_wert= ausrichtung-500;
+            int imu = imu_wert-imu_init;
             if (imu>180)
             {
                 imu = imu - 360;
@@ -935,6 +936,11 @@ void MainWindow::refresh()
        y.zList.prepend(x.zList.at(0));
        y.hoehensteuerung(); //Hoehensteuerung
     }
+    if (y.ziel==true)
+    {
+        ui->flug->setCheckState(Qt::Unchecked);
+        y.ziel=false;
+    }
 
 
     DrawMap();      //KARTE loeschen und neu zeichnen
@@ -1062,8 +1068,7 @@ void MainWindow::onreset_imuClicked()
 {
     if (y.Ausrichtung.size()!=0)
     {
-        int imu_aktuell=y.Ausrichtung.at(0)-imu_init;
-        imu_init = imu_aktuell;
+        imu_init = imu_wert;
     }
     else
     {

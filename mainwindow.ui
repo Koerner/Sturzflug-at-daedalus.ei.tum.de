@@ -1451,7 +1451,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>0</number>
+          <number>1500</number>
          </property>
         </widget>
        </item>
@@ -1468,7 +1468,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>3000</number>
+          <number>4500</number>
          </property>
         </widget>
        </item>
@@ -1505,7 +1505,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>800</number>
+          <number>0</number>
          </property>
         </widget>
        </item>
@@ -1613,7 +1613,7 @@
           <string>8</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -1686,7 +1686,7 @@
           <number>500</number>
          </property>
          <property name="value">
-          <number>150</number>
+          <number>200</number>
          </property>
         </widget>
        </item>
@@ -1745,7 +1745,7 @@
           <number>10000</number>
          </property>
          <property name="value">
-          <number>500</number>
+          <number>250</number>
          </property>
         </widget>
        </item>
@@ -1758,7 +1758,7 @@
           <number>10</number>
          </property>
          <property name="value">
-          <number>1000</number>
+          <number>1400</number>
          </property>
         </widget>
        </item>
@@ -1774,7 +1774,7 @@
           <number>10</number>
          </property>
          <property name="value">
-          <number>150</number>
+          <number>200</number>
          </property>
         </widget>
        </item>
@@ -1899,7 +1899,7 @@
           <number>15</number>
          </property>
          <property name="value">
-          <number>3</number>
+          <number>4</number>
          </property>
         </widget>
        </item>
@@ -2139,7 +2139,7 @@
      <x>0</x>
      <y>0</y>
      <width>1224</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

@@ -268,7 +268,7 @@ void ips::pos_filter()
     if(ultraschall==false)
     {
         qDebug()<<"Position z"<<posz;
-        if ((zList.size()< 6) || (abs(zList.at(0)- posz) < max_abw_hoehe) || (w>2))
+        if ((zList.size()< 6) || (abs(zList.at(0)- posz) < max_abw_hoehe) || (w>4))
         {
             zList.prepend(posz);
             w=0;

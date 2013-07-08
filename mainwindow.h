@@ -81,6 +81,7 @@ private:
     //Handsteuerung
     int geradeabweichung;
     int hoehenschubHand;
+    int imu_wert;
     int imu_init;
     void keyPressEvent(QKeyEvent *qkeyevent);
     void setup();

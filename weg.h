@@ -32,6 +32,7 @@ public:
     int AP[2]; //Ausrittspunkt aus Kreis
     int ziel_x; //Zielkoordinaten
     int ziel_y; //Zielkoordinaten
+    bool ziel;
     int rueck_countdown;  //zählt die Schleifen
 
 

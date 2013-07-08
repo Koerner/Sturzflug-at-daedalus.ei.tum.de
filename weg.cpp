@@ -14,6 +14,7 @@ weg::weg(){
     schub[2]=0;
     notfallmodus=0;
     rueck_countdown=0;
+    ziel = false;
 }
 //Ende Konstruktor-----------------------------------------------------------------------------------------------------
 
@@ -33,7 +34,10 @@ void weg::start()
         abwurfmodus = 0;
     }
     if (BetragVektor(xList.at(0),yList.at(0),zielkoordinaten[0],zielkoordinaten[1])<zieltol)
-    {stop();}
+    {
+        stop();
+        ziel = true;
+    }
     else
     { //Für den Notfallplan brauche ich das notfallziel array ausgefüllt, also die Daten wo das Zeppelin im Notfall hinsteuern soll (x und y) und den Ausrichtungswinkel, zum Schluss
         if(notfallmodus==1)
@@ -78,14 +82,14 @@ void weg::start()
                         qDebug()<<"IST_Ausrichtung"<<Ausrichtung.at(0);
                         qDebug()<<"SOll_Ausrichtung"<<Soll_Ausrichtung;
                         qDebug()<<"Abweichung_Ausrichtung"<<Abweichung_Ausrichtung;
-                        if(abs(Berechne_Abweichung())<150)
+                        if(abs(Berechne_Abweichung())<abweichungGUI[1])
                         {
                             qDebug()<<"Regelung Ausrichtung";
                             geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y),Abweichung_Ausrichtung);
                         }
                         else
                         {
-                            if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<=-150)||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>=150))
+                            if ((Abweichung_Ausrichtung<20&&Berechne_Abweichung()<=-abweichungGUI[1])||(Abweichung_Ausrichtung>-20&&Berechne_Abweichung()>=abweichungGUI[1]))
                             {
                                 qDebug()<<"Regelung Abweichung";
                                 geradeaus(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y),Berechne_Abweichung());
@@ -665,6 +669,7 @@ void weg::geradeaus(int streckenlaenge, double abweichung)
 //    else if (streckenlaenge<200)
 //    {
         schu=SUPERLANGSAM;
+        abweichung=abweichung/5;
 //    }
     if (abweichung<0)
     {
