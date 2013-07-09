@@ -15,6 +15,8 @@ weg::weg(){
     notfallmodus=0;
     rueck_countdown=0;
     ziel = false;
+    kurve_counter=0;
+    gerade_counter=0;
 }
 //Ende Konstruktor-----------------------------------------------------------------------------------------------------
 
@@ -55,10 +57,12 @@ void weg::start()
             {
                 if ((modus == false)&&(BetragVektor(xList.at(0),yList.at(0),ziel_x,ziel_y)<zieltol))
                 {
+                    kurve(hin[hinnummer][2],kreisradius[hinnummer]);
                     modus = true;
                     hinnummer = hinnummer + 1;
                     berechneWeg();
-                    rueck();
+                    schub[0]=-schub[0];
+                    schub[1]=-schub[1];
                     rueck_countdown=anz_rueckschub-1;
 
                 }
@@ -66,8 +70,8 @@ void weg::start()
                 {
                     modus = false;
                     berechneWeg();
-                    rueck();
-                    rueck_countdown=anz_rueckschub-1;
+                    //rueck();
+                    //rueck_countdown=anz_rueckschub-1;
                 }
 
                 else
@@ -600,11 +604,11 @@ void weg::hoehensteuerung()
 
     if ((abs(dif1)<3*hoehentol)&&(abs(dif3)>hoehentol)&&(dif3<0)&&(dif2>0))
     {
-        schub[2]=2*dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
+        schub[2]=3*dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
     }
     else if ((abs(dif1)<3*hoehentol)&&(abs(dif3)>hoehentol)&&(dif3>0)&&(dif2<0))
     {
-        schub[2]=2*dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
+        schub[2]=3*dif2/(HOEHENSCHUBMULTIPLIKATOR);//*(rueckschub);
     }
     else
     {
@@ -649,8 +653,8 @@ void weg::geradeaus(int streckenlaenge)
 //    }
 //    else if (streckenlaenge<200)
 //    {
-        schub[0]=SUPERLANGSAM;
-        schub[1]=SUPERLANGSAM;
+        schub[0]=LANGSAM;
+        schub[1]=LANGSAM;
     //}
     qDebug()<<"Gerade ohne Regelung:"<<schub[0]<<schub[1];
 }
@@ -688,16 +692,30 @@ void weg::geradeaus(int streckenlaenge, double abweichung)
 //Kurvenflug>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void weg::kurve(int linksrechts, double radius)
 {
+    if (kurve_counter<kurve_drall)
+    {
     //Kurvenflugmodus
     if (linksrechts == 0){
         schub[1]=LANGSAM;
-        schub[0]=schub[1]*2;//((radius+spannweite)/(radius-spannweite));
+        schub[0]=schub[1]*2*((radius+spannweite)/(radius-spannweite));
         qDebug() << "Rechtskurve:" << schub[0]<< schub[1];
     }
     else{
-        schub[0]=SUPERLANGSAM;
-        schub[1]=schub[0]*((radius+spannweite)/(radius-spannweite));
+        schub[0]=LANGSAM;
+        schub[1]=schub[0]*2*((radius+spannweite)/(radius-spannweite));
         qDebug() << "Linkskurve:" << schub[0]<< schub[1];
+    }
+        kurve_counter++;
+    }
+    else if (gerade_counter<kurve_gerade-1)
+    {
+        geradeaus(1000,0);
+        gerade_counter++;
+    }
+    else
+    {
+        gerade_counter=0;
+        kurve_counter=0;
     }
 }
 

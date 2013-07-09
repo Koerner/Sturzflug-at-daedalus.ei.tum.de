@@ -45,6 +45,8 @@ public:
 
     int schub[3];    //Schub link, schub rechts, schub höhe
     int abwurfmodus; //0 ist nein 1 ist ja
+    int kurve_counter;
+    int gerade_counter;
 
 
     //Notfallplan variable

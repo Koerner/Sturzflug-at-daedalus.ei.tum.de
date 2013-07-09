@@ -190,7 +190,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -532,6 +532,9 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>4300</number>
+         </property>
         </widget>
        </item>
        <item row="6" column="0">
@@ -618,6 +621,9 @@
          </property>
          <property name="maximum">
           <number>99999</number>
+         </property>
+         <property name="value">
+          <number>200</number>
          </property>
         </widget>
        </item>
@@ -847,12 +853,18 @@
          <property name="maximum">
           <number>1</number>
          </property>
+         <property name="value">
+          <number>1</number>
+         </property>
         </widget>
        </item>
        <item row="1" column="3">
         <widget class="QSpinBox" name="h1a">
          <property name="maximum">
           <number>99999</number>
+         </property>
+         <property name="value">
+          <number>4000</number>
          </property>
         </widget>
        </item>
@@ -1121,6 +1133,9 @@
          <property name="singleStep">
           <number>10</number>
          </property>
+         <property name="value">
+          <number>7000</number>
+         </property>
         </widget>
        </item>
        <item row="0" column="2">
@@ -1133,6 +1148,9 @@
          </property>
          <property name="singleStep">
           <number>10</number>
+         </property>
+         <property name="value">
+          <number>900</number>
          </property>
         </widget>
        </item>
@@ -1161,6 +1179,9 @@
          <property name="singleStep">
           <number>10</number>
          </property>
+         <property name="value">
+          <number>5100</number>
+         </property>
         </widget>
        </item>
        <item row="1" column="2">
@@ -1173,6 +1194,9 @@
          </property>
          <property name="singleStep">
           <number>10</number>
+         </property>
+         <property name="value">
+          <number>2150</number>
          </property>
         </widget>
        </item>
@@ -1211,7 +1235,7 @@
           <number>0</number>
          </property>
          <property name="value">
-          <number>-2</number>
+          <number>-3</number>
          </property>
         </widget>
        </item>
@@ -1306,7 +1330,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>1500</number>
+          <number>250</number>
          </property>
         </widget>
        </item>
@@ -1314,6 +1338,9 @@
         <widget class="QSpinBox" name="s7y">
          <property name="maximum">
           <number>99999</number>
+         </property>
+         <property name="value">
+          <number>250</number>
          </property>
         </widget>
        </item>
@@ -1323,7 +1350,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>1500</number>
+          <number>5800</number>
          </property>
         </widget>
        </item>
@@ -1333,7 +1360,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>3000</number>
+          <number>2800</number>
          </property>
         </widget>
        </item>
@@ -1343,7 +1370,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>2990</number>
+          <number>800</number>
          </property>
         </widget>
        </item>
@@ -1353,7 +1380,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>0</number>
+          <number>800</number>
          </property>
         </widget>
        </item>
@@ -1369,12 +1396,18 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>3250</number>
+         </property>
         </widget>
        </item>
        <item row="7" column="3">
         <widget class="QSpinBox" name="s7z">
          <property name="maximum">
           <number>99999</number>
+         </property>
+         <property name="value">
+          <number>400</number>
          </property>
         </widget>
        </item>
@@ -1384,7 +1417,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>1500</number>
+          <number>2300</number>
          </property>
         </widget>
        </item>
@@ -1394,7 +1427,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>2990</number>
+          <number>250</number>
          </property>
         </widget>
        </item>
@@ -1404,7 +1437,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>0</number>
+          <number>3250</number>
          </property>
         </widget>
        </item>
@@ -1426,6 +1459,9 @@
         <widget class="QSpinBox" name="s3x">
          <property name="maximum">
           <number>99999</number>
+         </property>
+         <property name="value">
+          <number>5800</number>
          </property>
         </widget>
        </item>
@@ -1456,7 +1492,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>0</number>
+          <number>4300</number>
          </property>
         </widget>
        </item>
@@ -1466,7 +1502,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>1500</number>
+          <number>5800</number>
          </property>
         </widget>
        </item>
@@ -1476,7 +1512,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>500</number>
+          <number>0</number>
          </property>
         </widget>
        </item>
@@ -1486,7 +1522,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>1500</number>
+          <number>250</number>
          </property>
         </widget>
        </item>
@@ -1503,7 +1539,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>0</number>
+          <number>1750</number>
          </property>
         </widget>
        </item>
@@ -1513,7 +1549,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>3000</number>
+          <number>2750</number>
          </property>
         </widget>
        </item>
@@ -1542,6 +1578,9 @@
          <property name="maximum">
           <number>99999</number>
          </property>
+         <property name="value">
+          <number>2800</number>
+         </property>
         </widget>
        </item>
        <item row="9" column="2">
@@ -1550,7 +1589,7 @@
           <number>99999</number>
          </property>
          <property name="value">
-          <number>3000</number>
+          <number>1750</number>
          </property>
         </widget>
        </item>
@@ -1577,7 +1616,7 @@
           <string>2</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -1587,7 +1626,7 @@
           <string>3</string>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1597,7 +1636,7 @@
           <string>4</string>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1625,6 +1664,9 @@
         <widget class="QCheckBox" name="stat7_checkBox">
          <property name="text">
           <string>7</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1750,7 +1792,7 @@
           <number>10</number>
          </property>
          <property name="value">
-          <number>300</number>
+          <number>400</number>
          </property>
         </widget>
        </item>
@@ -2160,7 +2202,7 @@
      <x>0</x>
      <y>0</y>
      <width>1224</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

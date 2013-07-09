@@ -8,6 +8,8 @@
 #define LANGSAM 7
 #define SUPERLANGSAM 2
 #define MAX 99
+#define kurve_gerade 10
+#define kurve_drall 1
 
 #define HOEHENSCHUBMULTIPLIKATOR 10
 
