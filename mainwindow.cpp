@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //Connectoren -----------------------------------------------------------------------------------------------------
 
     //globale Connectoren
-    connect(ui->TestButton, SIGNAL(clicked()), SLOT(onTestButtonClicked()));
+    //connect(ui->TestButton, SIGNAL(clicked()), SLOT(onTestButtonClicked()));
     connect(ui->reset_imu, SIGNAL(clicked()), SLOT(onreset_imuClicked()));
 
 
