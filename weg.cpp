@@ -70,8 +70,8 @@ void weg::start()
                 {
                     modus = false;
                     berechneWeg();
-                    //rueck();
-                    //rueck_countdown=anz_rueckschub-1;
+                    rueck();
+                    rueck_countdown=anz_rueckschub-1;
                 }
 
                 else
@@ -673,17 +673,16 @@ void weg::geradeaus(int streckenlaenge, double abweichung)
 //    else if (streckenlaenge<200)
 //    {
         schu=LANGSAM;
-        abweichung=abweichung/3;
 //    }
     if (abweichung<0)
     {
-        schub[0]=Runden((schu*(100-abweichung))/100);
+        schub[0]=Runden((schu*(100-2*abweichung))/100);
         schub[1]=schu;
     }
     else
     {
         schub[0]=schu;
-        schub[1]=Runden((schu*(100+abweichung))/100);
+        schub[1]=Runden((schu*(100+2*abweichung))/100);
     }
     qDebug()<<"Gerade mit Regelung:"<<schub[0]<<schub[1];
 }
@@ -692,30 +691,17 @@ void weg::geradeaus(int streckenlaenge, double abweichung)
 //Kurvenflug>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void weg::kurve(int linksrechts, double radius)
 {
-    if (kurve_counter<kurve_drall)
-    {
+
     //Kurvenflugmodus
     if (linksrechts == 0){
         schub[1]=LANGSAM;
-        schub[0]=schub[1]*2*((radius+spannweite)/(radius-spannweite));
+        schub[0]=schub[1]*((radius+spannweite)/(radius-spannweite));
         qDebug() << "Rechtskurve:" << schub[0]<< schub[1];
     }
     else{
         schub[0]=LANGSAM;
-        schub[1]=schub[0]*2*((radius+spannweite)/(radius-spannweite));
+        schub[1]=schub[0]*((radius+spannweite)/(radius-spannweite));
         qDebug() << "Linkskurve:" << schub[0]<< schub[1];
-    }
-        kurve_counter++;
-    }
-    else if (gerade_counter<kurve_gerade-1)
-    {
-        geradeaus(1000,0);
-        gerade_counter++;
-    }
-    else
-    {
-        gerade_counter=0;
-        kurve_counter=0;
     }
 }
 

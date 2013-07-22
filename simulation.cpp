@@ -17,7 +17,7 @@ int simulation::Runden(double Zahl)
 
 void simulation::sim()
 {
-    scheitel=spannweite;
+    scheitel=400;
     double alpha,theta,gamma,tau,z,b,h;
     if (xList.size()!=0){
         start_x = xList.at(0);
@@ -70,16 +70,14 @@ void simulation::sim()
 
     xList.prepend(posx);
     yList.prepend(posy);
-    int k;
     //Ausrichtung kalibrieren
-    k=start_ausrichtung/180;
-    if (start_ausrichtung/180>=1)
+    while(start_ausrichtung>180)
     {
-        start_ausrichtung=start_ausrichtung-180*k-180;
+        start_ausrichtung=start_ausrichtung-360;
     }
-    else if (start_ausrichtung/180<=-1)
+    while (start_ausrichtung<=-180)
     {
-        start_ausrichtung=start_ausrichtung-180*k+180;
+        start_ausrichtung=start_ausrichtung+360;
     }
     qDebug()<< "Position Zeppelin: "<<xList.at(0)<<"(x),"<<yList.at(0)<<"(y)";
     qDebug()<<"Ausrichtung:"<<start_ausrichtung;
